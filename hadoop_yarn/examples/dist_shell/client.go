@@ -20,7 +20,7 @@ func main() {
 	goPath := os.Getenv(GOPATH)
 	applicationMasterLocation := os.Getenv(APPLICATIONMASTER_GO)
 	if len(applicationMasterLocation) == 0 {
-		log.Fatalf("%s is missing, please set to the path of hadoop_yarn/examples/dist_shell/applicationmaster.go", APPLICATIONMASTER_GO)
+		applicationMasterLocation = goPath + "/src/github.com/hortonworks/gohadoop/hadoop_yarn/examples/dist_shell/applicationmaster.go"
 	}
 
 	// Create YarnConfiguration
