@@ -10,11 +10,19 @@ import (
 
 const (
 	HADOOP_CONF_DIR = "HADOOP_CONF_DIR"
-	CORE_DEFAULT    = "core-default.xml"
-	CORE_SITE       = "core-site.xml"
-	HDFS_DEFAULT    = "hdfs-default.xml"
-	HDFS_SITE       = "hdfs-site.xml"
 )
+
+var (
+	CORE_DEFAULT Resource = Resource{"core-default.xml", false}
+	CORE_SITE    Resource = Resource{"core-site.xml", true}
+	HDFS_DEFAULT Resource = Resource{"hdfs-default.xml", false}
+	HDFS_SITE    Resource = Resource{"hdfs-site.xml", true}
+)
+
+type Resource struct {
+	Name     string
+	Required bool
+}
 
 type Configuration interface {
 	Get(key string, defaultValue string) (string, error)
@@ -65,19 +73,22 @@ func (conf *configuration) SetInt(key string, value int) error {
 }
 
 func NewConfiguration() (Configuration, error) {
-	return NewConfigurationResources([]string{})
+	return NewConfigurationResources([]Resource{})
 }
 
-func NewConfigurationResources(resources []string) (Configuration, error) {
+func NewConfigurationResources(resources []Resource) (Configuration, error) {
 	// Add $HADOOP_CONF_DIR/core-default.xml & $HADOOP_CONF_DIR/core-site.xml
-	resourcesWithDefault := []string{CORE_DEFAULT, CORE_SITE}
+	resourcesWithDefault := []Resource{CORE_DEFAULT, CORE_SITE}
 	resourcesWithDefault = append(resourcesWithDefault, resources...)
 
 	c := configuration{Properties: make(map[string]string)}
 
 	for _, resource := range resourcesWithDefault {
-		conf, err := os.Open(os.Getenv(HADOOP_CONF_DIR) + string(os.PathSeparator) + resource)
+		conf, err := os.Open(os.Getenv(HADOOP_CONF_DIR) + string(os.PathSeparator) + resource.Name)
 		if err != nil {
+			if !resource.Required {
+				continue
+			}
 			log.Fatal("Couldn't open resource: ", err)
 			return nil, err
 		}
@@ -92,7 +103,7 @@ func NewConfigurationResources(resources []string) (Configuration, error) {
 		var hConf hadoopConfiguration
 		err = xml.Unmarshal(confData, &hConf)
 		if err != nil {
-			log.Fatal("Couldn't parse core-site.xml", err)
+			log.Fatal("Couldn't parse core-site.xml: ", err)
 			return nil, err
 		}
 
