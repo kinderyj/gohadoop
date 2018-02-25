@@ -1,16 +1,28 @@
 package main
 
 import (
+	"log"
+	"os"
+	"time"
+
 	hadoop_conf "github.com/hortonworks/gohadoop/hadoop_common/conf"
 	hadoop_yarn "github.com/hortonworks/gohadoop/hadoop_yarn"
 	yarn_conf "github.com/hortonworks/gohadoop/hadoop_yarn/conf"
 	"github.com/hortonworks/gohadoop/hadoop_yarn/yarn_client"
-	"log"
-	"os"
-	"time"
+)
+
+const (
+	GOPATH               = "GOPATH"
+	APPLICATIONMASTER_GO = "APPLICATIONMASTER_GO"
 )
 
 func main() {
+	goPath := os.Getenv(GOPATH)
+	applicationMasterLocation := os.Getenv(APPLICATIONMASTER_GO)
+	if len(applicationMasterLocation) == 0 {
+		log.Fatalf("%s is missing, please set to the path of hadoop_yarn/examples/dist_shell/applicationmaster.go", APPLICATIONMASTER_GO)
+	}
+
 	// Create YarnConfiguration
 	conf, _ := yarn_conf.NewYarnConfiguration()
 
@@ -22,7 +34,7 @@ func main() {
 
 	// Setup ContainerLaunchContext for the application
 	clc := hadoop_yarn.ContainerLaunchContextProto{}
-	clc.Command = []string{"go run /Users/acmurthy/dev/go/src/github.com/hortonworks/gohadoop/hadoop_yarn/examples/dist_shell/applicationmaster.go 1>/tmp/stdout 2>/tmp/stderr"}
+	clc.Command = []string{"GOPATH=" + goPath + " go run " + applicationMasterLocation + " 1>/tmp/stdout 2>/tmp/stderr"}
 	clc.Environment = getEnv()
 
 	// Resource for ApplicationMaster

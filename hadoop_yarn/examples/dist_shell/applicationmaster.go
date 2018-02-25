@@ -1,21 +1,25 @@
 package main
 
 import (
-	"github.com/hortonworks/gohadoop/hadoop_yarn"
-	"github.com/hortonworks/gohadoop/hadoop_yarn/conf"
-	"github.com/hortonworks/gohadoop/hadoop_yarn/yarn_client"
+	"errors"
 	"log"
-	"os"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/hortonworks/gohadoop/hadoop_yarn"
+	"github.com/hortonworks/gohadoop/hadoop_yarn/conf"
+	"github.com/hortonworks/gohadoop/hadoop_yarn/yarn_client"
 )
 
-func parseAppAttemptId() (*hadoop_yarn.ApplicationAttemptIdProto, error) {
-	appAttemptIdString := os.Getenv("APPLICATION_ATTEMPT_ID")
+func parseAppAttemptId(appAttemptIdString string) (*hadoop_yarn.ApplicationAttemptIdProto, error) {
 	log.Println("APPLICATION_ATTEMPT_ID: ", appAttemptIdString)
 
 	appAttemptIdStrComponents := strings.Split(appAttemptIdString, "_")
+
+	if len(appAttemptIdStrComponents) < 4 {
+		return nil, errors.New("Invalid application attempt id: " + appAttemptIdString)
+	}
 
 	clusterTimeStamp, err := strconv.ParseInt(appAttemptIdStrComponents[1], 10, 64)
 	if err != nil {
@@ -40,17 +44,11 @@ func parseAppAttemptId() (*hadoop_yarn.ApplicationAttemptIdProto, error) {
 func main() {
 	var err error
 
-	// Get applicationAttemptId from environment
-	applicationAttemptId, err := parseAppAttemptId()
-	if err != nil {
-		log.Fatal("parseAppAttemptId: ", err)
-	}
-
 	// Create YarnConfiguration
 	conf, _ := conf.NewYarnConfiguration()
 
 	// Create AMRMClient
-	rmClient, _ := yarn_client.CreateAMRMClient(conf, applicationAttemptId)
+	rmClient, _ := yarn_client.CreateAMRMClient(conf)
 	log.Println("Created RM client: ", rmClient)
 
 	// Register with ResourceManager
