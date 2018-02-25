@@ -2,9 +2,9 @@ package ipc
 
 import (
 	"bytes"
-	"github.com/golang/protobuf/proto"
 	"errors"
 	"fmt"
+	"github.com/golang/protobuf/proto"
 	"github.com/hortonworks/gohadoop"
 	"github.com/hortonworks/gohadoop/hadoop_common"
 	"github.com/hortonworks/gohadoop/hadoop_common/security"
