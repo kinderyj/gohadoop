@@ -1,71 +1,82 @@
 package main
 
 import (
-  "os"
-  "log"
-  "time"
-  hadoop_conf "github.com/hortonworks/gohadoop/hadoop_common/conf"
-  hadoop_yarn "github.com/hortonworks/gohadoop/hadoop_yarn"
-  yarn_conf "github.com/hortonworks/gohadoop/hadoop_yarn/conf"
-  "github.com/hortonworks/gohadoop/hadoop_yarn/yarn_client"
+	"log"
+	"os"
+	"time"
+
+	hadoop_conf "github.com/hortonworks/gohadoop/hadoop_common/conf"
+	hadoop_yarn "github.com/hortonworks/gohadoop/hadoop_yarn"
+	yarn_conf "github.com/hortonworks/gohadoop/hadoop_yarn/conf"
+	"github.com/hortonworks/gohadoop/hadoop_yarn/yarn_client"
+)
+
+const (
+	GOPATH               = "GOPATH"
+	APPLICATIONMASTER_GO = "APPLICATIONMASTER_GO"
 )
 
 func main() {
-  // Create YarnConfiguration
-  conf, _ := yarn_conf.NewYarnConfiguration()
+	goPath := os.Getenv(GOPATH)
+	applicationMasterLocation := os.Getenv(APPLICATIONMASTER_GO)
+	if len(applicationMasterLocation) == 0 {
+		applicationMasterLocation = goPath + "/src/github.com/hortonworks/gohadoop/hadoop_yarn/examples/dist_shell/applicationmaster.go"
+	}
 
-  // Create YarnClient
-  yarnClient, _ := yarn_client.CreateYarnClient(conf)
+	// Create YarnConfiguration
+	conf, _ := yarn_conf.NewYarnConfiguration()
 
-  // Create new application to get ApplicationSubmissionContext
-  _, asc, _ := yarnClient.CreateNewApplication()
+	// Create YarnClient
+	yarnClient, _ := yarn_client.CreateYarnClient(conf)
 
-  // Setup ContainerLaunchContext for the application
-  clc := hadoop_yarn.ContainerLaunchContextProto{}
-  clc.Command = []string{"go run /Users/acmurthy/dev/go/src/github.com/hortonworks/gohadoop/hadoop_yarn/examples/dist_shell/applicationmaster.go 1>/tmp/stdout 2>/tmp/stderr"}
-  clc.Environment = getEnv()
+	// Create new application to get ApplicationSubmissionContext
+	_, asc, _ := yarnClient.CreateNewApplication()
 
-  // Resource for ApplicationMaster
-  var memory int32 = 1024
-  resource := hadoop_yarn.ResourceProto{Memory: &memory}
+	// Setup ContainerLaunchContext for the application
+	clc := hadoop_yarn.ContainerLaunchContextProto{}
+	clc.Command = []string{"GOPATH=" + goPath + " go run " + applicationMasterLocation + " 1>/tmp/stdout 2>/tmp/stderr"}
+	clc.Environment = getEnv()
 
-  // Some useful information
-  queue := "default"
-  appName := "simple-go-yarn-app"
-  appType := "GO_HADOOP"
+	// Resource for ApplicationMaster
+	var memory int32 = 1024
+	resource := hadoop_yarn.ResourceProto{Memory: &memory}
 
-  // Setup ApplicationSubmissionContext for the application
-  asc.AmContainerSpec = &clc
-  asc.Resource = &resource
-  asc.ApplicationName = &appName
-  asc.Queue = &queue
-  asc.ApplicationType = &appType
+	// Some useful information
+	queue := "default"
+	appName := "simple-go-yarn-app"
+	appType := "GO_HADOOP"
 
-  // Submit!
-  err := yarnClient.SubmitApplication(asc)
-  if err != nil {
-    log.Fatal("yarnClient.SubmitApplication ", err)
-  }
-  log.Println("Successfully submitted application: ", asc.ApplicationId)
+	// Setup ApplicationSubmissionContext for the application
+	asc.AmContainerSpec = &clc
+	asc.Resource = &resource
+	asc.ApplicationName = &appName
+	asc.Queue = &queue
+	asc.ApplicationType = &appType
 
-  appReport, err := yarnClient.GetApplicationReport(asc.ApplicationId)
-  if err != nil {
-    log.Fatal("yarnClient.GetApplicationReport ", err)
-  }
-  appState := appReport.GetYarnApplicationState() 
-  for appState != hadoop_yarn.YarnApplicationStateProto_FINISHED && appState != hadoop_yarn.YarnApplicationStateProto_KILLED && appState != hadoop_yarn.YarnApplicationStateProto_FAILED {
-    log.Println("Application in state ", appState)
-    time.Sleep(1 * time.Second)
-    appReport, err = yarnClient.GetApplicationReport(asc.ApplicationId)
-    appState = appReport.GetYarnApplicationState() 
-  }
+	// Submit!
+	err := yarnClient.SubmitApplication(asc)
+	if err != nil {
+		log.Fatal("yarnClient.SubmitApplication ", err)
+	}
+	log.Println("Successfully submitted application: ", asc.ApplicationId)
 
-  log.Println("Application finished in state: ", appState)
+	appReport, err := yarnClient.GetApplicationReport(asc.ApplicationId)
+	if err != nil {
+		log.Fatal("yarnClient.GetApplicationReport ", err)
+	}
+	appState := appReport.GetYarnApplicationState()
+	for appState != hadoop_yarn.YarnApplicationStateProto_FINISHED && appState != hadoop_yarn.YarnApplicationStateProto_KILLED && appState != hadoop_yarn.YarnApplicationStateProto_FAILED {
+		log.Println("Application in state ", appState)
+		time.Sleep(1 * time.Second)
+		appReport, err = yarnClient.GetApplicationReport(asc.ApplicationId)
+		appState = appReport.GetYarnApplicationState()
+	}
+
+	log.Println("Application finished in state: ", appState)
 }
 
-func getEnv () ([]*hadoop_yarn.StringStringMapProto) {
-  key := hadoop_conf.HADOOP_CONF_DIR
-  value := os.Getenv(hadoop_conf.HADOOP_CONF_DIR)
-  return []*hadoop_yarn.StringStringMapProto{&hadoop_yarn.StringStringMapProto{Key: &key, Value: &value}}
+func getEnv() []*hadoop_yarn.StringStringMapProto {
+	key := hadoop_conf.HADOOP_CONF_DIR
+	value := os.Getenv(hadoop_conf.HADOOP_CONF_DIR)
+	return []*hadoop_yarn.StringStringMapProto{&hadoop_yarn.StringStringMapProto{Key: &key, Value: &value}}
 }
-

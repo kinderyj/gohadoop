@@ -4,9 +4,9 @@ import (
 	hadoop_conf "github.com/hortonworks/gohadoop/hadoop_common/conf"
 )
 
-const (
-	YARN_DEFAULT = "yarn-default.xml"
-	YARN_SITE    = "yarn-site.xml"
+var (
+	YARN_DEFAULT hadoop_conf.Resource = hadoop_conf.Resource{"yarn-default.xml", false}
+	YARN_SITE    hadoop_conf.Resource = hadoop_conf.Resource{"yarn-site.xml", true}
 )
 
 const (
@@ -71,6 +71,6 @@ func (yarn_conf *yarn_configuration) SetRMSchedulerAddress(address string) error
 }
 
 func NewYarnConfiguration() (YarnConfiguration, error) {
-	c, err := hadoop_conf.NewConfigurationResources([]string{YARN_DEFAULT, YARN_SITE})
+	c, err := hadoop_conf.NewConfigurationResources([]hadoop_conf.Resource{YARN_DEFAULT, YARN_SITE})
 	return &yarn_configuration{conf: c}, err
 }
