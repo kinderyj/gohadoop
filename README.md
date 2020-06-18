@@ -1,22 +1,32 @@
-gohadoop
-========
+### usage
 
-gohadoop is native go clients for Apache Hadoop YARN.
+编译：
 
-It includes an early version of Hadoop IPC client and requisite YARN client libraries to implement YARN applications completely in go (both YARN application-client and application-master).
+1)protobuf使用2.5.0
 
-### Notes: 
-* Set HADOOP_CONF_DIR environment variable, and ensure the conf directory contains both *-default.xml and *-site.xml files.
-* hadoop_yarn/examples/dist_shell is an example go YARN application: client.go is the submission client and applicationmaster.go is the application-master. 
+cd protobuf-2.5.0
 
-To run:
-  
+./configure --prefix=/usr/local/protobuf
 
-### Run regular dist-shell with AM in-cluster
+sudo make install
 
-$ HADOOP_CONF_DIR=conf go run hadoop_yarn/examples/dist_shell/client.go
+export PATH=$PATH:/usr/local/protobuf/bin
+
+2)protoc-gen-go暂时使用v1.0.0
+
+cd go/src/github.com/golang/protobuf/protoc-gen-go
+
+git checkout v1.0.0
+
+go build
+
+cp protoc-gen-go /usr/local/bin/
+
+3)pb.go hadoop使用branch-3.2.0
+
+cd /Users/kinderyj/go/src/github.com/hortonworks/gohadoop/hadoop_yarn
+
+protoc --proto_path=../hadoop_common --proto_path=. --go_out=build yarn_protos.proto
 
 
-### Run dist-shell with unmanaged AM
 
-$ HADOOP_CONF_DIR=conf go run hadoop_yarn/examples/dist_shell/unmanaged.go
