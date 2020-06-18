@@ -44,3 +44,16 @@ func (c *YarnClient) GetApplicationAttemptReport(applicationAttemptId *hadoop_ya
 	err := c.client.GetApplicationAttemptReport(&request, &response)
 	return response.ApplicationAttemptReport, err
 }
+
+func (c *YarnClient) GetNodesState() {
+    request := hadoop_yarn.GetClusterNodesRequestProto{}
+    response := hadoop_yarn.GetClusterNodesResponseProto{}
+    err := c.client.GetClusterNodes(&request, &response)
+    if err != nil {
+        //return nil, nil, err
+        log.Println("failed to GetNodesState ", err)
+    }
+
+    //return &response, &hadoop_yarn.ApplicationSubmissionContextProto{ApplicationId: response.ApplicationId}, nil
+    log.Println("response is ", response)
+}
