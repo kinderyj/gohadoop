@@ -23,10 +23,7 @@ go build
 cp protoc-gen-go /usr/local/bin/
 
 3)pb.go hadoop使用branch-3.2.0
-
-cd /Users/kinderyj/go/src/github.com/hortonworks/gohadoop/hadoop_yarn
-
-protoc --proto_path=../hadoop_common --proto_path=. --go_out=build yarn_protos.proto
+protoc --proto_path=/Users/kinderyj/go/src/github.com/apache/hadoop/hadoop-common-project/hadoop-common/src/main/proto/  --proto_path=. --go_out=build *.proto
 
 
 ## 调试&demo
