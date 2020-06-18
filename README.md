@@ -1,6 +1,6 @@
-### usage
+# usage
 
-编译：
+## 编译
 
 1)protobuf使用2.5.0
 
@@ -29,4 +29,8 @@ cd /Users/kinderyj/go/src/github.com/hortonworks/gohadoop/hadoop_yarn
 protoc --proto_path=../hadoop_common --proto_path=. --go_out=build yarn_protos.proto
 
 
+## 使用
+
+1. 登陆emr集群， su hadoop
+2. source ~/.bash_profile
 
