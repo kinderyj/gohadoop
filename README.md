@@ -29,8 +29,10 @@ cd /Users/kinderyj/go/src/github.com/hortonworks/gohadoop/hadoop_yarn
 protoc --proto_path=../hadoop_common --proto_path=. --go_out=build yarn_protos.proto
 
 
-## 使用
+## 调试&demo
 
 1. 登陆emr集群， su hadoop
 2. source ~/.bash_profile
+3. cd /home/hadoop/go/src/github.com/hortonworks/gohadoop/hadoop_yarn/examples/dist_shell
+4. go run emr.go #查询集群内node信息，查询指定了appId的信息
 
