@@ -26,6 +26,7 @@ cp protoc-gen-go /usr/local/bin/
 
 protoc --proto_path=$GOPATH/src/github.com/apache/hadoop/hadoop-common-project/hadoop-common/src/main/proto/  --proto_path=. --go_out=build *.proto
 
+当前只替换了3.2.0版本的yarn_service_protos.pb.go和yarn_protos.pb.go
 
 ## 调试&demo
 
