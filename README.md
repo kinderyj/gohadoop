@@ -14,7 +14,7 @@ export PATH=$PATH:/usr/local/protobuf/bin
 
 2)protoc-gen-go暂时使用v1.0.0
 
-cd go/src/github.com/golang/protobuf/protoc-gen-go
+cd $GOPATH/src/github.com/golang/protobuf/protoc-gen-go
 
 git checkout v1.0.0
 
@@ -24,7 +24,7 @@ cp protoc-gen-go /usr/local/bin/
 
 3)pb.go hadoop使用branch-3.2.0
 
-protoc --proto_path=/Users/kinderyj/go/src/github.com/apache/hadoop/hadoop-common-project/hadoop-common/src/main/proto/  --proto_path=. --go_out=build *.proto
+protoc --proto_path=$GOPATH/src/github.com/apache/hadoop/hadoop-common-project/hadoop-common/src/main/proto/  --proto_path=. --go_out=build *.proto
 
 
 ## 调试&demo
