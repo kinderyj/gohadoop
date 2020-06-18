@@ -36,3 +36,6 @@ protoc --proto_path=../hadoop_common --proto_path=. --go_out=build yarn_protos.p
 3. cd /home/hadoop/go/src/github.com/hortonworks/gohadoop/hadoop_yarn/examples/dist_shell
 4. go run emr.go #查询集群内node信息，查询指定了appId的信息
 
+## TODO
+
+为proto文件添加resourceRequests并编译pb文件
