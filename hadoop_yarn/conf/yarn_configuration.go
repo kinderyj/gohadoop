@@ -13,9 +13,9 @@ const (
 	YARN_PREFIX                      = "yarn."
 	RM_PREFIX                        = YARN_PREFIX + "resourcemanager."
 	RM_ADDRESS                       = RM_PREFIX + "address"
-	DEFAULT_RM_ADDRESS               = "0.0.0.0:8032"
+	DEFAULT_RM_ADDRESS               = "10.0.0.8:5000"
 	RM_SCHEDULER_ADDRESS             = RM_PREFIX + "scheduler.address"
-	DEFAULT_RM_SCHEDULER_ADDRESS     = "0.0.0.0:8030"
+	DEFAULT_RM_SCHEDULER_ADDRESS     = "10.0.0.8:5000"
 	RM_AM_EXPIRY_INTERVAL_MS         = YARN_PREFIX + "am.liveness-monitor.expiry-interval-ms"
 	DEFAULT_RM_AM_EXPIRY_INTERVAL_MS = 600000
 )
