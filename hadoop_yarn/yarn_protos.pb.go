@@ -9,10 +9,41 @@ import json "encoding/json"
 import math "math"
 import hadoop_common "github.com/hortonworks/gohadoop/hadoop_common"
 
-// Reference proto, json, and math imports to suppress error if they are not otherwise used.
+// Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
-var _ = &json.SyntaxError{}
+var _ = fmt.Errorf
 var _ = math.Inf
+
+type ResourceTypesProto int32
+
+const (
+	ResourceTypesProto_COUNTABLE ResourceTypesProto = 0
+)
+
+var ResourceTypesProto_name = map[int32]string{
+	0: "COUNTABLE",
+}
+var ResourceTypesProto_value = map[string]int32{
+	"COUNTABLE": 0,
+}
+
+func (x ResourceTypesProto) Enum() *ResourceTypesProto {
+	p := new(ResourceTypesProto)
+	*p = x
+	return p
+}
+func (x ResourceTypesProto) String() string {
+	return proto.EnumName(ResourceTypesProto_name, int32(x))
+}
+func (x *ResourceTypesProto) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(ResourceTypesProto_value, data, "ResourceTypesProto")
+	if err != nil {
+		return err
+	}
+	*x = ResourceTypesProto(value)
+	return nil
+}
+func (ResourceTypesProto) EnumDescriptor() ([]byte, []int) { return fileDescriptor5, []int{0} }
 
 type ContainerStateProto int32
 
@@ -41,9 +72,6 @@ func (x ContainerStateProto) Enum() *ContainerStateProto {
 func (x ContainerStateProto) String() string {
 	return proto.EnumName(ContainerStateProto_name, int32(x))
 }
-func (x ContainerStateProto) MarshalJSON() ([]byte, error) {
-	return json.Marshal(x.String())
-}
 func (x *ContainerStateProto) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(ContainerStateProto_value, data, "ContainerStateProto")
 	if err != nil {
@@ -52,6 +80,64 @@ func (x *ContainerStateProto) UnmarshalJSON(data []byte) error {
 	*x = ContainerStateProto(value)
 	return nil
 }
+func (ContainerStateProto) EnumDescriptor() ([]byte, []int) { return fileDescriptor5, []int{1} }
+
+type ContainerSubStateProto int32
+
+const (
+	// *
+	// NEW, LOCALIZING, SCHEDULED,
+	// REINITIALIZING_AWAITING_KILL, RELAUNCHING,
+	ContainerSubStateProto_CSS_SCHEDULED ContainerSubStateProto = 1
+	// *
+	// RUNNING, REINITIALIZING, PAUSING, KILLING
+	ContainerSubStateProto_CSS_RUNNING ContainerSubStateProto = 2
+	// *
+	// PAUSED, RESUMING
+	ContainerSubStateProto_CSS_PAUSED ContainerSubStateProto = 3
+	// *
+	// LOCALIZATION_FAILED, EXITED_WITH_SUCCESS,
+	// EXITED_WITH_FAILURE,
+	// CONTAINER_CLEANEDUP_AFTER_KILL,
+	// CONTAINER_RESOURCES_CLEANINGUP
+	ContainerSubStateProto_CSS_COMPLETING ContainerSubStateProto = 4
+	// *
+	// DONE
+	ContainerSubStateProto_CSS_DONE ContainerSubStateProto = 5
+)
+
+var ContainerSubStateProto_name = map[int32]string{
+	1: "CSS_SCHEDULED",
+	2: "CSS_RUNNING",
+	3: "CSS_PAUSED",
+	4: "CSS_COMPLETING",
+	5: "CSS_DONE",
+}
+var ContainerSubStateProto_value = map[string]int32{
+	"CSS_SCHEDULED":  1,
+	"CSS_RUNNING":    2,
+	"CSS_PAUSED":     3,
+	"CSS_COMPLETING": 4,
+	"CSS_DONE":       5,
+}
+
+func (x ContainerSubStateProto) Enum() *ContainerSubStateProto {
+	p := new(ContainerSubStateProto)
+	*p = x
+	return p
+}
+func (x ContainerSubStateProto) String() string {
+	return proto.EnumName(ContainerSubStateProto_name, int32(x))
+}
+func (x *ContainerSubStateProto) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(ContainerSubStateProto_value, data, "ContainerSubStateProto")
+	if err != nil {
+		return err
+	}
+	*x = ContainerSubStateProto(value)
+	return nil
+}
+func (ContainerSubStateProto) EnumDescriptor() ([]byte, []int) { return fileDescriptor5, []int{2} }
 
 type YarnApplicationStateProto int32
 
@@ -95,9 +181,6 @@ func (x YarnApplicationStateProto) Enum() *YarnApplicationStateProto {
 func (x YarnApplicationStateProto) String() string {
 	return proto.EnumName(YarnApplicationStateProto_name, int32(x))
 }
-func (x YarnApplicationStateProto) MarshalJSON() ([]byte, error) {
-	return json.Marshal(x.String())
-}
 func (x *YarnApplicationStateProto) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(YarnApplicationStateProto_value, data, "YarnApplicationStateProto")
 	if err != nil {
@@ -106,6 +189,7 @@ func (x *YarnApplicationStateProto) UnmarshalJSON(data []byte) error {
 	*x = YarnApplicationStateProto(value)
 	return nil
 }
+func (YarnApplicationStateProto) EnumDescriptor() ([]byte, []int) { return fileDescriptor5, []int{3} }
 
 type YarnApplicationAttemptStateProto int32
 
@@ -158,9 +242,6 @@ func (x YarnApplicationAttemptStateProto) Enum() *YarnApplicationAttemptStatePro
 func (x YarnApplicationAttemptStateProto) String() string {
 	return proto.EnumName(YarnApplicationAttemptStateProto_name, int32(x))
 }
-func (x YarnApplicationAttemptStateProto) MarshalJSON() ([]byte, error) {
-	return json.Marshal(x.String())
-}
 func (x *YarnApplicationAttemptStateProto) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(YarnApplicationAttemptStateProto_value, data, "YarnApplicationAttemptStateProto")
 	if err != nil {
@@ -168,6 +249,9 @@ func (x *YarnApplicationAttemptStateProto) UnmarshalJSON(data []byte) error {
 	}
 	*x = YarnApplicationAttemptStateProto(value)
 	return nil
+}
+func (YarnApplicationAttemptStateProto) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor5, []int{4}
 }
 
 type FinalApplicationStatusProto int32
@@ -177,6 +261,7 @@ const (
 	FinalApplicationStatusProto_APP_SUCCEEDED FinalApplicationStatusProto = 1
 	FinalApplicationStatusProto_APP_FAILED    FinalApplicationStatusProto = 2
 	FinalApplicationStatusProto_APP_KILLED    FinalApplicationStatusProto = 3
+	FinalApplicationStatusProto_APP_ENDED     FinalApplicationStatusProto = 4
 )
 
 var FinalApplicationStatusProto_name = map[int32]string{
@@ -184,12 +269,14 @@ var FinalApplicationStatusProto_name = map[int32]string{
 	1: "APP_SUCCEEDED",
 	2: "APP_FAILED",
 	3: "APP_KILLED",
+	4: "APP_ENDED",
 }
 var FinalApplicationStatusProto_value = map[string]int32{
 	"APP_UNDEFINED": 0,
 	"APP_SUCCEEDED": 1,
 	"APP_FAILED":    2,
 	"APP_KILLED":    3,
+	"APP_ENDED":     4,
 }
 
 func (x FinalApplicationStatusProto) Enum() *FinalApplicationStatusProto {
@@ -200,9 +287,6 @@ func (x FinalApplicationStatusProto) Enum() *FinalApplicationStatusProto {
 func (x FinalApplicationStatusProto) String() string {
 	return proto.EnumName(FinalApplicationStatusProto_name, int32(x))
 }
-func (x FinalApplicationStatusProto) MarshalJSON() ([]byte, error) {
-	return json.Marshal(x.String())
-}
 func (x *FinalApplicationStatusProto) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(FinalApplicationStatusProto_value, data, "FinalApplicationStatusProto")
 	if err != nil {
@@ -211,6 +295,7 @@ func (x *FinalApplicationStatusProto) UnmarshalJSON(data []byte) error {
 	*x = FinalApplicationStatusProto(value)
 	return nil
 }
+func (FinalApplicationStatusProto) EnumDescriptor() ([]byte, []int) { return fileDescriptor5, []int{5} }
 
 type LocalResourceVisibilityProto int32
 
@@ -239,9 +324,6 @@ func (x LocalResourceVisibilityProto) Enum() *LocalResourceVisibilityProto {
 func (x LocalResourceVisibilityProto) String() string {
 	return proto.EnumName(LocalResourceVisibilityProto_name, int32(x))
 }
-func (x LocalResourceVisibilityProto) MarshalJSON() ([]byte, error) {
-	return json.Marshal(x.String())
-}
 func (x *LocalResourceVisibilityProto) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(LocalResourceVisibilityProto_value, data, "LocalResourceVisibilityProto")
 	if err != nil {
@@ -249,6 +331,9 @@ func (x *LocalResourceVisibilityProto) UnmarshalJSON(data []byte) error {
 	}
 	*x = LocalResourceVisibilityProto(value)
 	return nil
+}
+func (LocalResourceVisibilityProto) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor5, []int{6}
 }
 
 type LocalResourceTypeProto int32
@@ -278,9 +363,6 @@ func (x LocalResourceTypeProto) Enum() *LocalResourceTypeProto {
 func (x LocalResourceTypeProto) String() string {
 	return proto.EnumName(LocalResourceTypeProto_name, int32(x))
 }
-func (x LocalResourceTypeProto) MarshalJSON() ([]byte, error) {
-	return json.Marshal(x.String())
-}
 func (x *LocalResourceTypeProto) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(LocalResourceTypeProto_value, data, "LocalResourceTypeProto")
 	if err != nil {
@@ -289,16 +371,68 @@ func (x *LocalResourceTypeProto) UnmarshalJSON(data []byte) error {
 	*x = LocalResourceTypeProto(value)
 	return nil
 }
+func (LocalResourceTypeProto) EnumDescriptor() ([]byte, []int) { return fileDescriptor5, []int{7} }
+
+type LogAggregationStatusProto int32
+
+const (
+	LogAggregationStatusProto_LOG_DISABLED             LogAggregationStatusProto = 1
+	LogAggregationStatusProto_LOG_NOT_START            LogAggregationStatusProto = 2
+	LogAggregationStatusProto_LOG_RUNNING              LogAggregationStatusProto = 3
+	LogAggregationStatusProto_LOG_SUCCEEDED            LogAggregationStatusProto = 4
+	LogAggregationStatusProto_LOG_FAILED               LogAggregationStatusProto = 5
+	LogAggregationStatusProto_LOG_TIME_OUT             LogAggregationStatusProto = 6
+	LogAggregationStatusProto_LOG_RUNNING_WITH_FAILURE LogAggregationStatusProto = 7
+)
+
+var LogAggregationStatusProto_name = map[int32]string{
+	1: "LOG_DISABLED",
+	2: "LOG_NOT_START",
+	3: "LOG_RUNNING",
+	4: "LOG_SUCCEEDED",
+	5: "LOG_FAILED",
+	6: "LOG_TIME_OUT",
+	7: "LOG_RUNNING_WITH_FAILURE",
+}
+var LogAggregationStatusProto_value = map[string]int32{
+	"LOG_DISABLED":             1,
+	"LOG_NOT_START":            2,
+	"LOG_RUNNING":              3,
+	"LOG_SUCCEEDED":            4,
+	"LOG_FAILED":               5,
+	"LOG_TIME_OUT":             6,
+	"LOG_RUNNING_WITH_FAILURE": 7,
+}
+
+func (x LogAggregationStatusProto) Enum() *LogAggregationStatusProto {
+	p := new(LogAggregationStatusProto)
+	*p = x
+	return p
+}
+func (x LogAggregationStatusProto) String() string {
+	return proto.EnumName(LogAggregationStatusProto_name, int32(x))
+}
+func (x *LogAggregationStatusProto) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(LogAggregationStatusProto_value, data, "LogAggregationStatusProto")
+	if err != nil {
+		return err
+	}
+	*x = LogAggregationStatusProto(value)
+	return nil
+}
+func (LogAggregationStatusProto) EnumDescriptor() ([]byte, []int) { return fileDescriptor5, []int{8} }
 
 type NodeStateProto int32
 
 const (
-	NodeStateProto_NS_NEW            NodeStateProto = 1
-	NodeStateProto_NS_RUNNING        NodeStateProto = 2
-	NodeStateProto_NS_UNHEALTHY      NodeStateProto = 3
-	NodeStateProto_NS_DECOMMISSIONED NodeStateProto = 4
-	NodeStateProto_NS_LOST           NodeStateProto = 5
-	NodeStateProto_NS_REBOOTED       NodeStateProto = 6
+	NodeStateProto_NS_NEW             NodeStateProto = 1
+	NodeStateProto_NS_RUNNING         NodeStateProto = 2
+	NodeStateProto_NS_UNHEALTHY       NodeStateProto = 3
+	NodeStateProto_NS_DECOMMISSIONED  NodeStateProto = 4
+	NodeStateProto_NS_LOST            NodeStateProto = 5
+	NodeStateProto_NS_REBOOTED        NodeStateProto = 6
+	NodeStateProto_NS_DECOMMISSIONING NodeStateProto = 7
+	NodeStateProto_NS_SHUTDOWN        NodeStateProto = 8
 )
 
 var NodeStateProto_name = map[int32]string{
@@ -308,14 +442,18 @@ var NodeStateProto_name = map[int32]string{
 	4: "NS_DECOMMISSIONED",
 	5: "NS_LOST",
 	6: "NS_REBOOTED",
+	7: "NS_DECOMMISSIONING",
+	8: "NS_SHUTDOWN",
 }
 var NodeStateProto_value = map[string]int32{
-	"NS_NEW":            1,
-	"NS_RUNNING":        2,
-	"NS_UNHEALTHY":      3,
-	"NS_DECOMMISSIONED": 4,
-	"NS_LOST":           5,
-	"NS_REBOOTED":       6,
+	"NS_NEW":             1,
+	"NS_RUNNING":         2,
+	"NS_UNHEALTHY":       3,
+	"NS_DECOMMISSIONED":  4,
+	"NS_LOST":            5,
+	"NS_REBOOTED":        6,
+	"NS_DECOMMISSIONING": 7,
+	"NS_SHUTDOWN":        8,
 }
 
 func (x NodeStateProto) Enum() *NodeStateProto {
@@ -326,9 +464,6 @@ func (x NodeStateProto) Enum() *NodeStateProto {
 func (x NodeStateProto) String() string {
 	return proto.EnumName(NodeStateProto_name, int32(x))
 }
-func (x NodeStateProto) MarshalJSON() ([]byte, error) {
-	return json.Marshal(x.String())
-}
 func (x *NodeStateProto) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(NodeStateProto_value, data, "NodeStateProto")
 	if err != nil {
@@ -337,6 +472,143 @@ func (x *NodeStateProto) UnmarshalJSON(data []byte) error {
 	*x = NodeStateProto(value)
 	return nil
 }
+func (NodeStateProto) EnumDescriptor() ([]byte, []int) { return fileDescriptor5, []int{9} }
+
+type NodeUpdateTypeProto int32
+
+const (
+	NodeUpdateTypeProto_NODE_USABLE          NodeUpdateTypeProto = 0
+	NodeUpdateTypeProto_NODE_UNUSABLE        NodeUpdateTypeProto = 1
+	NodeUpdateTypeProto_NODE_DECOMMISSIONING NodeUpdateTypeProto = 2
+)
+
+var NodeUpdateTypeProto_name = map[int32]string{
+	0: "NODE_USABLE",
+	1: "NODE_UNUSABLE",
+	2: "NODE_DECOMMISSIONING",
+}
+var NodeUpdateTypeProto_value = map[string]int32{
+	"NODE_USABLE":          0,
+	"NODE_UNUSABLE":        1,
+	"NODE_DECOMMISSIONING": 2,
+}
+
+func (x NodeUpdateTypeProto) Enum() *NodeUpdateTypeProto {
+	p := new(NodeUpdateTypeProto)
+	*p = x
+	return p
+}
+func (x NodeUpdateTypeProto) String() string {
+	return proto.EnumName(NodeUpdateTypeProto_name, int32(x))
+}
+func (x *NodeUpdateTypeProto) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(NodeUpdateTypeProto_value, data, "NodeUpdateTypeProto")
+	if err != nil {
+		return err
+	}
+	*x = NodeUpdateTypeProto(value)
+	return nil
+}
+func (NodeUpdateTypeProto) EnumDescriptor() ([]byte, []int) { return fileDescriptor5, []int{10} }
+
+type NodeAttributeTypeProto int32
+
+const (
+	NodeAttributeTypeProto_STRING NodeAttributeTypeProto = 1
+)
+
+var NodeAttributeTypeProto_name = map[int32]string{
+	1: "STRING",
+}
+var NodeAttributeTypeProto_value = map[string]int32{
+	"STRING": 1,
+}
+
+func (x NodeAttributeTypeProto) Enum() *NodeAttributeTypeProto {
+	p := new(NodeAttributeTypeProto)
+	*p = x
+	return p
+}
+func (x NodeAttributeTypeProto) String() string {
+	return proto.EnumName(NodeAttributeTypeProto_name, int32(x))
+}
+func (x *NodeAttributeTypeProto) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(NodeAttributeTypeProto_value, data, "NodeAttributeTypeProto")
+	if err != nil {
+		return err
+	}
+	*x = NodeAttributeTypeProto(value)
+	return nil
+}
+func (NodeAttributeTypeProto) EnumDescriptor() ([]byte, []int) { return fileDescriptor5, []int{11} }
+
+type ContainerTypeProto int32
+
+const (
+	ContainerTypeProto_APPLICATION_MASTER ContainerTypeProto = 1
+	ContainerTypeProto_TASK               ContainerTypeProto = 2
+)
+
+var ContainerTypeProto_name = map[int32]string{
+	1: "APPLICATION_MASTER",
+	2: "TASK",
+}
+var ContainerTypeProto_value = map[string]int32{
+	"APPLICATION_MASTER": 1,
+	"TASK":               2,
+}
+
+func (x ContainerTypeProto) Enum() *ContainerTypeProto {
+	p := new(ContainerTypeProto)
+	*p = x
+	return p
+}
+func (x ContainerTypeProto) String() string {
+	return proto.EnumName(ContainerTypeProto_name, int32(x))
+}
+func (x *ContainerTypeProto) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(ContainerTypeProto_value, data, "ContainerTypeProto")
+	if err != nil {
+		return err
+	}
+	*x = ContainerTypeProto(value)
+	return nil
+}
+func (ContainerTypeProto) EnumDescriptor() ([]byte, []int) { return fileDescriptor5, []int{12} }
+
+type ExecutionTypeProto int32
+
+const (
+	ExecutionTypeProto_GUARANTEED    ExecutionTypeProto = 1
+	ExecutionTypeProto_OPPORTUNISTIC ExecutionTypeProto = 2
+)
+
+var ExecutionTypeProto_name = map[int32]string{
+	1: "GUARANTEED",
+	2: "OPPORTUNISTIC",
+}
+var ExecutionTypeProto_value = map[string]int32{
+	"GUARANTEED":    1,
+	"OPPORTUNISTIC": 2,
+}
+
+func (x ExecutionTypeProto) Enum() *ExecutionTypeProto {
+	p := new(ExecutionTypeProto)
+	*p = x
+	return p
+}
+func (x ExecutionTypeProto) String() string {
+	return proto.EnumName(ExecutionTypeProto_name, int32(x))
+}
+func (x *ExecutionTypeProto) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(ExecutionTypeProto_value, data, "ExecutionTypeProto")
+	if err != nil {
+		return err
+	}
+	*x = ExecutionTypeProto(value)
+	return nil
+}
+func (ExecutionTypeProto) EnumDescriptor() ([]byte, []int) { return fileDescriptor5, []int{13} }
 
 type AMCommandProto int32
 
@@ -362,9 +634,6 @@ func (x AMCommandProto) Enum() *AMCommandProto {
 func (x AMCommandProto) String() string {
 	return proto.EnumName(AMCommandProto_name, int32(x))
 }
-func (x AMCommandProto) MarshalJSON() ([]byte, error) {
-	return json.Marshal(x.String())
-}
 func (x *AMCommandProto) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(AMCommandProto_value, data, "AMCommandProto")
 	if err != nil {
@@ -372,6 +641,74 @@ func (x *AMCommandProto) UnmarshalJSON(data []byte) error {
 	}
 	*x = AMCommandProto(value)
 	return nil
+}
+func (AMCommandProto) EnumDescriptor() ([]byte, []int) { return fileDescriptor5, []int{14} }
+
+type RejectionReasonProto int32
+
+const (
+	RejectionReasonProto_RRP_COULD_NOT_PLACE_ON_NODE    RejectionReasonProto = 1
+	RejectionReasonProto_RRP_COULD_NOT_SCHEDULE_ON_NODE RejectionReasonProto = 2
+)
+
+var RejectionReasonProto_name = map[int32]string{
+	1: "RRP_COULD_NOT_PLACE_ON_NODE",
+	2: "RRP_COULD_NOT_SCHEDULE_ON_NODE",
+}
+var RejectionReasonProto_value = map[string]int32{
+	"RRP_COULD_NOT_PLACE_ON_NODE":    1,
+	"RRP_COULD_NOT_SCHEDULE_ON_NODE": 2,
+}
+
+func (x RejectionReasonProto) Enum() *RejectionReasonProto {
+	p := new(RejectionReasonProto)
+	*p = x
+	return p
+}
+func (x RejectionReasonProto) String() string {
+	return proto.EnumName(RejectionReasonProto_name, int32(x))
+}
+func (x *RejectionReasonProto) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(RejectionReasonProto_value, data, "RejectionReasonProto")
+	if err != nil {
+		return err
+	}
+	*x = RejectionReasonProto(value)
+	return nil
+}
+func (RejectionReasonProto) EnumDescriptor() ([]byte, []int) { return fileDescriptor5, []int{15} }
+
+type ApplicationTimeoutTypeProto int32
+
+const (
+	ApplicationTimeoutTypeProto_APP_TIMEOUT_LIFETIME ApplicationTimeoutTypeProto = 1
+)
+
+var ApplicationTimeoutTypeProto_name = map[int32]string{
+	1: "APP_TIMEOUT_LIFETIME",
+}
+var ApplicationTimeoutTypeProto_value = map[string]int32{
+	"APP_TIMEOUT_LIFETIME": 1,
+}
+
+func (x ApplicationTimeoutTypeProto) Enum() *ApplicationTimeoutTypeProto {
+	p := new(ApplicationTimeoutTypeProto)
+	*p = x
+	return p
+}
+func (x ApplicationTimeoutTypeProto) String() string {
+	return proto.EnumName(ApplicationTimeoutTypeProto_name, int32(x))
+}
+func (x *ApplicationTimeoutTypeProto) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(ApplicationTimeoutTypeProto_value, data, "ApplicationTimeoutTypeProto")
+	if err != nil {
+		return err
+	}
+	*x = ApplicationTimeoutTypeProto(value)
+	return nil
+}
+func (ApplicationTimeoutTypeProto) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor5, []int{16}
 }
 
 type ApplicationAccessTypeProto int32
@@ -398,9 +735,6 @@ func (x ApplicationAccessTypeProto) Enum() *ApplicationAccessTypeProto {
 func (x ApplicationAccessTypeProto) String() string {
 	return proto.EnumName(ApplicationAccessTypeProto_name, int32(x))
 }
-func (x ApplicationAccessTypeProto) MarshalJSON() ([]byte, error) {
-	return json.Marshal(x.String())
-}
 func (x *ApplicationAccessTypeProto) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(ApplicationAccessTypeProto_value, data, "ApplicationAccessTypeProto")
 	if err != nil {
@@ -409,21 +743,25 @@ func (x *ApplicationAccessTypeProto) UnmarshalJSON(data []byte) error {
 	*x = ApplicationAccessTypeProto(value)
 	return nil
 }
+func (ApplicationAccessTypeProto) EnumDescriptor() ([]byte, []int) { return fileDescriptor5, []int{17} }
 
 type QueueStateProto int32
 
 const (
-	QueueStateProto_Q_STOPPED QueueStateProto = 1
-	QueueStateProto_Q_RUNNING QueueStateProto = 2
+	QueueStateProto_Q_STOPPED  QueueStateProto = 1
+	QueueStateProto_Q_RUNNING  QueueStateProto = 2
+	QueueStateProto_Q_DRAINING QueueStateProto = 3
 )
 
 var QueueStateProto_name = map[int32]string{
 	1: "Q_STOPPED",
 	2: "Q_RUNNING",
+	3: "Q_DRAINING",
 }
 var QueueStateProto_value = map[string]int32{
-	"Q_STOPPED": 1,
-	"Q_RUNNING": 2,
+	"Q_STOPPED":  1,
+	"Q_RUNNING":  2,
+	"Q_DRAINING": 3,
 }
 
 func (x QueueStateProto) Enum() *QueueStateProto {
@@ -434,9 +772,6 @@ func (x QueueStateProto) Enum() *QueueStateProto {
 func (x QueueStateProto) String() string {
 	return proto.EnumName(QueueStateProto_name, int32(x))
 }
-func (x QueueStateProto) MarshalJSON() ([]byte, error) {
-	return json.Marshal(x.String())
-}
 func (x *QueueStateProto) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(QueueStateProto_value, data, "QueueStateProto")
 	if err != nil {
@@ -445,6 +780,7 @@ func (x *QueueStateProto) UnmarshalJSON(data []byte) error {
 	*x = QueueStateProto(value)
 	return nil
 }
+func (QueueStateProto) EnumDescriptor() ([]byte, []int) { return fileDescriptor5, []int{18} }
 
 type QueueACLProto int32
 
@@ -470,9 +806,6 @@ func (x QueueACLProto) Enum() *QueueACLProto {
 func (x QueueACLProto) String() string {
 	return proto.EnumName(QueueACLProto_name, int32(x))
 }
-func (x QueueACLProto) MarshalJSON() ([]byte, error) {
-	return json.Marshal(x.String())
-}
 func (x *QueueACLProto) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(QueueACLProto_value, data, "QueueACLProto")
 	if err != nil {
@@ -480,6 +813,125 @@ func (x *QueueACLProto) UnmarshalJSON(data []byte) error {
 	}
 	*x = QueueACLProto(value)
 	return nil
+}
+func (QueueACLProto) EnumDescriptor() ([]byte, []int) { return fileDescriptor5, []int{19} }
+
+type SignalContainerCommandProto int32
+
+const (
+	SignalContainerCommandProto_OUTPUT_THREAD_DUMP SignalContainerCommandProto = 1
+	SignalContainerCommandProto_GRACEFUL_SHUTDOWN  SignalContainerCommandProto = 2
+	SignalContainerCommandProto_FORCEFUL_SHUTDOWN  SignalContainerCommandProto = 3
+)
+
+var SignalContainerCommandProto_name = map[int32]string{
+	1: "OUTPUT_THREAD_DUMP",
+	2: "GRACEFUL_SHUTDOWN",
+	3: "FORCEFUL_SHUTDOWN",
+}
+var SignalContainerCommandProto_value = map[string]int32{
+	"OUTPUT_THREAD_DUMP": 1,
+	"GRACEFUL_SHUTDOWN":  2,
+	"FORCEFUL_SHUTDOWN":  3,
+}
+
+func (x SignalContainerCommandProto) Enum() *SignalContainerCommandProto {
+	p := new(SignalContainerCommandProto)
+	*p = x
+	return p
+}
+func (x SignalContainerCommandProto) String() string {
+	return proto.EnumName(SignalContainerCommandProto_name, int32(x))
+}
+func (x *SignalContainerCommandProto) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(SignalContainerCommandProto_value, data, "SignalContainerCommandProto")
+	if err != nil {
+		return err
+	}
+	*x = SignalContainerCommandProto(value)
+	return nil
+}
+func (SignalContainerCommandProto) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor5, []int{20}
+}
+
+type NodeAttributeOpCodeProto int32
+
+const (
+	NodeAttributeOpCodeProto_NO_OP NodeAttributeOpCodeProto = 1
+	NodeAttributeOpCodeProto_EQ    NodeAttributeOpCodeProto = 2
+	NodeAttributeOpCodeProto_NE    NodeAttributeOpCodeProto = 3
+)
+
+var NodeAttributeOpCodeProto_name = map[int32]string{
+	1: "NO_OP",
+	2: "EQ",
+	3: "NE",
+}
+var NodeAttributeOpCodeProto_value = map[string]int32{
+	"NO_OP": 1,
+	"EQ":    2,
+	"NE":    3,
+}
+
+func (x NodeAttributeOpCodeProto) Enum() *NodeAttributeOpCodeProto {
+	p := new(NodeAttributeOpCodeProto)
+	*p = x
+	return p
+}
+func (x NodeAttributeOpCodeProto) String() string {
+	return proto.EnumName(NodeAttributeOpCodeProto_name, int32(x))
+}
+func (x *NodeAttributeOpCodeProto) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(NodeAttributeOpCodeProto_value, data, "NodeAttributeOpCodeProto")
+	if err != nil {
+		return err
+	}
+	*x = NodeAttributeOpCodeProto(value)
+	return nil
+}
+func (NodeAttributeOpCodeProto) EnumDescriptor() ([]byte, []int) { return fileDescriptor5, []int{21} }
+
+type ReservationRequestInterpreterProto int32
+
+const (
+	ReservationRequestInterpreterProto_R_ANY          ReservationRequestInterpreterProto = 0
+	ReservationRequestInterpreterProto_R_ALL          ReservationRequestInterpreterProto = 1
+	ReservationRequestInterpreterProto_R_ORDER        ReservationRequestInterpreterProto = 2
+	ReservationRequestInterpreterProto_R_ORDER_NO_GAP ReservationRequestInterpreterProto = 3
+)
+
+var ReservationRequestInterpreterProto_name = map[int32]string{
+	0: "R_ANY",
+	1: "R_ALL",
+	2: "R_ORDER",
+	3: "R_ORDER_NO_GAP",
+}
+var ReservationRequestInterpreterProto_value = map[string]int32{
+	"R_ANY":          0,
+	"R_ALL":          1,
+	"R_ORDER":        2,
+	"R_ORDER_NO_GAP": 3,
+}
+
+func (x ReservationRequestInterpreterProto) Enum() *ReservationRequestInterpreterProto {
+	p := new(ReservationRequestInterpreterProto)
+	*p = x
+	return p
+}
+func (x ReservationRequestInterpreterProto) String() string {
+	return proto.EnumName(ReservationRequestInterpreterProto_name, int32(x))
+}
+func (x *ReservationRequestInterpreterProto) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(ReservationRequestInterpreterProto_value, data, "ReservationRequestInterpreterProto")
+	if err != nil {
+		return err
+	}
+	*x = ReservationRequestInterpreterProto(value)
+	return nil
+}
+func (ReservationRequestInterpreterProto) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor5, []int{22}
 }
 
 type ContainerExitStatusProto int32
@@ -512,9 +964,6 @@ func (x ContainerExitStatusProto) Enum() *ContainerExitStatusProto {
 func (x ContainerExitStatusProto) String() string {
 	return proto.EnumName(ContainerExitStatusProto_name, int32(x))
 }
-func (x ContainerExitStatusProto) MarshalJSON() ([]byte, error) {
-	return json.Marshal(x.String())
-}
 func (x *ContainerExitStatusProto) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(ContainerExitStatusProto_value, data, "ContainerExitStatusProto")
 	if err != nil {
@@ -522,6 +971,163 @@ func (x *ContainerExitStatusProto) UnmarshalJSON(data []byte) error {
 	}
 	*x = ContainerExitStatusProto(value)
 	return nil
+}
+func (ContainerExitStatusProto) EnumDescriptor() ([]byte, []int) { return fileDescriptor5, []int{23} }
+
+type ContainerRetryPolicyProto int32
+
+const (
+	ContainerRetryPolicyProto_NEVER_RETRY                   ContainerRetryPolicyProto = 0
+	ContainerRetryPolicyProto_RETRY_ON_ALL_ERRORS           ContainerRetryPolicyProto = 1
+	ContainerRetryPolicyProto_RETRY_ON_SPECIFIC_ERROR_CODES ContainerRetryPolicyProto = 2
+)
+
+var ContainerRetryPolicyProto_name = map[int32]string{
+	0: "NEVER_RETRY",
+	1: "RETRY_ON_ALL_ERRORS",
+	2: "RETRY_ON_SPECIFIC_ERROR_CODES",
+}
+var ContainerRetryPolicyProto_value = map[string]int32{
+	"NEVER_RETRY":                   0,
+	"RETRY_ON_ALL_ERRORS":           1,
+	"RETRY_ON_SPECIFIC_ERROR_CODES": 2,
+}
+
+func (x ContainerRetryPolicyProto) Enum() *ContainerRetryPolicyProto {
+	p := new(ContainerRetryPolicyProto)
+	*p = x
+	return p
+}
+func (x ContainerRetryPolicyProto) String() string {
+	return proto.EnumName(ContainerRetryPolicyProto_name, int32(x))
+}
+func (x *ContainerRetryPolicyProto) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(ContainerRetryPolicyProto_value, data, "ContainerRetryPolicyProto")
+	if err != nil {
+		return err
+	}
+	*x = ContainerRetryPolicyProto(value)
+	return nil
+}
+func (ContainerRetryPolicyProto) EnumDescriptor() ([]byte, []int) { return fileDescriptor5, []int{24} }
+
+type PlacementConstraintTargetProto_TargetType int32
+
+const (
+	PlacementConstraintTargetProto_NODE_ATTRIBUTE PlacementConstraintTargetProto_TargetType = 1
+	PlacementConstraintTargetProto_ALLOCATION_TAG PlacementConstraintTargetProto_TargetType = 2
+	PlacementConstraintTargetProto_SELF           PlacementConstraintTargetProto_TargetType = 3
+)
+
+var PlacementConstraintTargetProto_TargetType_name = map[int32]string{
+	1: "NODE_ATTRIBUTE",
+	2: "ALLOCATION_TAG",
+	3: "SELF",
+}
+var PlacementConstraintTargetProto_TargetType_value = map[string]int32{
+	"NODE_ATTRIBUTE": 1,
+	"ALLOCATION_TAG": 2,
+	"SELF":           3,
+}
+
+func (x PlacementConstraintTargetProto_TargetType) Enum() *PlacementConstraintTargetProto_TargetType {
+	p := new(PlacementConstraintTargetProto_TargetType)
+	*p = x
+	return p
+}
+func (x PlacementConstraintTargetProto_TargetType) String() string {
+	return proto.EnumName(PlacementConstraintTargetProto_TargetType_name, int32(x))
+}
+func (x *PlacementConstraintTargetProto_TargetType) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(PlacementConstraintTargetProto_TargetType_value, data, "PlacementConstraintTargetProto_TargetType")
+	if err != nil {
+		return err
+	}
+	*x = PlacementConstraintTargetProto_TargetType(value)
+	return nil
+}
+func (PlacementConstraintTargetProto_TargetType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor5, []int{58, 0}
+}
+
+type TimedPlacementConstraintProto_DelayUnit int32
+
+const (
+	TimedPlacementConstraintProto_MILLISECONDS  TimedPlacementConstraintProto_DelayUnit = 1
+	TimedPlacementConstraintProto_OPPORTUNITIES TimedPlacementConstraintProto_DelayUnit = 2
+)
+
+var TimedPlacementConstraintProto_DelayUnit_name = map[int32]string{
+	1: "MILLISECONDS",
+	2: "OPPORTUNITIES",
+}
+var TimedPlacementConstraintProto_DelayUnit_value = map[string]int32{
+	"MILLISECONDS":  1,
+	"OPPORTUNITIES": 2,
+}
+
+func (x TimedPlacementConstraintProto_DelayUnit) Enum() *TimedPlacementConstraintProto_DelayUnit {
+	p := new(TimedPlacementConstraintProto_DelayUnit)
+	*p = x
+	return p
+}
+func (x TimedPlacementConstraintProto_DelayUnit) String() string {
+	return proto.EnumName(TimedPlacementConstraintProto_DelayUnit_name, int32(x))
+}
+func (x *TimedPlacementConstraintProto_DelayUnit) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(TimedPlacementConstraintProto_DelayUnit_value, data, "TimedPlacementConstraintProto_DelayUnit")
+	if err != nil {
+		return err
+	}
+	*x = TimedPlacementConstraintProto_DelayUnit(value)
+	return nil
+}
+func (TimedPlacementConstraintProto_DelayUnit) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor5, []int{59, 0}
+}
+
+type CompositePlacementConstraintProto_CompositeType int32
+
+const (
+	// All children constraints have to be satisfied.
+	CompositePlacementConstraintProto_AND CompositePlacementConstraintProto_CompositeType = 1
+	// One of the children constraints has to be satisfied.
+	CompositePlacementConstraintProto_OR CompositePlacementConstraintProto_CompositeType = 2
+	// Attempt to satisfy the first child constraint for delays[0] units (e.g.,
+	// millisec or heartbeats). If this fails, try to satisfy the second child
+	// constraint for delays[1] units and so on.
+	CompositePlacementConstraintProto_DELAYED_OR CompositePlacementConstraintProto_CompositeType = 3
+)
+
+var CompositePlacementConstraintProto_CompositeType_name = map[int32]string{
+	1: "AND",
+	2: "OR",
+	3: "DELAYED_OR",
+}
+var CompositePlacementConstraintProto_CompositeType_value = map[string]int32{
+	"AND":        1,
+	"OR":         2,
+	"DELAYED_OR": 3,
+}
+
+func (x CompositePlacementConstraintProto_CompositeType) Enum() *CompositePlacementConstraintProto_CompositeType {
+	p := new(CompositePlacementConstraintProto_CompositeType)
+	*p = x
+	return p
+}
+func (x CompositePlacementConstraintProto_CompositeType) String() string {
+	return proto.EnumName(CompositePlacementConstraintProto_CompositeType_name, int32(x))
+}
+func (x *CompositePlacementConstraintProto_CompositeType) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(CompositePlacementConstraintProto_CompositeType_value, data, "CompositePlacementConstraintProto_CompositeType")
+	if err != nil {
+		return err
+	}
+	*x = CompositePlacementConstraintProto_CompositeType(value)
+	return nil
+}
+func (CompositePlacementConstraintProto_CompositeType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor5, []int{60, 0}
 }
 
 type SerializedExceptionProto struct {
@@ -532,9 +1138,10 @@ type SerializedExceptionProto struct {
 	XXX_unrecognized []byte                    `json:"-"`
 }
 
-func (m *SerializedExceptionProto) Reset()         { *m = SerializedExceptionProto{} }
-func (m *SerializedExceptionProto) String() string { return proto.CompactTextString(m) }
-func (*SerializedExceptionProto) ProtoMessage()    {}
+func (m *SerializedExceptionProto) Reset()                    { *m = SerializedExceptionProto{} }
+func (m *SerializedExceptionProto) String() string            { return proto.CompactTextString(m) }
+func (*SerializedExceptionProto) ProtoMessage()               {}
+func (*SerializedExceptionProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{0} }
 
 func (m *SerializedExceptionProto) GetMessage() string {
 	if m != nil && m.Message != nil {
@@ -570,9 +1177,10 @@ type ApplicationIdProto struct {
 	XXX_unrecognized []byte `json:"-"`
 }
 
-func (m *ApplicationIdProto) Reset()         { *m = ApplicationIdProto{} }
-func (m *ApplicationIdProto) String() string { return proto.CompactTextString(m) }
-func (*ApplicationIdProto) ProtoMessage()    {}
+func (m *ApplicationIdProto) Reset()                    { *m = ApplicationIdProto{} }
+func (m *ApplicationIdProto) String() string            { return proto.CompactTextString(m) }
+func (*ApplicationIdProto) ProtoMessage()               {}
+func (*ApplicationIdProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{1} }
 
 func (m *ApplicationIdProto) GetId() int32 {
 	if m != nil && m.Id != nil {
@@ -594,9 +1202,10 @@ type ApplicationAttemptIdProto struct {
 	XXX_unrecognized []byte              `json:"-"`
 }
 
-func (m *ApplicationAttemptIdProto) Reset()         { *m = ApplicationAttemptIdProto{} }
-func (m *ApplicationAttemptIdProto) String() string { return proto.CompactTextString(m) }
-func (*ApplicationAttemptIdProto) ProtoMessage()    {}
+func (m *ApplicationAttemptIdProto) Reset()                    { *m = ApplicationAttemptIdProto{} }
+func (m *ApplicationAttemptIdProto) String() string            { return proto.CompactTextString(m) }
+func (*ApplicationAttemptIdProto) ProtoMessage()               {}
+func (*ApplicationAttemptIdProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{2} }
 
 func (m *ApplicationAttemptIdProto) GetApplicationId() *ApplicationIdProto {
 	if m != nil {
@@ -615,13 +1224,14 @@ func (m *ApplicationAttemptIdProto) GetAttemptId() int32 {
 type ContainerIdProto struct {
 	AppId            *ApplicationIdProto        `protobuf:"bytes,1,opt,name=app_id" json:"app_id,omitempty"`
 	AppAttemptId     *ApplicationAttemptIdProto `protobuf:"bytes,2,opt,name=app_attempt_id" json:"app_attempt_id,omitempty"`
-	Id               *int32                     `protobuf:"varint,3,opt,name=id" json:"id,omitempty"`
+	Id               *int64                     `protobuf:"varint,3,opt,name=id" json:"id,omitempty"`
 	XXX_unrecognized []byte                     `json:"-"`
 }
 
-func (m *ContainerIdProto) Reset()         { *m = ContainerIdProto{} }
-func (m *ContainerIdProto) String() string { return proto.CompactTextString(m) }
-func (*ContainerIdProto) ProtoMessage()    {}
+func (m *ContainerIdProto) Reset()                    { *m = ContainerIdProto{} }
+func (m *ContainerIdProto) String() string            { return proto.CompactTextString(m) }
+func (*ContainerIdProto) ProtoMessage()               {}
+func (*ContainerIdProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{3} }
 
 func (m *ContainerIdProto) GetAppId() *ApplicationIdProto {
 	if m != nil {
@@ -637,24 +1247,100 @@ func (m *ContainerIdProto) GetAppAttemptId() *ApplicationAttemptIdProto {
 	return nil
 }
 
-func (m *ContainerIdProto) GetId() int32 {
+func (m *ContainerIdProto) GetId() int64 {
 	if m != nil && m.Id != nil {
 		return *m.Id
 	}
 	return 0
 }
 
-type ResourceProto struct {
-	Memory           *int32 `protobuf:"varint,1,opt,name=memory" json:"memory,omitempty"`
-	VirtualCores     *int32 `protobuf:"varint,2,opt,name=virtual_cores" json:"virtual_cores,omitempty"`
-	XXX_unrecognized []byte `json:"-"`
+type ResourceInformationProto struct {
+	Key              *string             `protobuf:"bytes,1,req,name=key" json:"key,omitempty"`
+	Value            *int64              `protobuf:"varint,2,opt,name=value" json:"value,omitempty"`
+	Units            *string             `protobuf:"bytes,3,opt,name=units" json:"units,omitempty"`
+	Type             *ResourceTypesProto `protobuf:"varint,4,opt,name=type,enum=hadoop.yarn.ResourceTypesProto" json:"type,omitempty"`
+	XXX_unrecognized []byte              `json:"-"`
 }
 
-func (m *ResourceProto) Reset()         { *m = ResourceProto{} }
-func (m *ResourceProto) String() string { return proto.CompactTextString(m) }
-func (*ResourceProto) ProtoMessage()    {}
+func (m *ResourceInformationProto) Reset()                    { *m = ResourceInformationProto{} }
+func (m *ResourceInformationProto) String() string            { return proto.CompactTextString(m) }
+func (*ResourceInformationProto) ProtoMessage()               {}
+func (*ResourceInformationProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{4} }
 
-func (m *ResourceProto) GetMemory() int32 {
+func (m *ResourceInformationProto) GetKey() string {
+	if m != nil && m.Key != nil {
+		return *m.Key
+	}
+	return ""
+}
+
+func (m *ResourceInformationProto) GetValue() int64 {
+	if m != nil && m.Value != nil {
+		return *m.Value
+	}
+	return 0
+}
+
+func (m *ResourceInformationProto) GetUnits() string {
+	if m != nil && m.Units != nil {
+		return *m.Units
+	}
+	return ""
+}
+
+func (m *ResourceInformationProto) GetType() ResourceTypesProto {
+	if m != nil && m.Type != nil {
+		return *m.Type
+	}
+	return ResourceTypesProto_COUNTABLE
+}
+
+type ResourceTypeInfoProto struct {
+	Name             *string             `protobuf:"bytes,1,req,name=name" json:"name,omitempty"`
+	Units            *string             `protobuf:"bytes,2,opt,name=units" json:"units,omitempty"`
+	Type             *ResourceTypesProto `protobuf:"varint,3,opt,name=type,enum=hadoop.yarn.ResourceTypesProto" json:"type,omitempty"`
+	XXX_unrecognized []byte              `json:"-"`
+}
+
+func (m *ResourceTypeInfoProto) Reset()                    { *m = ResourceTypeInfoProto{} }
+func (m *ResourceTypeInfoProto) String() string            { return proto.CompactTextString(m) }
+func (*ResourceTypeInfoProto) ProtoMessage()               {}
+func (*ResourceTypeInfoProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{5} }
+
+func (m *ResourceTypeInfoProto) GetName() string {
+	if m != nil && m.Name != nil {
+		return *m.Name
+	}
+	return ""
+}
+
+func (m *ResourceTypeInfoProto) GetUnits() string {
+	if m != nil && m.Units != nil {
+		return *m.Units
+	}
+	return ""
+}
+
+func (m *ResourceTypeInfoProto) GetType() ResourceTypesProto {
+	if m != nil && m.Type != nil {
+		return *m.Type
+	}
+	return ResourceTypesProto_COUNTABLE
+}
+
+type ResourceProto struct {
+	Memory           *int64                      `protobuf:"varint,1,opt,name=memory" json:"memory,omitempty"`
+	VirtualCores     *int32                      `protobuf:"varint,2,opt,name=virtual_cores" json:"virtual_cores,omitempty"`
+	ResourceValueMap []*ResourceInformationProto `protobuf:"bytes,3,rep,name=resource_value_map" json:"resource_value_map,omitempty"`
+	XXX_unrecognized []byte                      `json:"-"`
+}
+
+func (m *ResourceProto) Reset()                    { *m = ResourceProto{} }
+func (m *ResourceProto) String() string            { return proto.CompactTextString(m) }
+func (*ResourceProto) ProtoMessage()               {}
+func (*ResourceProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{6} }
+
+func (m *ResourceProto) GetMemory() int64 {
 	if m != nil && m.Memory != nil {
 		return *m.Memory
 	}
@@ -668,15 +1354,56 @@ func (m *ResourceProto) GetVirtualCores() int32 {
 	return 0
 }
 
+func (m *ResourceProto) GetResourceValueMap() []*ResourceInformationProto {
+	if m != nil {
+		return m.ResourceValueMap
+	}
+	return nil
+}
+
+type ResourceUtilizationProto struct {
+	Pmem             *int32   `protobuf:"varint,1,opt,name=pmem" json:"pmem,omitempty"`
+	Vmem             *int32   `protobuf:"varint,2,opt,name=vmem" json:"vmem,omitempty"`
+	Cpu              *float32 `protobuf:"fixed32,3,opt,name=cpu" json:"cpu,omitempty"`
+	XXX_unrecognized []byte   `json:"-"`
+}
+
+func (m *ResourceUtilizationProto) Reset()                    { *m = ResourceUtilizationProto{} }
+func (m *ResourceUtilizationProto) String() string            { return proto.CompactTextString(m) }
+func (*ResourceUtilizationProto) ProtoMessage()               {}
+func (*ResourceUtilizationProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{7} }
+
+func (m *ResourceUtilizationProto) GetPmem() int32 {
+	if m != nil && m.Pmem != nil {
+		return *m.Pmem
+	}
+	return 0
+}
+
+func (m *ResourceUtilizationProto) GetVmem() int32 {
+	if m != nil && m.Vmem != nil {
+		return *m.Vmem
+	}
+	return 0
+}
+
+func (m *ResourceUtilizationProto) GetCpu() float32 {
+	if m != nil && m.Cpu != nil {
+		return *m.Cpu
+	}
+	return 0
+}
+
 type ResourceOptionProto struct {
 	Resource          *ResourceProto `protobuf:"bytes,1,opt,name=resource" json:"resource,omitempty"`
 	OverCommitTimeout *int32         `protobuf:"varint,2,opt,name=over_commit_timeout" json:"over_commit_timeout,omitempty"`
 	XXX_unrecognized  []byte         `json:"-"`
 }
 
-func (m *ResourceOptionProto) Reset()         { *m = ResourceOptionProto{} }
-func (m *ResourceOptionProto) String() string { return proto.CompactTextString(m) }
-func (*ResourceOptionProto) ProtoMessage()    {}
+func (m *ResourceOptionProto) Reset()                    { *m = ResourceOptionProto{} }
+func (m *ResourceOptionProto) String() string            { return proto.CompactTextString(m) }
+func (*ResourceOptionProto) ProtoMessage()               {}
+func (*ResourceOptionProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{8} }
 
 func (m *ResourceOptionProto) GetResource() *ResourceProto {
 	if m != nil {
@@ -692,15 +1419,58 @@ func (m *ResourceOptionProto) GetOverCommitTimeout() int32 {
 	return 0
 }
 
+type ResourceProfileEntry struct {
+	Name             *string        `protobuf:"bytes,1,req,name=name" json:"name,omitempty"`
+	Resources        *ResourceProto `protobuf:"bytes,2,req,name=resources" json:"resources,omitempty"`
+	XXX_unrecognized []byte         `json:"-"`
+}
+
+func (m *ResourceProfileEntry) Reset()                    { *m = ResourceProfileEntry{} }
+func (m *ResourceProfileEntry) String() string            { return proto.CompactTextString(m) }
+func (*ResourceProfileEntry) ProtoMessage()               {}
+func (*ResourceProfileEntry) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{9} }
+
+func (m *ResourceProfileEntry) GetName() string {
+	if m != nil && m.Name != nil {
+		return *m.Name
+	}
+	return ""
+}
+
+func (m *ResourceProfileEntry) GetResources() *ResourceProto {
+	if m != nil {
+		return m.Resources
+	}
+	return nil
+}
+
+type ResourceProfilesProto struct {
+	ResourceProfilesMap []*ResourceProfileEntry `protobuf:"bytes,1,rep,name=resource_profiles_map" json:"resource_profiles_map,omitempty"`
+	XXX_unrecognized    []byte                  `json:"-"`
+}
+
+func (m *ResourceProfilesProto) Reset()                    { *m = ResourceProfilesProto{} }
+func (m *ResourceProfilesProto) String() string            { return proto.CompactTextString(m) }
+func (*ResourceProfilesProto) ProtoMessage()               {}
+func (*ResourceProfilesProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{10} }
+
+func (m *ResourceProfilesProto) GetResourceProfilesMap() []*ResourceProfileEntry {
+	if m != nil {
+		return m.ResourceProfilesMap
+	}
+	return nil
+}
+
 type NodeResourceMapProto struct {
 	NodeId           *NodeIdProto         `protobuf:"bytes,1,opt,name=node_id" json:"node_id,omitempty"`
 	ResourceOption   *ResourceOptionProto `protobuf:"bytes,2,opt,name=resource_option" json:"resource_option,omitempty"`
 	XXX_unrecognized []byte               `json:"-"`
 }
 
-func (m *NodeResourceMapProto) Reset()         { *m = NodeResourceMapProto{} }
-func (m *NodeResourceMapProto) String() string { return proto.CompactTextString(m) }
-func (*NodeResourceMapProto) ProtoMessage()    {}
+func (m *NodeResourceMapProto) Reset()                    { *m = NodeResourceMapProto{} }
+func (m *NodeResourceMapProto) String() string            { return proto.CompactTextString(m) }
+func (*NodeResourceMapProto) ProtoMessage()               {}
+func (*NodeResourceMapProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{11} }
 
 func (m *NodeResourceMapProto) GetNodeId() *NodeIdProto {
 	if m != nil {
@@ -721,9 +1491,10 @@ type PriorityProto struct {
 	XXX_unrecognized []byte `json:"-"`
 }
 
-func (m *PriorityProto) Reset()         { *m = PriorityProto{} }
-func (m *PriorityProto) String() string { return proto.CompactTextString(m) }
-func (*PriorityProto) ProtoMessage()    {}
+func (m *PriorityProto) Reset()                    { *m = PriorityProto{} }
+func (m *PriorityProto) String() string            { return proto.CompactTextString(m) }
+func (*PriorityProto) ProtoMessage()               {}
+func (*PriorityProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{12} }
 
 func (m *PriorityProto) GetPriority() int32 {
 	if m != nil && m.Priority != nil {
@@ -733,18 +1504,27 @@ func (m *PriorityProto) GetPriority() int32 {
 }
 
 type ContainerProto struct {
-	Id               *ContainerIdProto         `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
-	NodeId           *NodeIdProto              `protobuf:"bytes,2,opt,name=nodeId" json:"nodeId,omitempty"`
-	NodeHttpAddress  *string                   `protobuf:"bytes,3,opt,name=node_http_address" json:"node_http_address,omitempty"`
-	Resource         *ResourceProto            `protobuf:"bytes,4,opt,name=resource" json:"resource,omitempty"`
-	Priority         *PriorityProto            `protobuf:"bytes,5,opt,name=priority" json:"priority,omitempty"`
-	ContainerToken   *hadoop_common.TokenProto `protobuf:"bytes,6,opt,name=container_token" json:"container_token,omitempty"`
-	XXX_unrecognized []byte                    `json:"-"`
+	Id                  *ContainerIdProto         `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
+	NodeId              *NodeIdProto              `protobuf:"bytes,2,opt,name=nodeId" json:"nodeId,omitempty"`
+	NodeHttpAddress     *string                   `protobuf:"bytes,3,opt,name=node_http_address" json:"node_http_address,omitempty"`
+	Resource            *ResourceProto            `protobuf:"bytes,4,opt,name=resource" json:"resource,omitempty"`
+	Priority            *PriorityProto            `protobuf:"bytes,5,opt,name=priority" json:"priority,omitempty"`
+	ContainerToken      *hadoop_common.TokenProto `protobuf:"bytes,6,opt,name=container_token" json:"container_token,omitempty"`
+	ExecutionType       *ExecutionTypeProto       `protobuf:"varint,7,opt,name=execution_type,enum=hadoop.yarn.ExecutionTypeProto,def=1" json:"execution_type,omitempty"`
+	AllocationRequestId *int64                    `protobuf:"varint,8,opt,name=allocation_request_id,def=-1" json:"allocation_request_id,omitempty"`
+	Version             *int32                    `protobuf:"varint,9,opt,name=version,def=0" json:"version,omitempty"`
+	AllocationTags      []string                  `protobuf:"bytes,10,rep,name=allocation_tags" json:"allocation_tags,omitempty"`
+	XXX_unrecognized    []byte                    `json:"-"`
 }
 
-func (m *ContainerProto) Reset()         { *m = ContainerProto{} }
-func (m *ContainerProto) String() string { return proto.CompactTextString(m) }
-func (*ContainerProto) ProtoMessage()    {}
+func (m *ContainerProto) Reset()                    { *m = ContainerProto{} }
+func (m *ContainerProto) String() string            { return proto.CompactTextString(m) }
+func (*ContainerProto) ProtoMessage()               {}
+func (*ContainerProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{13} }
+
+const Default_ContainerProto_ExecutionType ExecutionTypeProto = ExecutionTypeProto_GUARANTEED
+const Default_ContainerProto_AllocationRequestId int64 = -1
+const Default_ContainerProto_Version int32 = 0
 
 func (m *ContainerProto) GetId() *ContainerIdProto {
 	if m != nil {
@@ -788,6 +1568,34 @@ func (m *ContainerProto) GetContainerToken() *hadoop_common.TokenProto {
 	return nil
 }
 
+func (m *ContainerProto) GetExecutionType() ExecutionTypeProto {
+	if m != nil && m.ExecutionType != nil {
+		return *m.ExecutionType
+	}
+	return Default_ContainerProto_ExecutionType
+}
+
+func (m *ContainerProto) GetAllocationRequestId() int64 {
+	if m != nil && m.AllocationRequestId != nil {
+		return *m.AllocationRequestId
+	}
+	return Default_ContainerProto_AllocationRequestId
+}
+
+func (m *ContainerProto) GetVersion() int32 {
+	if m != nil && m.Version != nil {
+		return *m.Version
+	}
+	return Default_ContainerProto_Version
+}
+
+func (m *ContainerProto) GetAllocationTags() []string {
+	if m != nil {
+		return m.AllocationTags
+	}
+	return nil
+}
+
 type ContainerReportProto struct {
 	ContainerId         *ContainerIdProto    `protobuf:"bytes,1,opt,name=container_id" json:"container_id,omitempty"`
 	Resource            *ResourceProto       `protobuf:"bytes,2,opt,name=resource" json:"resource,omitempty"`
@@ -799,14 +1607,18 @@ type ContainerReportProto struct {
 	LogUrl              *string              `protobuf:"bytes,8,opt,name=log_url" json:"log_url,omitempty"`
 	ContainerExitStatus *int32               `protobuf:"varint,9,opt,name=container_exit_status" json:"container_exit_status,omitempty"`
 	ContainerState      *ContainerStateProto `protobuf:"varint,10,opt,name=container_state,enum=hadoop.yarn.ContainerStateProto" json:"container_state,omitempty"`
+	NodeHttpAddress     *string              `protobuf:"bytes,11,opt,name=node_http_address" json:"node_http_address,omitempty"`
+	ExecutionType       *ExecutionTypeProto  `protobuf:"varint,12,opt,name=executionType,enum=hadoop.yarn.ExecutionTypeProto,def=1" json:"executionType,omitempty"`
 	XXX_unrecognized    []byte               `json:"-"`
 }
 
-func (m *ContainerReportProto) Reset()         { *m = ContainerReportProto{} }
-func (m *ContainerReportProto) String() string { return proto.CompactTextString(m) }
-func (*ContainerReportProto) ProtoMessage()    {}
+func (m *ContainerReportProto) Reset()                    { *m = ContainerReportProto{} }
+func (m *ContainerReportProto) String() string            { return proto.CompactTextString(m) }
+func (*ContainerReportProto) ProtoMessage()               {}
+func (*ContainerReportProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{14} }
 
 const Default_ContainerReportProto_DiagnosticsInfo string = "N/A"
+const Default_ContainerReportProto_ExecutionType ExecutionTypeProto = ExecutionTypeProto_GUARANTEED
 
 func (m *ContainerReportProto) GetContainerId() *ContainerIdProto {
 	if m != nil {
@@ -875,7 +1687,21 @@ func (m *ContainerReportProto) GetContainerState() ContainerStateProto {
 	if m != nil && m.ContainerState != nil {
 		return *m.ContainerState
 	}
-	return 0
+	return ContainerStateProto_C_NEW
+}
+
+func (m *ContainerReportProto) GetNodeHttpAddress() string {
+	if m != nil && m.NodeHttpAddress != nil {
+		return *m.NodeHttpAddress
+	}
+	return ""
+}
+
+func (m *ContainerReportProto) GetExecutionType() ExecutionTypeProto {
+	if m != nil && m.ExecutionType != nil {
+		return *m.ExecutionType
+	}
+	return Default_ContainerReportProto_ExecutionType
 }
 
 type URLProto struct {
@@ -887,9 +1713,10 @@ type URLProto struct {
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *URLProto) Reset()         { *m = URLProto{} }
-func (m *URLProto) String() string { return proto.CompactTextString(m) }
-func (*URLProto) ProtoMessage()    {}
+func (m *URLProto) Reset()                    { *m = URLProto{} }
+func (m *URLProto) String() string            { return proto.CompactTextString(m) }
+func (*URLProto) ProtoMessage()               {}
+func (*URLProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{15} }
 
 func (m *URLProto) GetScheme() string {
 	if m != nil && m.Scheme != nil {
@@ -927,18 +1754,20 @@ func (m *URLProto) GetUserInfo() string {
 }
 
 type LocalResourceProto struct {
-	Resource         *URLProto                     `protobuf:"bytes,1,opt,name=resource" json:"resource,omitempty"`
-	Size             *int64                        `protobuf:"varint,2,opt,name=size" json:"size,omitempty"`
-	Timestamp        *int64                        `protobuf:"varint,3,opt,name=timestamp" json:"timestamp,omitempty"`
-	Type             *LocalResourceTypeProto       `protobuf:"varint,4,opt,name=type,enum=hadoop.yarn.LocalResourceTypeProto" json:"type,omitempty"`
-	Visibility       *LocalResourceVisibilityProto `protobuf:"varint,5,opt,name=visibility,enum=hadoop.yarn.LocalResourceVisibilityProto" json:"visibility,omitempty"`
-	Pattern          *string                       `protobuf:"bytes,6,opt,name=pattern" json:"pattern,omitempty"`
-	XXX_unrecognized []byte                        `json:"-"`
+	Resource                      *URLProto                     `protobuf:"bytes,1,opt,name=resource" json:"resource,omitempty"`
+	Size                          *int64                        `protobuf:"varint,2,opt,name=size" json:"size,omitempty"`
+	Timestamp                     *int64                        `protobuf:"varint,3,opt,name=timestamp" json:"timestamp,omitempty"`
+	Type                          *LocalResourceTypeProto       `protobuf:"varint,4,opt,name=type,enum=hadoop.yarn.LocalResourceTypeProto" json:"type,omitempty"`
+	Visibility                    *LocalResourceVisibilityProto `protobuf:"varint,5,opt,name=visibility,enum=hadoop.yarn.LocalResourceVisibilityProto" json:"visibility,omitempty"`
+	Pattern                       *string                       `protobuf:"bytes,6,opt,name=pattern" json:"pattern,omitempty"`
+	ShouldBeUploadedToSharedCache *bool                         `protobuf:"varint,7,opt,name=should_be_uploaded_to_shared_cache" json:"should_be_uploaded_to_shared_cache,omitempty"`
+	XXX_unrecognized              []byte                        `json:"-"`
 }
 
-func (m *LocalResourceProto) Reset()         { *m = LocalResourceProto{} }
-func (m *LocalResourceProto) String() string { return proto.CompactTextString(m) }
-func (*LocalResourceProto) ProtoMessage()    {}
+func (m *LocalResourceProto) Reset()                    { *m = LocalResourceProto{} }
+func (m *LocalResourceProto) String() string            { return proto.CompactTextString(m) }
+func (*LocalResourceProto) ProtoMessage()               {}
+func (*LocalResourceProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{16} }
 
 func (m *LocalResourceProto) GetResource() *URLProto {
 	if m != nil {
@@ -965,14 +1794,14 @@ func (m *LocalResourceProto) GetType() LocalResourceTypeProto {
 	if m != nil && m.Type != nil {
 		return *m.Type
 	}
-	return 0
+	return LocalResourceTypeProto_ARCHIVE
 }
 
 func (m *LocalResourceProto) GetVisibility() LocalResourceVisibilityProto {
 	if m != nil && m.Visibility != nil {
 		return *m.Visibility
 	}
-	return 0
+	return LocalResourceVisibilityProto_PUBLIC
 }
 
 func (m *LocalResourceProto) GetPattern() string {
@@ -982,18 +1811,61 @@ func (m *LocalResourceProto) GetPattern() string {
 	return ""
 }
 
+func (m *LocalResourceProto) GetShouldBeUploadedToSharedCache() bool {
+	if m != nil && m.ShouldBeUploadedToSharedCache != nil {
+		return *m.ShouldBeUploadedToSharedCache
+	}
+	return false
+}
+
+type StringLongMapProto struct {
+	Key              *string `protobuf:"bytes,1,req,name=key" json:"key,omitempty"`
+	Value            *int64  `protobuf:"varint,2,req,name=value" json:"value,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *StringLongMapProto) Reset()                    { *m = StringLongMapProto{} }
+func (m *StringLongMapProto) String() string            { return proto.CompactTextString(m) }
+func (*StringLongMapProto) ProtoMessage()               {}
+func (*StringLongMapProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{17} }
+
+func (m *StringLongMapProto) GetKey() string {
+	if m != nil && m.Key != nil {
+		return *m.Key
+	}
+	return ""
+}
+
+func (m *StringLongMapProto) GetValue() int64 {
+	if m != nil && m.Value != nil {
+		return *m.Value
+	}
+	return 0
+}
+
 type ApplicationResourceUsageReportProto struct {
-	NumUsedContainers     *int32         `protobuf:"varint,1,opt,name=num_used_containers" json:"num_used_containers,omitempty"`
-	NumReservedContainers *int32         `protobuf:"varint,2,opt,name=num_reserved_containers" json:"num_reserved_containers,omitempty"`
-	UsedResources         *ResourceProto `protobuf:"bytes,3,opt,name=used_resources" json:"used_resources,omitempty"`
-	ReservedResources     *ResourceProto `protobuf:"bytes,4,opt,name=reserved_resources" json:"reserved_resources,omitempty"`
-	NeededResources       *ResourceProto `protobuf:"bytes,5,opt,name=needed_resources" json:"needed_resources,omitempty"`
-	XXX_unrecognized      []byte         `json:"-"`
+	NumUsedContainers                    *int32                `protobuf:"varint,1,opt,name=num_used_containers" json:"num_used_containers,omitempty"`
+	NumReservedContainers                *int32                `protobuf:"varint,2,opt,name=num_reserved_containers" json:"num_reserved_containers,omitempty"`
+	UsedResources                        *ResourceProto        `protobuf:"bytes,3,opt,name=used_resources" json:"used_resources,omitempty"`
+	ReservedResources                    *ResourceProto        `protobuf:"bytes,4,opt,name=reserved_resources" json:"reserved_resources,omitempty"`
+	NeededResources                      *ResourceProto        `protobuf:"bytes,5,opt,name=needed_resources" json:"needed_resources,omitempty"`
+	MemorySeconds                        *int64                `protobuf:"varint,6,opt,name=memory_seconds" json:"memory_seconds,omitempty"`
+	VcoreSeconds                         *int64                `protobuf:"varint,7,opt,name=vcore_seconds" json:"vcore_seconds,omitempty"`
+	QueueUsagePercentage                 *float32              `protobuf:"fixed32,8,opt,name=queue_usage_percentage" json:"queue_usage_percentage,omitempty"`
+	ClusterUsagePercentage               *float32              `protobuf:"fixed32,9,opt,name=cluster_usage_percentage" json:"cluster_usage_percentage,omitempty"`
+	PreemptedMemorySeconds               *int64                `protobuf:"varint,10,opt,name=preempted_memory_seconds" json:"preempted_memory_seconds,omitempty"`
+	PreemptedVcoreSeconds                *int64                `protobuf:"varint,11,opt,name=preempted_vcore_seconds" json:"preempted_vcore_seconds,omitempty"`
+	ApplicationResourceUsageMap          []*StringLongMapProto `protobuf:"bytes,12,rep,name=application_resource_usage_map" json:"application_resource_usage_map,omitempty"`
+	ApplicationPreemptedResourceUsageMap []*StringLongMapProto `protobuf:"bytes,13,rep,name=application_preempted_resource_usage_map" json:"application_preempted_resource_usage_map,omitempty"`
+	XXX_unrecognized                     []byte                `json:"-"`
 }
 
 func (m *ApplicationResourceUsageReportProto) Reset()         { *m = ApplicationResourceUsageReportProto{} }
 func (m *ApplicationResourceUsageReportProto) String() string { return proto.CompactTextString(m) }
 func (*ApplicationResourceUsageReportProto) ProtoMessage()    {}
+func (*ApplicationResourceUsageReportProto) Descriptor() ([]byte, []int) {
+	return fileDescriptor5, []int{18}
+}
 
 func (m *ApplicationResourceUsageReportProto) GetNumUsedContainers() int32 {
 	if m != nil && m.NumUsedContainers != nil {
@@ -1030,6 +1902,62 @@ func (m *ApplicationResourceUsageReportProto) GetNeededResources() *ResourceProt
 	return nil
 }
 
+func (m *ApplicationResourceUsageReportProto) GetMemorySeconds() int64 {
+	if m != nil && m.MemorySeconds != nil {
+		return *m.MemorySeconds
+	}
+	return 0
+}
+
+func (m *ApplicationResourceUsageReportProto) GetVcoreSeconds() int64 {
+	if m != nil && m.VcoreSeconds != nil {
+		return *m.VcoreSeconds
+	}
+	return 0
+}
+
+func (m *ApplicationResourceUsageReportProto) GetQueueUsagePercentage() float32 {
+	if m != nil && m.QueueUsagePercentage != nil {
+		return *m.QueueUsagePercentage
+	}
+	return 0
+}
+
+func (m *ApplicationResourceUsageReportProto) GetClusterUsagePercentage() float32 {
+	if m != nil && m.ClusterUsagePercentage != nil {
+		return *m.ClusterUsagePercentage
+	}
+	return 0
+}
+
+func (m *ApplicationResourceUsageReportProto) GetPreemptedMemorySeconds() int64 {
+	if m != nil && m.PreemptedMemorySeconds != nil {
+		return *m.PreemptedMemorySeconds
+	}
+	return 0
+}
+
+func (m *ApplicationResourceUsageReportProto) GetPreemptedVcoreSeconds() int64 {
+	if m != nil && m.PreemptedVcoreSeconds != nil {
+		return *m.PreemptedVcoreSeconds
+	}
+	return 0
+}
+
+func (m *ApplicationResourceUsageReportProto) GetApplicationResourceUsageMap() []*StringLongMapProto {
+	if m != nil {
+		return m.ApplicationResourceUsageMap
+	}
+	return nil
+}
+
+func (m *ApplicationResourceUsageReportProto) GetApplicationPreemptedResourceUsageMap() []*StringLongMapProto {
+	if m != nil {
+		return m.ApplicationPreemptedResourceUsageMap
+	}
+	return nil
+}
+
 type ApplicationReportProto struct {
 	ApplicationId               *ApplicationIdProto                  `protobuf:"bytes,1,opt,name=applicationId" json:"applicationId,omitempty"`
 	User                        *string                              `protobuf:"bytes,2,opt,name=user" json:"user,omitempty"`
@@ -1051,14 +1979,25 @@ type ApplicationReportProto struct {
 	ApplicationType             *string                              `protobuf:"bytes,18,opt,name=applicationType" json:"applicationType,omitempty"`
 	AmRmToken                   *hadoop_common.TokenProto            `protobuf:"bytes,19,opt,name=am_rm_token" json:"am_rm_token,omitempty"`
 	ApplicationTags             []string                             `protobuf:"bytes,20,rep,name=applicationTags" json:"applicationTags,omitempty"`
+	LogAggregationStatus        *LogAggregationStatusProto           `protobuf:"varint,21,opt,name=log_aggregation_status,enum=hadoop.yarn.LogAggregationStatusProto" json:"log_aggregation_status,omitempty"`
+	UnmanagedApplication        *bool                                `protobuf:"varint,22,opt,name=unmanaged_application,def=0" json:"unmanaged_application,omitempty"`
+	Priority                    *PriorityProto                       `protobuf:"bytes,23,opt,name=priority" json:"priority,omitempty"`
+	AppNodeLabelExpression      *string                              `protobuf:"bytes,24,opt,name=appNodeLabelExpression" json:"appNodeLabelExpression,omitempty"`
+	AmNodeLabelExpression       *string                              `protobuf:"bytes,25,opt,name=amNodeLabelExpression" json:"amNodeLabelExpression,omitempty"`
+	AppTimeouts                 []*AppTimeoutsMapProto               `protobuf:"bytes,26,rep,name=appTimeouts" json:"appTimeouts,omitempty"`
+	LaunchTime                  *int64                               `protobuf:"varint,27,opt,name=launchTime" json:"launchTime,omitempty"`
+	SubmitTime                  *int64                               `protobuf:"varint,28,opt,name=submitTime" json:"submitTime,omitempty"`
+	ResourceRequests            []*ResourceRequestProto              `protobuf:"bytes,29,rep,name=resourceRequests" json:"resourceRequests,omitempty"`
 	XXX_unrecognized            []byte                               `json:"-"`
 }
 
-func (m *ApplicationReportProto) Reset()         { *m = ApplicationReportProto{} }
-func (m *ApplicationReportProto) String() string { return proto.CompactTextString(m) }
-func (*ApplicationReportProto) ProtoMessage()    {}
+func (m *ApplicationReportProto) Reset()                    { *m = ApplicationReportProto{} }
+func (m *ApplicationReportProto) String() string            { return proto.CompactTextString(m) }
+func (*ApplicationReportProto) ProtoMessage()               {}
+func (*ApplicationReportProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{19} }
 
 const Default_ApplicationReportProto_Diagnostics string = "N/A"
+const Default_ApplicationReportProto_UnmanagedApplication bool = false
 
 func (m *ApplicationReportProto) GetApplicationId() *ApplicationIdProto {
 	if m != nil {
@@ -1113,7 +2052,7 @@ func (m *ApplicationReportProto) GetYarnApplicationState() YarnApplicationStateP
 	if m != nil && m.YarnApplicationState != nil {
 		return *m.YarnApplicationState
 	}
-	return 0
+	return YarnApplicationStateProto_NEW
 }
 
 func (m *ApplicationReportProto) GetTrackingUrl() string {
@@ -1148,7 +2087,7 @@ func (m *ApplicationReportProto) GetFinalApplicationStatus() FinalApplicationSta
 	if m != nil && m.FinalApplicationStatus != nil {
 		return *m.FinalApplicationStatus
 	}
-	return 0
+	return FinalApplicationStatusProto_APP_UNDEFINED
 }
 
 func (m *ApplicationReportProto) GetAppResource_Usage() *ApplicationResourceUsageReportProto {
@@ -1200,6 +2139,127 @@ func (m *ApplicationReportProto) GetApplicationTags() []string {
 	return nil
 }
 
+func (m *ApplicationReportProto) GetLogAggregationStatus() LogAggregationStatusProto {
+	if m != nil && m.LogAggregationStatus != nil {
+		return *m.LogAggregationStatus
+	}
+	return LogAggregationStatusProto_LOG_DISABLED
+}
+
+func (m *ApplicationReportProto) GetUnmanagedApplication() bool {
+	if m != nil && m.UnmanagedApplication != nil {
+		return *m.UnmanagedApplication
+	}
+	return Default_ApplicationReportProto_UnmanagedApplication
+}
+
+func (m *ApplicationReportProto) GetPriority() *PriorityProto {
+	if m != nil {
+		return m.Priority
+	}
+	return nil
+}
+
+func (m *ApplicationReportProto) GetAppNodeLabelExpression() string {
+	if m != nil && m.AppNodeLabelExpression != nil {
+		return *m.AppNodeLabelExpression
+	}
+	return ""
+}
+
+func (m *ApplicationReportProto) GetAmNodeLabelExpression() string {
+	if m != nil && m.AmNodeLabelExpression != nil {
+		return *m.AmNodeLabelExpression
+	}
+	return ""
+}
+
+func (m *ApplicationReportProto) GetAppTimeouts() []*AppTimeoutsMapProto {
+	if m != nil {
+		return m.AppTimeouts
+	}
+	return nil
+}
+
+func (m *ApplicationReportProto) GetLaunchTime() int64 {
+	if m != nil && m.LaunchTime != nil {
+		return *m.LaunchTime
+	}
+	return 0
+}
+
+func (m *ApplicationReportProto) GetSubmitTime() int64 {
+	if m != nil && m.SubmitTime != nil {
+		return *m.SubmitTime
+	}
+	return 0
+}
+
+func (m *ApplicationReportProto) GetResourceRequests() []*ResourceRequestProto {
+	if m != nil {
+		return m.ResourceRequests
+	}
+	return nil
+}
+
+type AppTimeoutsMapProto struct {
+	ApplicationTimeoutType *ApplicationTimeoutTypeProto `protobuf:"varint,1,opt,name=application_timeout_type,enum=hadoop.yarn.ApplicationTimeoutTypeProto" json:"application_timeout_type,omitempty"`
+	ApplicationTimeout     *ApplicationTimeoutProto     `protobuf:"bytes,2,opt,name=application_timeout" json:"application_timeout,omitempty"`
+	XXX_unrecognized       []byte                       `json:"-"`
+}
+
+func (m *AppTimeoutsMapProto) Reset()                    { *m = AppTimeoutsMapProto{} }
+func (m *AppTimeoutsMapProto) String() string            { return proto.CompactTextString(m) }
+func (*AppTimeoutsMapProto) ProtoMessage()               {}
+func (*AppTimeoutsMapProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{20} }
+
+func (m *AppTimeoutsMapProto) GetApplicationTimeoutType() ApplicationTimeoutTypeProto {
+	if m != nil && m.ApplicationTimeoutType != nil {
+		return *m.ApplicationTimeoutType
+	}
+	return ApplicationTimeoutTypeProto_APP_TIMEOUT_LIFETIME
+}
+
+func (m *AppTimeoutsMapProto) GetApplicationTimeout() *ApplicationTimeoutProto {
+	if m != nil {
+		return m.ApplicationTimeout
+	}
+	return nil
+}
+
+type ApplicationTimeoutProto struct {
+	ApplicationTimeoutType *ApplicationTimeoutTypeProto `protobuf:"varint,1,req,name=application_timeout_type,enum=hadoop.yarn.ApplicationTimeoutTypeProto" json:"application_timeout_type,omitempty"`
+	ExpireTime             *string                      `protobuf:"bytes,2,opt,name=expire_time" json:"expire_time,omitempty"`
+	RemainingTime          *int64                       `protobuf:"varint,3,opt,name=remaining_time" json:"remaining_time,omitempty"`
+	XXX_unrecognized       []byte                       `json:"-"`
+}
+
+func (m *ApplicationTimeoutProto) Reset()                    { *m = ApplicationTimeoutProto{} }
+func (m *ApplicationTimeoutProto) String() string            { return proto.CompactTextString(m) }
+func (*ApplicationTimeoutProto) ProtoMessage()               {}
+func (*ApplicationTimeoutProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{21} }
+
+func (m *ApplicationTimeoutProto) GetApplicationTimeoutType() ApplicationTimeoutTypeProto {
+	if m != nil && m.ApplicationTimeoutType != nil {
+		return *m.ApplicationTimeoutType
+	}
+	return ApplicationTimeoutTypeProto_APP_TIMEOUT_LIFETIME
+}
+
+func (m *ApplicationTimeoutProto) GetExpireTime() string {
+	if m != nil && m.ExpireTime != nil {
+		return *m.ExpireTime
+	}
+	return ""
+}
+
+func (m *ApplicationTimeoutProto) GetRemainingTime() int64 {
+	if m != nil && m.RemainingTime != nil {
+		return *m.RemainingTime
+	}
+	return 0
+}
+
 type ApplicationAttemptReportProto struct {
 	ApplicationAttemptId        *ApplicationAttemptIdProto        `protobuf:"bytes,1,opt,name=application_attempt_id" json:"application_attempt_id,omitempty"`
 	Host                        *string                           `protobuf:"bytes,2,opt,name=host" json:"host,omitempty"`
@@ -1208,12 +2268,16 @@ type ApplicationAttemptReportProto struct {
 	Diagnostics                 *string                           `protobuf:"bytes,5,opt,name=diagnostics,def=N/A" json:"diagnostics,omitempty"`
 	YarnApplicationAttemptState *YarnApplicationAttemptStateProto `protobuf:"varint,6,opt,name=yarn_application_attempt_state,enum=hadoop.yarn.YarnApplicationAttemptStateProto" json:"yarn_application_attempt_state,omitempty"`
 	AmContainerId               *ContainerIdProto                 `protobuf:"bytes,7,opt,name=am_container_id" json:"am_container_id,omitempty"`
+	OriginalTrackingUrl         *string                           `protobuf:"bytes,8,opt,name=original_tracking_url" json:"original_tracking_url,omitempty"`
+	StartTime                   *int64                            `protobuf:"varint,9,opt,name=startTime" json:"startTime,omitempty"`
+	FinishTime                  *int64                            `protobuf:"varint,10,opt,name=finishTime" json:"finishTime,omitempty"`
 	XXX_unrecognized            []byte                            `json:"-"`
 }
 
-func (m *ApplicationAttemptReportProto) Reset()         { *m = ApplicationAttemptReportProto{} }
-func (m *ApplicationAttemptReportProto) String() string { return proto.CompactTextString(m) }
-func (*ApplicationAttemptReportProto) ProtoMessage()    {}
+func (m *ApplicationAttemptReportProto) Reset()                    { *m = ApplicationAttemptReportProto{} }
+func (m *ApplicationAttemptReportProto) String() string            { return proto.CompactTextString(m) }
+func (*ApplicationAttemptReportProto) ProtoMessage()               {}
+func (*ApplicationAttemptReportProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{22} }
 
 const Default_ApplicationAttemptReportProto_Diagnostics string = "N/A"
 
@@ -1256,7 +2320,7 @@ func (m *ApplicationAttemptReportProto) GetYarnApplicationAttemptState() YarnApp
 	if m != nil && m.YarnApplicationAttemptState != nil {
 		return *m.YarnApplicationAttemptState
 	}
-	return 0
+	return YarnApplicationAttemptStateProto_APP_ATTEMPT_NEW
 }
 
 func (m *ApplicationAttemptReportProto) GetAmContainerId() *ContainerIdProto {
@@ -1266,15 +2330,37 @@ func (m *ApplicationAttemptReportProto) GetAmContainerId() *ContainerIdProto {
 	return nil
 }
 
+func (m *ApplicationAttemptReportProto) GetOriginalTrackingUrl() string {
+	if m != nil && m.OriginalTrackingUrl != nil {
+		return *m.OriginalTrackingUrl
+	}
+	return ""
+}
+
+func (m *ApplicationAttemptReportProto) GetStartTime() int64 {
+	if m != nil && m.StartTime != nil {
+		return *m.StartTime
+	}
+	return 0
+}
+
+func (m *ApplicationAttemptReportProto) GetFinishTime() int64 {
+	if m != nil && m.FinishTime != nil {
+		return *m.FinishTime
+	}
+	return 0
+}
+
 type NodeIdProto struct {
 	Host             *string `protobuf:"bytes,1,opt,name=host" json:"host,omitempty"`
 	Port             *int32  `protobuf:"varint,2,opt,name=port" json:"port,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *NodeIdProto) Reset()         { *m = NodeIdProto{} }
-func (m *NodeIdProto) String() string { return proto.CompactTextString(m) }
-func (*NodeIdProto) ProtoMessage()    {}
+func (m *NodeIdProto) Reset()                    { *m = NodeIdProto{} }
+func (m *NodeIdProto) String() string            { return proto.CompactTextString(m) }
+func (*NodeIdProto) ProtoMessage()               {}
+func (*NodeIdProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{23} }
 
 func (m *NodeIdProto) GetHost() string {
 	if m != nil && m.Host != nil {
@@ -1291,21 +2377,28 @@ func (m *NodeIdProto) GetPort() int32 {
 }
 
 type NodeReportProto struct {
-	NodeId               *NodeIdProto    `protobuf:"bytes,1,opt,name=nodeId" json:"nodeId,omitempty"`
-	HttpAddress          *string         `protobuf:"bytes,2,opt,name=httpAddress" json:"httpAddress,omitempty"`
-	RackName             *string         `protobuf:"bytes,3,opt,name=rackName" json:"rackName,omitempty"`
-	Used                 *ResourceProto  `protobuf:"bytes,4,opt,name=used" json:"used,omitempty"`
-	Capability           *ResourceProto  `protobuf:"bytes,5,opt,name=capability" json:"capability,omitempty"`
-	NumContainers        *int32          `protobuf:"varint,6,opt,name=numContainers" json:"numContainers,omitempty"`
-	NodeState            *NodeStateProto `protobuf:"varint,7,opt,name=node_state,enum=hadoop.yarn.NodeStateProto" json:"node_state,omitempty"`
-	HealthReport         *string         `protobuf:"bytes,8,opt,name=health_report" json:"health_report,omitempty"`
-	LastHealthReportTime *int64          `protobuf:"varint,9,opt,name=last_health_report_time" json:"last_health_report_time,omitempty"`
-	XXX_unrecognized     []byte          `json:"-"`
+	NodeId                 *NodeIdProto              `protobuf:"bytes,1,opt,name=nodeId" json:"nodeId,omitempty"`
+	HttpAddress            *string                   `protobuf:"bytes,2,opt,name=httpAddress" json:"httpAddress,omitempty"`
+	RackName               *string                   `protobuf:"bytes,3,opt,name=rackName" json:"rackName,omitempty"`
+	Used                   *ResourceProto            `protobuf:"bytes,4,opt,name=used" json:"used,omitempty"`
+	Capability             *ResourceProto            `protobuf:"bytes,5,opt,name=capability" json:"capability,omitempty"`
+	NumContainers          *int32                    `protobuf:"varint,6,opt,name=numContainers" json:"numContainers,omitempty"`
+	NodeState              *NodeStateProto           `protobuf:"varint,7,opt,name=node_state,enum=hadoop.yarn.NodeStateProto" json:"node_state,omitempty"`
+	HealthReport           *string                   `protobuf:"bytes,8,opt,name=health_report" json:"health_report,omitempty"`
+	LastHealthReportTime   *int64                    `protobuf:"varint,9,opt,name=last_health_report_time" json:"last_health_report_time,omitempty"`
+	NodeLabels             []string                  `protobuf:"bytes,10,rep,name=node_labels" json:"node_labels,omitempty"`
+	ContainersUtilization  *ResourceUtilizationProto `protobuf:"bytes,11,opt,name=containers_utilization" json:"containers_utilization,omitempty"`
+	NodeUtilization        *ResourceUtilizationProto `protobuf:"bytes,12,opt,name=node_utilization" json:"node_utilization,omitempty"`
+	DecommissioningTimeout *uint32                   `protobuf:"varint,13,opt,name=decommissioning_timeout" json:"decommissioning_timeout,omitempty"`
+	NodeUpdateType         *NodeUpdateTypeProto      `protobuf:"varint,14,opt,name=node_update_type,enum=hadoop.yarn.NodeUpdateTypeProto" json:"node_update_type,omitempty"`
+	NodeAttributes         []*NodeAttributeProto     `protobuf:"bytes,15,rep,name=node_attributes" json:"node_attributes,omitempty"`
+	XXX_unrecognized       []byte                    `json:"-"`
 }
 
-func (m *NodeReportProto) Reset()         { *m = NodeReportProto{} }
-func (m *NodeReportProto) String() string { return proto.CompactTextString(m) }
-func (*NodeReportProto) ProtoMessage()    {}
+func (m *NodeReportProto) Reset()                    { *m = NodeReportProto{} }
+func (m *NodeReportProto) String() string            { return proto.CompactTextString(m) }
+func (*NodeReportProto) ProtoMessage()               {}
+func (*NodeReportProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{24} }
 
 func (m *NodeReportProto) GetNodeId() *NodeIdProto {
 	if m != nil {
@@ -1353,7 +2446,7 @@ func (m *NodeReportProto) GetNodeState() NodeStateProto {
 	if m != nil && m.NodeState != nil {
 		return *m.NodeState
 	}
-	return 0
+	return NodeStateProto_NS_NEW
 }
 
 func (m *NodeReportProto) GetHealthReport() string {
@@ -1370,23 +2463,309 @@ func (m *NodeReportProto) GetLastHealthReportTime() int64 {
 	return 0
 }
 
+func (m *NodeReportProto) GetNodeLabels() []string {
+	if m != nil {
+		return m.NodeLabels
+	}
+	return nil
+}
+
+func (m *NodeReportProto) GetContainersUtilization() *ResourceUtilizationProto {
+	if m != nil {
+		return m.ContainersUtilization
+	}
+	return nil
+}
+
+func (m *NodeReportProto) GetNodeUtilization() *ResourceUtilizationProto {
+	if m != nil {
+		return m.NodeUtilization
+	}
+	return nil
+}
+
+func (m *NodeReportProto) GetDecommissioningTimeout() uint32 {
+	if m != nil && m.DecommissioningTimeout != nil {
+		return *m.DecommissioningTimeout
+	}
+	return 0
+}
+
+func (m *NodeReportProto) GetNodeUpdateType() NodeUpdateTypeProto {
+	if m != nil && m.NodeUpdateType != nil {
+		return *m.NodeUpdateType
+	}
+	return NodeUpdateTypeProto_NODE_USABLE
+}
+
+func (m *NodeReportProto) GetNodeAttributes() []*NodeAttributeProto {
+	if m != nil {
+		return m.NodeAttributes
+	}
+	return nil
+}
+
+type NodeIdToLabelsProto struct {
+	NodeId           *NodeIdProto `protobuf:"bytes,1,opt,name=nodeId" json:"nodeId,omitempty"`
+	NodeLabels       []string     `protobuf:"bytes,2,rep,name=nodeLabels" json:"nodeLabels,omitempty"`
+	XXX_unrecognized []byte       `json:"-"`
+}
+
+func (m *NodeIdToLabelsProto) Reset()                    { *m = NodeIdToLabelsProto{} }
+func (m *NodeIdToLabelsProto) String() string            { return proto.CompactTextString(m) }
+func (*NodeIdToLabelsProto) ProtoMessage()               {}
+func (*NodeIdToLabelsProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{25} }
+
+func (m *NodeIdToLabelsProto) GetNodeId() *NodeIdProto {
+	if m != nil {
+		return m.NodeId
+	}
+	return nil
+}
+
+func (m *NodeIdToLabelsProto) GetNodeLabels() []string {
+	if m != nil {
+		return m.NodeLabels
+	}
+	return nil
+}
+
+type LabelsToNodeIdsProto struct {
+	NodeLabels       *string        `protobuf:"bytes,1,opt,name=nodeLabels" json:"nodeLabels,omitempty"`
+	NodeId           []*NodeIdProto `protobuf:"bytes,2,rep,name=nodeId" json:"nodeId,omitempty"`
+	XXX_unrecognized []byte         `json:"-"`
+}
+
+func (m *LabelsToNodeIdsProto) Reset()                    { *m = LabelsToNodeIdsProto{} }
+func (m *LabelsToNodeIdsProto) String() string            { return proto.CompactTextString(m) }
+func (*LabelsToNodeIdsProto) ProtoMessage()               {}
+func (*LabelsToNodeIdsProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{26} }
+
+func (m *LabelsToNodeIdsProto) GetNodeLabels() string {
+	if m != nil && m.NodeLabels != nil {
+		return *m.NodeLabels
+	}
+	return ""
+}
+
+func (m *LabelsToNodeIdsProto) GetNodeId() []*NodeIdProto {
+	if m != nil {
+		return m.NodeId
+	}
+	return nil
+}
+
+type NodeLabelProto struct {
+	Name             *string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
+	IsExclusive      *bool   `protobuf:"varint,2,opt,name=isExclusive,def=1" json:"isExclusive,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *NodeLabelProto) Reset()                    { *m = NodeLabelProto{} }
+func (m *NodeLabelProto) String() string            { return proto.CompactTextString(m) }
+func (*NodeLabelProto) ProtoMessage()               {}
+func (*NodeLabelProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{27} }
+
+const Default_NodeLabelProto_IsExclusive bool = true
+
+func (m *NodeLabelProto) GetName() string {
+	if m != nil && m.Name != nil {
+		return *m.Name
+	}
+	return ""
+}
+
+func (m *NodeLabelProto) GetIsExclusive() bool {
+	if m != nil && m.IsExclusive != nil {
+		return *m.IsExclusive
+	}
+	return Default_NodeLabelProto_IsExclusive
+}
+
+type NodeAttributeKeyProto struct {
+	AttributePrefix  *string `protobuf:"bytes,1,opt,name=attributePrefix,def=rm.yarn.io" json:"attributePrefix,omitempty"`
+	AttributeName    *string `protobuf:"bytes,2,req,name=attributeName" json:"attributeName,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *NodeAttributeKeyProto) Reset()                    { *m = NodeAttributeKeyProto{} }
+func (m *NodeAttributeKeyProto) String() string            { return proto.CompactTextString(m) }
+func (*NodeAttributeKeyProto) ProtoMessage()               {}
+func (*NodeAttributeKeyProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{28} }
+
+const Default_NodeAttributeKeyProto_AttributePrefix string = "rm.yarn.io"
+
+func (m *NodeAttributeKeyProto) GetAttributePrefix() string {
+	if m != nil && m.AttributePrefix != nil {
+		return *m.AttributePrefix
+	}
+	return Default_NodeAttributeKeyProto_AttributePrefix
+}
+
+func (m *NodeAttributeKeyProto) GetAttributeName() string {
+	if m != nil && m.AttributeName != nil {
+		return *m.AttributeName
+	}
+	return ""
+}
+
+type NodeAttributeProto struct {
+	AttributeKey     *NodeAttributeKeyProto  `protobuf:"bytes,1,req,name=attributeKey" json:"attributeKey,omitempty"`
+	AttributeType    *NodeAttributeTypeProto `protobuf:"varint,2,opt,name=attributeType,enum=hadoop.yarn.NodeAttributeTypeProto,def=1" json:"attributeType,omitempty"`
+	AttributeValue   *string                 `protobuf:"bytes,3,opt,name=attributeValue,def=" json:"attributeValue,omitempty"`
+	XXX_unrecognized []byte                  `json:"-"`
+}
+
+func (m *NodeAttributeProto) Reset()                    { *m = NodeAttributeProto{} }
+func (m *NodeAttributeProto) String() string            { return proto.CompactTextString(m) }
+func (*NodeAttributeProto) ProtoMessage()               {}
+func (*NodeAttributeProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{29} }
+
+const Default_NodeAttributeProto_AttributeType NodeAttributeTypeProto = NodeAttributeTypeProto_STRING
+
+func (m *NodeAttributeProto) GetAttributeKey() *NodeAttributeKeyProto {
+	if m != nil {
+		return m.AttributeKey
+	}
+	return nil
+}
+
+func (m *NodeAttributeProto) GetAttributeType() NodeAttributeTypeProto {
+	if m != nil && m.AttributeType != nil {
+		return *m.AttributeType
+	}
+	return Default_NodeAttributeProto_AttributeType
+}
+
+func (m *NodeAttributeProto) GetAttributeValue() string {
+	if m != nil && m.AttributeValue != nil {
+		return *m.AttributeValue
+	}
+	return ""
+}
+
+type NodeAttributeInfoProto struct {
+	AttributeKey     *NodeAttributeKeyProto  `protobuf:"bytes,1,req,name=attributeKey" json:"attributeKey,omitempty"`
+	AttributeType    *NodeAttributeTypeProto `protobuf:"varint,2,req,name=attributeType,enum=hadoop.yarn.NodeAttributeTypeProto" json:"attributeType,omitempty"`
+	XXX_unrecognized []byte                  `json:"-"`
+}
+
+func (m *NodeAttributeInfoProto) Reset()                    { *m = NodeAttributeInfoProto{} }
+func (m *NodeAttributeInfoProto) String() string            { return proto.CompactTextString(m) }
+func (*NodeAttributeInfoProto) ProtoMessage()               {}
+func (*NodeAttributeInfoProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{30} }
+
+func (m *NodeAttributeInfoProto) GetAttributeKey() *NodeAttributeKeyProto {
+	if m != nil {
+		return m.AttributeKey
+	}
+	return nil
+}
+
+func (m *NodeAttributeInfoProto) GetAttributeType() NodeAttributeTypeProto {
+	if m != nil && m.AttributeType != nil {
+		return *m.AttributeType
+	}
+	return NodeAttributeTypeProto_STRING
+}
+
+type NodeToAttributeValueProto struct {
+	Hostname         *string `protobuf:"bytes,1,req,name=hostname" json:"hostname,omitempty"`
+	AttributeValue   *string `protobuf:"bytes,2,req,name=attributeValue" json:"attributeValue,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *NodeToAttributeValueProto) Reset()                    { *m = NodeToAttributeValueProto{} }
+func (m *NodeToAttributeValueProto) String() string            { return proto.CompactTextString(m) }
+func (*NodeToAttributeValueProto) ProtoMessage()               {}
+func (*NodeToAttributeValueProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{31} }
+
+func (m *NodeToAttributeValueProto) GetHostname() string {
+	if m != nil && m.Hostname != nil {
+		return *m.Hostname
+	}
+	return ""
+}
+
+func (m *NodeToAttributeValueProto) GetAttributeValue() string {
+	if m != nil && m.AttributeValue != nil {
+		return *m.AttributeValue
+	}
+	return ""
+}
+
+type AttributeToNodesProto struct {
+	NodeAttribute    *NodeAttributeKeyProto       `protobuf:"bytes,1,req,name=nodeAttribute" json:"nodeAttribute,omitempty"`
+	NodeValueMap     []*NodeToAttributeValueProto `protobuf:"bytes,2,rep,name=nodeValueMap" json:"nodeValueMap,omitempty"`
+	XXX_unrecognized []byte                       `json:"-"`
+}
+
+func (m *AttributeToNodesProto) Reset()                    { *m = AttributeToNodesProto{} }
+func (m *AttributeToNodesProto) String() string            { return proto.CompactTextString(m) }
+func (*AttributeToNodesProto) ProtoMessage()               {}
+func (*AttributeToNodesProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{32} }
+
+func (m *AttributeToNodesProto) GetNodeAttribute() *NodeAttributeKeyProto {
+	if m != nil {
+		return m.NodeAttribute
+	}
+	return nil
+}
+
+func (m *AttributeToNodesProto) GetNodeValueMap() []*NodeToAttributeValueProto {
+	if m != nil {
+		return m.NodeValueMap
+	}
+	return nil
+}
+
+type NodeToAttributesProto struct {
+	Node             *string               `protobuf:"bytes,1,opt,name=node" json:"node,omitempty"`
+	NodeAttributes   []*NodeAttributeProto `protobuf:"bytes,2,rep,name=nodeAttributes" json:"nodeAttributes,omitempty"`
+	XXX_unrecognized []byte                `json:"-"`
+}
+
+func (m *NodeToAttributesProto) Reset()                    { *m = NodeToAttributesProto{} }
+func (m *NodeToAttributesProto) String() string            { return proto.CompactTextString(m) }
+func (*NodeToAttributesProto) ProtoMessage()               {}
+func (*NodeToAttributesProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{33} }
+
+func (m *NodeToAttributesProto) GetNode() string {
+	if m != nil && m.Node != nil {
+		return *m.Node
+	}
+	return ""
+}
+
+func (m *NodeToAttributesProto) GetNodeAttributes() []*NodeAttributeProto {
+	if m != nil {
+		return m.NodeAttributes
+	}
+	return nil
+}
+
 // //////////////////////////////////////////////////////////////////////
 // //// From AM_RM_Protocol /////////////////////////////////////////////
 // //////////////////////////////////////////////////////////////////////
 type ResourceRequestProto struct {
-	Priority         *PriorityProto `protobuf:"bytes,1,opt,name=priority" json:"priority,omitempty"`
-	ResourceName     *string        `protobuf:"bytes,2,opt,name=resource_name" json:"resource_name,omitempty"`
-	Capability       *ResourceProto `protobuf:"bytes,3,opt,name=capability" json:"capability,omitempty"`
-	NumContainers    *int32         `protobuf:"varint,4,opt,name=num_containers" json:"num_containers,omitempty"`
-	RelaxLocality    *bool          `protobuf:"varint,5,opt,name=relax_locality,def=1" json:"relax_locality,omitempty"`
-	XXX_unrecognized []byte         `json:"-"`
+	Priority             *PriorityProto             `protobuf:"bytes,1,opt,name=priority" json:"priority,omitempty"`
+	ResourceName         *string                    `protobuf:"bytes,2,opt,name=resource_name" json:"resource_name,omitempty"`
+	Capability           *ResourceProto             `protobuf:"bytes,3,opt,name=capability" json:"capability,omitempty"`
+	NumContainers        *int32                     `protobuf:"varint,4,opt,name=num_containers" json:"num_containers,omitempty"`
+	RelaxLocality        *bool                      `protobuf:"varint,5,opt,name=relax_locality,def=1" json:"relax_locality,omitempty"`
+	NodeLabelExpression  *string                    `protobuf:"bytes,6,opt,name=node_label_expression" json:"node_label_expression,omitempty"`
+	ExecutionTypeRequest *ExecutionTypeRequestProto `protobuf:"bytes,7,opt,name=execution_type_request" json:"execution_type_request,omitempty"`
+	AllocationRequestId  *int64                     `protobuf:"varint,8,opt,name=allocation_request_id,def=-1" json:"allocation_request_id,omitempty"`
+	XXX_unrecognized     []byte                     `json:"-"`
 }
 
-func (m *ResourceRequestProto) Reset()         { *m = ResourceRequestProto{} }
-func (m *ResourceRequestProto) String() string { return proto.CompactTextString(m) }
-func (*ResourceRequestProto) ProtoMessage()    {}
+func (m *ResourceRequestProto) Reset()                    { *m = ResourceRequestProto{} }
+func (m *ResourceRequestProto) String() string            { return proto.CompactTextString(m) }
+func (*ResourceRequestProto) ProtoMessage()               {}
+func (*ResourceRequestProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{34} }
 
 const Default_ResourceRequestProto_RelaxLocality bool = true
+const Default_ResourceRequestProto_AllocationRequestId int64 = -1
 
 func (m *ResourceRequestProto) GetPriority() *PriorityProto {
 	if m != nil {
@@ -1423,15 +2802,176 @@ func (m *ResourceRequestProto) GetRelaxLocality() bool {
 	return Default_ResourceRequestProto_RelaxLocality
 }
 
+func (m *ResourceRequestProto) GetNodeLabelExpression() string {
+	if m != nil && m.NodeLabelExpression != nil {
+		return *m.NodeLabelExpression
+	}
+	return ""
+}
+
+func (m *ResourceRequestProto) GetExecutionTypeRequest() *ExecutionTypeRequestProto {
+	if m != nil {
+		return m.ExecutionTypeRequest
+	}
+	return nil
+}
+
+func (m *ResourceRequestProto) GetAllocationRequestId() int64 {
+	if m != nil && m.AllocationRequestId != nil {
+		return *m.AllocationRequestId
+	}
+	return Default_ResourceRequestProto_AllocationRequestId
+}
+
+type ExecutionTypeRequestProto struct {
+	ExecutionType        *ExecutionTypeProto `protobuf:"varint,1,opt,name=execution_type,enum=hadoop.yarn.ExecutionTypeProto,def=1" json:"execution_type,omitempty"`
+	EnforceExecutionType *bool               `protobuf:"varint,2,opt,name=enforce_execution_type,def=0" json:"enforce_execution_type,omitempty"`
+	XXX_unrecognized     []byte              `json:"-"`
+}
+
+func (m *ExecutionTypeRequestProto) Reset()                    { *m = ExecutionTypeRequestProto{} }
+func (m *ExecutionTypeRequestProto) String() string            { return proto.CompactTextString(m) }
+func (*ExecutionTypeRequestProto) ProtoMessage()               {}
+func (*ExecutionTypeRequestProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{35} }
+
+const Default_ExecutionTypeRequestProto_ExecutionType ExecutionTypeProto = ExecutionTypeProto_GUARANTEED
+const Default_ExecutionTypeRequestProto_EnforceExecutionType bool = false
+
+func (m *ExecutionTypeRequestProto) GetExecutionType() ExecutionTypeProto {
+	if m != nil && m.ExecutionType != nil {
+		return *m.ExecutionType
+	}
+	return Default_ExecutionTypeRequestProto_ExecutionType
+}
+
+func (m *ExecutionTypeRequestProto) GetEnforceExecutionType() bool {
+	if m != nil && m.EnforceExecutionType != nil {
+		return *m.EnforceExecutionType
+	}
+	return Default_ExecutionTypeRequestProto_EnforceExecutionType
+}
+
+type SchedulingRequestProto struct {
+	AllocationRequestId *int64                     `protobuf:"varint,1,opt,name=allocationRequestId,def=0" json:"allocationRequestId,omitempty"`
+	Priority            *PriorityProto             `protobuf:"bytes,2,opt,name=priority" json:"priority,omitempty"`
+	ExecutionType       *ExecutionTypeRequestProto `protobuf:"bytes,3,opt,name=executionType" json:"executionType,omitempty"`
+	AllocationTags      []string                   `protobuf:"bytes,4,rep,name=allocationTags" json:"allocationTags,omitempty"`
+	ResourceSizing      *ResourceSizingProto       `protobuf:"bytes,5,opt,name=resourceSizing" json:"resourceSizing,omitempty"`
+	PlacementConstraint *PlacementConstraintProto  `protobuf:"bytes,6,opt,name=placementConstraint" json:"placementConstraint,omitempty"`
+	XXX_unrecognized    []byte                     `json:"-"`
+}
+
+func (m *SchedulingRequestProto) Reset()                    { *m = SchedulingRequestProto{} }
+func (m *SchedulingRequestProto) String() string            { return proto.CompactTextString(m) }
+func (*SchedulingRequestProto) ProtoMessage()               {}
+func (*SchedulingRequestProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{36} }
+
+const Default_SchedulingRequestProto_AllocationRequestId int64 = 0
+
+func (m *SchedulingRequestProto) GetAllocationRequestId() int64 {
+	if m != nil && m.AllocationRequestId != nil {
+		return *m.AllocationRequestId
+	}
+	return Default_SchedulingRequestProto_AllocationRequestId
+}
+
+func (m *SchedulingRequestProto) GetPriority() *PriorityProto {
+	if m != nil {
+		return m.Priority
+	}
+	return nil
+}
+
+func (m *SchedulingRequestProto) GetExecutionType() *ExecutionTypeRequestProto {
+	if m != nil {
+		return m.ExecutionType
+	}
+	return nil
+}
+
+func (m *SchedulingRequestProto) GetAllocationTags() []string {
+	if m != nil {
+		return m.AllocationTags
+	}
+	return nil
+}
+
+func (m *SchedulingRequestProto) GetResourceSizing() *ResourceSizingProto {
+	if m != nil {
+		return m.ResourceSizing
+	}
+	return nil
+}
+
+func (m *SchedulingRequestProto) GetPlacementConstraint() *PlacementConstraintProto {
+	if m != nil {
+		return m.PlacementConstraint
+	}
+	return nil
+}
+
+type ResourceSizingProto struct {
+	NumAllocations   *int32         `protobuf:"varint,1,opt,name=numAllocations" json:"numAllocations,omitempty"`
+	Resources        *ResourceProto `protobuf:"bytes,2,opt,name=resources" json:"resources,omitempty"`
+	XXX_unrecognized []byte         `json:"-"`
+}
+
+func (m *ResourceSizingProto) Reset()                    { *m = ResourceSizingProto{} }
+func (m *ResourceSizingProto) String() string            { return proto.CompactTextString(m) }
+func (*ResourceSizingProto) ProtoMessage()               {}
+func (*ResourceSizingProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{37} }
+
+func (m *ResourceSizingProto) GetNumAllocations() int32 {
+	if m != nil && m.NumAllocations != nil {
+		return *m.NumAllocations
+	}
+	return 0
+}
+
+func (m *ResourceSizingProto) GetResources() *ResourceProto {
+	if m != nil {
+		return m.Resources
+	}
+	return nil
+}
+
+type RejectedSchedulingRequestProto struct {
+	Reason           *RejectionReasonProto   `protobuf:"varint,1,req,name=reason,enum=hadoop.yarn.RejectionReasonProto" json:"reason,omitempty"`
+	Request          *SchedulingRequestProto `protobuf:"bytes,2,req,name=request" json:"request,omitempty"`
+	XXX_unrecognized []byte                  `json:"-"`
+}
+
+func (m *RejectedSchedulingRequestProto) Reset()         { *m = RejectedSchedulingRequestProto{} }
+func (m *RejectedSchedulingRequestProto) String() string { return proto.CompactTextString(m) }
+func (*RejectedSchedulingRequestProto) ProtoMessage()    {}
+func (*RejectedSchedulingRequestProto) Descriptor() ([]byte, []int) {
+	return fileDescriptor5, []int{38}
+}
+
+func (m *RejectedSchedulingRequestProto) GetReason() RejectionReasonProto {
+	if m != nil && m.Reason != nil {
+		return *m.Reason
+	}
+	return RejectionReasonProto_RRP_COULD_NOT_PLACE_ON_NODE
+}
+
+func (m *RejectedSchedulingRequestProto) GetRequest() *SchedulingRequestProto {
+	if m != nil {
+		return m.Request
+	}
+	return nil
+}
+
 type PreemptionMessageProto struct {
 	StrictContract   *StrictPreemptionContractProto `protobuf:"bytes,1,opt,name=strictContract" json:"strictContract,omitempty"`
 	Contract         *PreemptionContractProto       `protobuf:"bytes,2,opt,name=contract" json:"contract,omitempty"`
 	XXX_unrecognized []byte                         `json:"-"`
 }
 
-func (m *PreemptionMessageProto) Reset()         { *m = PreemptionMessageProto{} }
-func (m *PreemptionMessageProto) String() string { return proto.CompactTextString(m) }
-func (*PreemptionMessageProto) ProtoMessage()    {}
+func (m *PreemptionMessageProto) Reset()                    { *m = PreemptionMessageProto{} }
+func (m *PreemptionMessageProto) String() string            { return proto.CompactTextString(m) }
+func (*PreemptionMessageProto) ProtoMessage()               {}
+func (*PreemptionMessageProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{39} }
 
 func (m *PreemptionMessageProto) GetStrictContract() *StrictPreemptionContractProto {
 	if m != nil {
@@ -1452,9 +2992,10 @@ type StrictPreemptionContractProto struct {
 	XXX_unrecognized []byte                      `json:"-"`
 }
 
-func (m *StrictPreemptionContractProto) Reset()         { *m = StrictPreemptionContractProto{} }
-func (m *StrictPreemptionContractProto) String() string { return proto.CompactTextString(m) }
-func (*StrictPreemptionContractProto) ProtoMessage()    {}
+func (m *StrictPreemptionContractProto) Reset()                    { *m = StrictPreemptionContractProto{} }
+func (m *StrictPreemptionContractProto) String() string            { return proto.CompactTextString(m) }
+func (*StrictPreemptionContractProto) ProtoMessage()               {}
+func (*StrictPreemptionContractProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{40} }
 
 func (m *StrictPreemptionContractProto) GetContainer() []*PreemptionContainerProto {
 	if m != nil {
@@ -1469,9 +3010,10 @@ type PreemptionContractProto struct {
 	XXX_unrecognized []byte                            `json:"-"`
 }
 
-func (m *PreemptionContractProto) Reset()         { *m = PreemptionContractProto{} }
-func (m *PreemptionContractProto) String() string { return proto.CompactTextString(m) }
-func (*PreemptionContractProto) ProtoMessage()    {}
+func (m *PreemptionContractProto) Reset()                    { *m = PreemptionContractProto{} }
+func (m *PreemptionContractProto) String() string            { return proto.CompactTextString(m) }
+func (*PreemptionContractProto) ProtoMessage()               {}
+func (*PreemptionContractProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{41} }
 
 func (m *PreemptionContractProto) GetResource() []*PreemptionResourceRequestProto {
 	if m != nil {
@@ -1492,9 +3034,10 @@ type PreemptionContainerProto struct {
 	XXX_unrecognized []byte            `json:"-"`
 }
 
-func (m *PreemptionContainerProto) Reset()         { *m = PreemptionContainerProto{} }
-func (m *PreemptionContainerProto) String() string { return proto.CompactTextString(m) }
-func (*PreemptionContainerProto) ProtoMessage()    {}
+func (m *PreemptionContainerProto) Reset()                    { *m = PreemptionContainerProto{} }
+func (m *PreemptionContainerProto) String() string            { return proto.CompactTextString(m) }
+func (*PreemptionContainerProto) ProtoMessage()               {}
+func (*PreemptionContainerProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{42} }
 
 func (m *PreemptionContainerProto) GetId() *ContainerIdProto {
 	if m != nil {
@@ -1511,6 +3054,9 @@ type PreemptionResourceRequestProto struct {
 func (m *PreemptionResourceRequestProto) Reset()         { *m = PreemptionResourceRequestProto{} }
 func (m *PreemptionResourceRequestProto) String() string { return proto.CompactTextString(m) }
 func (*PreemptionResourceRequestProto) ProtoMessage()    {}
+func (*PreemptionResourceRequestProto) Descriptor() ([]byte, []int) {
+	return fileDescriptor5, []int{43}
+}
 
 func (m *PreemptionResourceRequestProto) GetResource() *ResourceRequestProto {
 	if m != nil {
@@ -1525,9 +3071,10 @@ type ResourceBlacklistRequestProto struct {
 	XXX_unrecognized   []byte   `json:"-"`
 }
 
-func (m *ResourceBlacklistRequestProto) Reset()         { *m = ResourceBlacklistRequestProto{} }
-func (m *ResourceBlacklistRequestProto) String() string { return proto.CompactTextString(m) }
-func (*ResourceBlacklistRequestProto) ProtoMessage()    {}
+func (m *ResourceBlacklistRequestProto) Reset()                    { *m = ResourceBlacklistRequestProto{} }
+func (m *ResourceBlacklistRequestProto) String() string            { return proto.CompactTextString(m) }
+func (*ResourceBlacklistRequestProto) ProtoMessage()               {}
+func (*ResourceBlacklistRequestProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{44} }
 
 func (m *ResourceBlacklistRequestProto) GetBlacklistAdditions() []string {
 	if m != nil {
@@ -1547,24 +3094,34 @@ func (m *ResourceBlacklistRequestProto) GetBlacklistRemovals() []string {
 // //// From client_RM_Protocol /////////////////////////////////////////
 // //////////////////////////////////////////////////////////////////////
 type ApplicationSubmissionContextProto struct {
-	ApplicationId                           *ApplicationIdProto          `protobuf:"bytes,1,opt,name=application_id" json:"application_id,omitempty"`
-	ApplicationName                         *string                      `protobuf:"bytes,2,opt,name=application_name,def=N/A" json:"application_name,omitempty"`
-	Queue                                   *string                      `protobuf:"bytes,3,opt,name=queue,def=default" json:"queue,omitempty"`
-	Priority                                *PriorityProto               `protobuf:"bytes,4,opt,name=priority" json:"priority,omitempty"`
-	AmContainerSpec                         *ContainerLaunchContextProto `protobuf:"bytes,5,opt,name=am_container_spec" json:"am_container_spec,omitempty"`
-	CancelTokensWhenComplete                *bool                        `protobuf:"varint,6,opt,name=cancel_tokens_when_complete,def=1" json:"cancel_tokens_when_complete,omitempty"`
-	UnmanagedAm                             *bool                        `protobuf:"varint,7,opt,name=unmanaged_am,def=0" json:"unmanaged_am,omitempty"`
-	MaxAppAttempts                          *int32                       `protobuf:"varint,8,opt,name=maxAppAttempts,def=0" json:"maxAppAttempts,omitempty"`
-	Resource                                *ResourceProto               `protobuf:"bytes,9,opt,name=resource" json:"resource,omitempty"`
-	ApplicationType                         *string                      `protobuf:"bytes,10,opt,name=applicationType,def=YARN" json:"applicationType,omitempty"`
-	KeepContainersAcrossApplicationAttempts *bool                        `protobuf:"varint,11,opt,name=keep_containers_across_application_attempts,def=0" json:"keep_containers_across_application_attempts,omitempty"`
-	ApplicationTags                         []string                     `protobuf:"bytes,12,rep,name=applicationTags" json:"applicationTags,omitempty"`
-	XXX_unrecognized                        []byte                       `json:"-"`
+	ApplicationId                           *ApplicationIdProto           `protobuf:"bytes,1,opt,name=application_id" json:"application_id,omitempty"`
+	ApplicationName                         *string                       `protobuf:"bytes,2,opt,name=application_name,def=N/A" json:"application_name,omitempty"`
+	Queue                                   *string                       `protobuf:"bytes,3,opt,name=queue,def=default" json:"queue,omitempty"`
+	Priority                                *PriorityProto                `protobuf:"bytes,4,opt,name=priority" json:"priority,omitempty"`
+	AmContainerSpec                         *ContainerLaunchContextProto  `protobuf:"bytes,5,opt,name=am_container_spec" json:"am_container_spec,omitempty"`
+	CancelTokensWhenComplete                *bool                         `protobuf:"varint,6,opt,name=cancel_tokens_when_complete,def=1" json:"cancel_tokens_when_complete,omitempty"`
+	UnmanagedAm                             *bool                         `protobuf:"varint,7,opt,name=unmanaged_am,def=0" json:"unmanaged_am,omitempty"`
+	MaxAppAttempts                          *int32                        `protobuf:"varint,8,opt,name=maxAppAttempts,def=0" json:"maxAppAttempts,omitempty"`
+	Resource                                *ResourceProto                `protobuf:"bytes,9,opt,name=resource" json:"resource,omitempty"`
+	ApplicationType                         *string                       `protobuf:"bytes,10,opt,name=applicationType,def=YARN" json:"applicationType,omitempty"`
+	KeepContainersAcrossApplicationAttempts *bool                         `protobuf:"varint,11,opt,name=keep_containers_across_application_attempts,def=0" json:"keep_containers_across_application_attempts,omitempty"`
+	ApplicationTags                         []string                      `protobuf:"bytes,12,rep,name=applicationTags" json:"applicationTags,omitempty"`
+	AttemptFailuresValidityInterval         *int64                        `protobuf:"varint,13,opt,name=attempt_failures_validity_interval,def=-1" json:"attempt_failures_validity_interval,omitempty"`
+	LogAggregationContext                   *LogAggregationContextProto   `protobuf:"bytes,14,opt,name=log_aggregation_context" json:"log_aggregation_context,omitempty"`
+	ReservationId                           *ReservationIdProto           `protobuf:"bytes,15,opt,name=reservation_id" json:"reservation_id,omitempty"`
+	NodeLabelExpression                     *string                       `protobuf:"bytes,16,opt,name=node_label_expression" json:"node_label_expression,omitempty"`
+	AmContainerResourceRequest              []*ResourceRequestProto       `protobuf:"bytes,17,rep,name=am_container_resource_request" json:"am_container_resource_request,omitempty"`
+	ApplicationTimeouts                     []*ApplicationTimeoutMapProto `protobuf:"bytes,18,rep,name=application_timeouts" json:"application_timeouts,omitempty"`
+	ApplicationSchedulingProperties         []*StringStringMapProto       `protobuf:"bytes,19,rep,name=application_scheduling_properties" json:"application_scheduling_properties,omitempty"`
+	XXX_unrecognized                        []byte                        `json:"-"`
 }
 
 func (m *ApplicationSubmissionContextProto) Reset()         { *m = ApplicationSubmissionContextProto{} }
 func (m *ApplicationSubmissionContextProto) String() string { return proto.CompactTextString(m) }
 func (*ApplicationSubmissionContextProto) ProtoMessage()    {}
+func (*ApplicationSubmissionContextProto) Descriptor() ([]byte, []int) {
+	return fileDescriptor5, []int{45}
+}
 
 const Default_ApplicationSubmissionContextProto_ApplicationName string = "N/A"
 const Default_ApplicationSubmissionContextProto_Queue string = "default"
@@ -1573,6 +3130,7 @@ const Default_ApplicationSubmissionContextProto_UnmanagedAm bool = false
 const Default_ApplicationSubmissionContextProto_MaxAppAttempts int32 = 0
 const Default_ApplicationSubmissionContextProto_ApplicationType string = "YARN"
 const Default_ApplicationSubmissionContextProto_KeepContainersAcrossApplicationAttempts bool = false
+const Default_ApplicationSubmissionContextProto_AttemptFailuresValidityInterval int64 = -1
 
 func (m *ApplicationSubmissionContextProto) GetApplicationId() *ApplicationIdProto {
 	if m != nil {
@@ -1658,15 +3216,177 @@ func (m *ApplicationSubmissionContextProto) GetApplicationTags() []string {
 	return nil
 }
 
+func (m *ApplicationSubmissionContextProto) GetAttemptFailuresValidityInterval() int64 {
+	if m != nil && m.AttemptFailuresValidityInterval != nil {
+		return *m.AttemptFailuresValidityInterval
+	}
+	return Default_ApplicationSubmissionContextProto_AttemptFailuresValidityInterval
+}
+
+func (m *ApplicationSubmissionContextProto) GetLogAggregationContext() *LogAggregationContextProto {
+	if m != nil {
+		return m.LogAggregationContext
+	}
+	return nil
+}
+
+func (m *ApplicationSubmissionContextProto) GetReservationId() *ReservationIdProto {
+	if m != nil {
+		return m.ReservationId
+	}
+	return nil
+}
+
+func (m *ApplicationSubmissionContextProto) GetNodeLabelExpression() string {
+	if m != nil && m.NodeLabelExpression != nil {
+		return *m.NodeLabelExpression
+	}
+	return ""
+}
+
+func (m *ApplicationSubmissionContextProto) GetAmContainerResourceRequest() []*ResourceRequestProto {
+	if m != nil {
+		return m.AmContainerResourceRequest
+	}
+	return nil
+}
+
+func (m *ApplicationSubmissionContextProto) GetApplicationTimeouts() []*ApplicationTimeoutMapProto {
+	if m != nil {
+		return m.ApplicationTimeouts
+	}
+	return nil
+}
+
+func (m *ApplicationSubmissionContextProto) GetApplicationSchedulingProperties() []*StringStringMapProto {
+	if m != nil {
+		return m.ApplicationSchedulingProperties
+	}
+	return nil
+}
+
+type ApplicationTimeoutMapProto struct {
+	ApplicationTimeoutType *ApplicationTimeoutTypeProto `protobuf:"varint,1,opt,name=application_timeout_type,enum=hadoop.yarn.ApplicationTimeoutTypeProto" json:"application_timeout_type,omitempty"`
+	Timeout                *int64                       `protobuf:"varint,2,opt,name=timeout" json:"timeout,omitempty"`
+	XXX_unrecognized       []byte                       `json:"-"`
+}
+
+func (m *ApplicationTimeoutMapProto) Reset()                    { *m = ApplicationTimeoutMapProto{} }
+func (m *ApplicationTimeoutMapProto) String() string            { return proto.CompactTextString(m) }
+func (*ApplicationTimeoutMapProto) ProtoMessage()               {}
+func (*ApplicationTimeoutMapProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{46} }
+
+func (m *ApplicationTimeoutMapProto) GetApplicationTimeoutType() ApplicationTimeoutTypeProto {
+	if m != nil && m.ApplicationTimeoutType != nil {
+		return *m.ApplicationTimeoutType
+	}
+	return ApplicationTimeoutTypeProto_APP_TIMEOUT_LIFETIME
+}
+
+func (m *ApplicationTimeoutMapProto) GetTimeout() int64 {
+	if m != nil && m.Timeout != nil {
+		return *m.Timeout
+	}
+	return 0
+}
+
+type ApplicationUpdateTimeoutMapProto struct {
+	ApplicationTimeoutType *ApplicationTimeoutTypeProto `protobuf:"varint,1,opt,name=application_timeout_type,enum=hadoop.yarn.ApplicationTimeoutTypeProto" json:"application_timeout_type,omitempty"`
+	ExpireTime             *string                      `protobuf:"bytes,2,opt,name=expire_time" json:"expire_time,omitempty"`
+	XXX_unrecognized       []byte                       `json:"-"`
+}
+
+func (m *ApplicationUpdateTimeoutMapProto) Reset()         { *m = ApplicationUpdateTimeoutMapProto{} }
+func (m *ApplicationUpdateTimeoutMapProto) String() string { return proto.CompactTextString(m) }
+func (*ApplicationUpdateTimeoutMapProto) ProtoMessage()    {}
+func (*ApplicationUpdateTimeoutMapProto) Descriptor() ([]byte, []int) {
+	return fileDescriptor5, []int{47}
+}
+
+func (m *ApplicationUpdateTimeoutMapProto) GetApplicationTimeoutType() ApplicationTimeoutTypeProto {
+	if m != nil && m.ApplicationTimeoutType != nil {
+		return *m.ApplicationTimeoutType
+	}
+	return ApplicationTimeoutTypeProto_APP_TIMEOUT_LIFETIME
+}
+
+func (m *ApplicationUpdateTimeoutMapProto) GetExpireTime() string {
+	if m != nil && m.ExpireTime != nil {
+		return *m.ExpireTime
+	}
+	return ""
+}
+
+type LogAggregationContextProto struct {
+	IncludePattern                 *string `protobuf:"bytes,1,opt,name=include_pattern,def=.*" json:"include_pattern,omitempty"`
+	ExcludePattern                 *string `protobuf:"bytes,2,opt,name=exclude_pattern,def=" json:"exclude_pattern,omitempty"`
+	RolledLogsIncludePattern       *string `protobuf:"bytes,3,opt,name=rolled_logs_include_pattern,def=" json:"rolled_logs_include_pattern,omitempty"`
+	RolledLogsExcludePattern       *string `protobuf:"bytes,4,opt,name=rolled_logs_exclude_pattern,def=.*" json:"rolled_logs_exclude_pattern,omitempty"`
+	LogAggregationPolicyClassName  *string `protobuf:"bytes,5,opt,name=log_aggregation_policy_class_name" json:"log_aggregation_policy_class_name,omitempty"`
+	LogAggregationPolicyParameters *string `protobuf:"bytes,6,opt,name=log_aggregation_policy_parameters" json:"log_aggregation_policy_parameters,omitempty"`
+	XXX_unrecognized               []byte  `json:"-"`
+}
+
+func (m *LogAggregationContextProto) Reset()                    { *m = LogAggregationContextProto{} }
+func (m *LogAggregationContextProto) String() string            { return proto.CompactTextString(m) }
+func (*LogAggregationContextProto) ProtoMessage()               {}
+func (*LogAggregationContextProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{48} }
+
+const Default_LogAggregationContextProto_IncludePattern string = ".*"
+const Default_LogAggregationContextProto_RolledLogsExcludePattern string = ".*"
+
+func (m *LogAggregationContextProto) GetIncludePattern() string {
+	if m != nil && m.IncludePattern != nil {
+		return *m.IncludePattern
+	}
+	return Default_LogAggregationContextProto_IncludePattern
+}
+
+func (m *LogAggregationContextProto) GetExcludePattern() string {
+	if m != nil && m.ExcludePattern != nil {
+		return *m.ExcludePattern
+	}
+	return ""
+}
+
+func (m *LogAggregationContextProto) GetRolledLogsIncludePattern() string {
+	if m != nil && m.RolledLogsIncludePattern != nil {
+		return *m.RolledLogsIncludePattern
+	}
+	return ""
+}
+
+func (m *LogAggregationContextProto) GetRolledLogsExcludePattern() string {
+	if m != nil && m.RolledLogsExcludePattern != nil {
+		return *m.RolledLogsExcludePattern
+	}
+	return Default_LogAggregationContextProto_RolledLogsExcludePattern
+}
+
+func (m *LogAggregationContextProto) GetLogAggregationPolicyClassName() string {
+	if m != nil && m.LogAggregationPolicyClassName != nil {
+		return *m.LogAggregationPolicyClassName
+	}
+	return ""
+}
+
+func (m *LogAggregationContextProto) GetLogAggregationPolicyParameters() string {
+	if m != nil && m.LogAggregationPolicyParameters != nil {
+		return *m.LogAggregationPolicyParameters
+	}
+	return ""
+}
+
 type ApplicationACLMapProto struct {
 	AccessType       *ApplicationAccessTypeProto `protobuf:"varint,1,opt,name=accessType,enum=hadoop.yarn.ApplicationAccessTypeProto" json:"accessType,omitempty"`
 	Acl              *string                     `protobuf:"bytes,2,opt,name=acl,def= " json:"acl,omitempty"`
 	XXX_unrecognized []byte                      `json:"-"`
 }
 
-func (m *ApplicationACLMapProto) Reset()         { *m = ApplicationACLMapProto{} }
-func (m *ApplicationACLMapProto) String() string { return proto.CompactTextString(m) }
-func (*ApplicationACLMapProto) ProtoMessage()    {}
+func (m *ApplicationACLMapProto) Reset()                    { *m = ApplicationACLMapProto{} }
+func (m *ApplicationACLMapProto) String() string            { return proto.CompactTextString(m) }
+func (*ApplicationACLMapProto) ProtoMessage()               {}
+func (*ApplicationACLMapProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{49} }
 
 const Default_ApplicationACLMapProto_Acl string = " "
 
@@ -1674,7 +3394,7 @@ func (m *ApplicationACLMapProto) GetAccessType() ApplicationAccessTypeProto {
 	if m != nil && m.AccessType != nil {
 		return *m.AccessType
 	}
-	return 0
+	return ApplicationAccessTypeProto_APPACCESS_VIEW_APP
 }
 
 func (m *ApplicationACLMapProto) GetAcl() string {
@@ -1685,13 +3405,19 @@ func (m *ApplicationACLMapProto) GetAcl() string {
 }
 
 type YarnClusterMetricsProto struct {
-	NumNodeManagers  *int32 `protobuf:"varint,1,opt,name=num_node_managers" json:"num_node_managers,omitempty"`
-	XXX_unrecognized []byte `json:"-"`
+	NumNodeManagers      *int32 `protobuf:"varint,1,opt,name=num_node_managers" json:"num_node_managers,omitempty"`
+	NumDecommissionedNms *int32 `protobuf:"varint,2,opt,name=num_decommissioned_nms" json:"num_decommissioned_nms,omitempty"`
+	NumActiveNms         *int32 `protobuf:"varint,3,opt,name=num_active_nms" json:"num_active_nms,omitempty"`
+	NumLostNms           *int32 `protobuf:"varint,4,opt,name=num_lost_nms" json:"num_lost_nms,omitempty"`
+	NumUnhealthyNms      *int32 `protobuf:"varint,5,opt,name=num_unhealthy_nms" json:"num_unhealthy_nms,omitempty"`
+	NumRebootedNms       *int32 `protobuf:"varint,6,opt,name=num_rebooted_nms" json:"num_rebooted_nms,omitempty"`
+	XXX_unrecognized     []byte `json:"-"`
 }
 
-func (m *YarnClusterMetricsProto) Reset()         { *m = YarnClusterMetricsProto{} }
-func (m *YarnClusterMetricsProto) String() string { return proto.CompactTextString(m) }
-func (*YarnClusterMetricsProto) ProtoMessage()    {}
+func (m *YarnClusterMetricsProto) Reset()                    { *m = YarnClusterMetricsProto{} }
+func (m *YarnClusterMetricsProto) String() string            { return proto.CompactTextString(m) }
+func (*YarnClusterMetricsProto) ProtoMessage()               {}
+func (*YarnClusterMetricsProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{50} }
 
 func (m *YarnClusterMetricsProto) GetNumNodeManagers() int32 {
 	if m != nil && m.NumNodeManagers != nil {
@@ -1700,20 +3426,215 @@ func (m *YarnClusterMetricsProto) GetNumNodeManagers() int32 {
 	return 0
 }
 
-type QueueInfoProto struct {
-	QueueName        *string                   `protobuf:"bytes,1,opt,name=queueName" json:"queueName,omitempty"`
-	Capacity         *float32                  `protobuf:"fixed32,2,opt,name=capacity" json:"capacity,omitempty"`
-	MaximumCapacity  *float32                  `protobuf:"fixed32,3,opt,name=maximumCapacity" json:"maximumCapacity,omitempty"`
-	CurrentCapacity  *float32                  `protobuf:"fixed32,4,opt,name=currentCapacity" json:"currentCapacity,omitempty"`
-	State            *QueueStateProto          `protobuf:"varint,5,opt,name=state,enum=hadoop.yarn.QueueStateProto" json:"state,omitempty"`
-	ChildQueues      []*QueueInfoProto         `protobuf:"bytes,6,rep,name=childQueues" json:"childQueues,omitempty"`
-	Applications     []*ApplicationReportProto `protobuf:"bytes,7,rep,name=applications" json:"applications,omitempty"`
-	XXX_unrecognized []byte                    `json:"-"`
+func (m *YarnClusterMetricsProto) GetNumDecommissionedNms() int32 {
+	if m != nil && m.NumDecommissionedNms != nil {
+		return *m.NumDecommissionedNms
+	}
+	return 0
 }
 
-func (m *QueueInfoProto) Reset()         { *m = QueueInfoProto{} }
-func (m *QueueInfoProto) String() string { return proto.CompactTextString(m) }
-func (*QueueInfoProto) ProtoMessage()    {}
+func (m *YarnClusterMetricsProto) GetNumActiveNms() int32 {
+	if m != nil && m.NumActiveNms != nil {
+		return *m.NumActiveNms
+	}
+	return 0
+}
+
+func (m *YarnClusterMetricsProto) GetNumLostNms() int32 {
+	if m != nil && m.NumLostNms != nil {
+		return *m.NumLostNms
+	}
+	return 0
+}
+
+func (m *YarnClusterMetricsProto) GetNumUnhealthyNms() int32 {
+	if m != nil && m.NumUnhealthyNms != nil {
+		return *m.NumUnhealthyNms
+	}
+	return 0
+}
+
+func (m *YarnClusterMetricsProto) GetNumRebootedNms() int32 {
+	if m != nil && m.NumRebootedNms != nil {
+		return *m.NumRebootedNms
+	}
+	return 0
+}
+
+type QueueStatisticsProto struct {
+	NumAppsSubmitted    *int64 `protobuf:"varint,1,opt,name=numAppsSubmitted" json:"numAppsSubmitted,omitempty"`
+	NumAppsRunning      *int64 `protobuf:"varint,2,opt,name=numAppsRunning" json:"numAppsRunning,omitempty"`
+	NumAppsPending      *int64 `protobuf:"varint,3,opt,name=numAppsPending" json:"numAppsPending,omitempty"`
+	NumAppsCompleted    *int64 `protobuf:"varint,4,opt,name=numAppsCompleted" json:"numAppsCompleted,omitempty"`
+	NumAppsKilled       *int64 `protobuf:"varint,5,opt,name=numAppsKilled" json:"numAppsKilled,omitempty"`
+	NumAppsFailed       *int64 `protobuf:"varint,6,opt,name=numAppsFailed" json:"numAppsFailed,omitempty"`
+	NumActiveUsers      *int64 `protobuf:"varint,7,opt,name=numActiveUsers" json:"numActiveUsers,omitempty"`
+	AvailableMemoryMB   *int64 `protobuf:"varint,8,opt,name=availableMemoryMB" json:"availableMemoryMB,omitempty"`
+	AllocatedMemoryMB   *int64 `protobuf:"varint,9,opt,name=allocatedMemoryMB" json:"allocatedMemoryMB,omitempty"`
+	PendingMemoryMB     *int64 `protobuf:"varint,10,opt,name=pendingMemoryMB" json:"pendingMemoryMB,omitempty"`
+	ReservedMemoryMB    *int64 `protobuf:"varint,11,opt,name=reservedMemoryMB" json:"reservedMemoryMB,omitempty"`
+	AvailableVCores     *int64 `protobuf:"varint,12,opt,name=availableVCores" json:"availableVCores,omitempty"`
+	AllocatedVCores     *int64 `protobuf:"varint,13,opt,name=allocatedVCores" json:"allocatedVCores,omitempty"`
+	PendingVCores       *int64 `protobuf:"varint,14,opt,name=pendingVCores" json:"pendingVCores,omitempty"`
+	ReservedVCores      *int64 `protobuf:"varint,15,opt,name=reservedVCores" json:"reservedVCores,omitempty"`
+	AllocatedContainers *int64 `protobuf:"varint,16,opt,name=allocatedContainers" json:"allocatedContainers,omitempty"`
+	PendingContainers   *int64 `protobuf:"varint,17,opt,name=pendingContainers" json:"pendingContainers,omitempty"`
+	ReservedContainers  *int64 `protobuf:"varint,18,opt,name=reservedContainers" json:"reservedContainers,omitempty"`
+	XXX_unrecognized    []byte `json:"-"`
+}
+
+func (m *QueueStatisticsProto) Reset()                    { *m = QueueStatisticsProto{} }
+func (m *QueueStatisticsProto) String() string            { return proto.CompactTextString(m) }
+func (*QueueStatisticsProto) ProtoMessage()               {}
+func (*QueueStatisticsProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{51} }
+
+func (m *QueueStatisticsProto) GetNumAppsSubmitted() int64 {
+	if m != nil && m.NumAppsSubmitted != nil {
+		return *m.NumAppsSubmitted
+	}
+	return 0
+}
+
+func (m *QueueStatisticsProto) GetNumAppsRunning() int64 {
+	if m != nil && m.NumAppsRunning != nil {
+		return *m.NumAppsRunning
+	}
+	return 0
+}
+
+func (m *QueueStatisticsProto) GetNumAppsPending() int64 {
+	if m != nil && m.NumAppsPending != nil {
+		return *m.NumAppsPending
+	}
+	return 0
+}
+
+func (m *QueueStatisticsProto) GetNumAppsCompleted() int64 {
+	if m != nil && m.NumAppsCompleted != nil {
+		return *m.NumAppsCompleted
+	}
+	return 0
+}
+
+func (m *QueueStatisticsProto) GetNumAppsKilled() int64 {
+	if m != nil && m.NumAppsKilled != nil {
+		return *m.NumAppsKilled
+	}
+	return 0
+}
+
+func (m *QueueStatisticsProto) GetNumAppsFailed() int64 {
+	if m != nil && m.NumAppsFailed != nil {
+		return *m.NumAppsFailed
+	}
+	return 0
+}
+
+func (m *QueueStatisticsProto) GetNumActiveUsers() int64 {
+	if m != nil && m.NumActiveUsers != nil {
+		return *m.NumActiveUsers
+	}
+	return 0
+}
+
+func (m *QueueStatisticsProto) GetAvailableMemoryMB() int64 {
+	if m != nil && m.AvailableMemoryMB != nil {
+		return *m.AvailableMemoryMB
+	}
+	return 0
+}
+
+func (m *QueueStatisticsProto) GetAllocatedMemoryMB() int64 {
+	if m != nil && m.AllocatedMemoryMB != nil {
+		return *m.AllocatedMemoryMB
+	}
+	return 0
+}
+
+func (m *QueueStatisticsProto) GetPendingMemoryMB() int64 {
+	if m != nil && m.PendingMemoryMB != nil {
+		return *m.PendingMemoryMB
+	}
+	return 0
+}
+
+func (m *QueueStatisticsProto) GetReservedMemoryMB() int64 {
+	if m != nil && m.ReservedMemoryMB != nil {
+		return *m.ReservedMemoryMB
+	}
+	return 0
+}
+
+func (m *QueueStatisticsProto) GetAvailableVCores() int64 {
+	if m != nil && m.AvailableVCores != nil {
+		return *m.AvailableVCores
+	}
+	return 0
+}
+
+func (m *QueueStatisticsProto) GetAllocatedVCores() int64 {
+	if m != nil && m.AllocatedVCores != nil {
+		return *m.AllocatedVCores
+	}
+	return 0
+}
+
+func (m *QueueStatisticsProto) GetPendingVCores() int64 {
+	if m != nil && m.PendingVCores != nil {
+		return *m.PendingVCores
+	}
+	return 0
+}
+
+func (m *QueueStatisticsProto) GetReservedVCores() int64 {
+	if m != nil && m.ReservedVCores != nil {
+		return *m.ReservedVCores
+	}
+	return 0
+}
+
+func (m *QueueStatisticsProto) GetAllocatedContainers() int64 {
+	if m != nil && m.AllocatedContainers != nil {
+		return *m.AllocatedContainers
+	}
+	return 0
+}
+
+func (m *QueueStatisticsProto) GetPendingContainers() int64 {
+	if m != nil && m.PendingContainers != nil {
+		return *m.PendingContainers
+	}
+	return 0
+}
+
+func (m *QueueStatisticsProto) GetReservedContainers() int64 {
+	if m != nil && m.ReservedContainers != nil {
+		return *m.ReservedContainers
+	}
+	return 0
+}
+
+type QueueInfoProto struct {
+	QueueName                    *string                        `protobuf:"bytes,1,opt,name=queueName" json:"queueName,omitempty"`
+	Capacity                     *float32                       `protobuf:"fixed32,2,opt,name=capacity" json:"capacity,omitempty"`
+	MaximumCapacity              *float32                       `protobuf:"fixed32,3,opt,name=maximumCapacity" json:"maximumCapacity,omitempty"`
+	CurrentCapacity              *float32                       `protobuf:"fixed32,4,opt,name=currentCapacity" json:"currentCapacity,omitempty"`
+	State                        *QueueStateProto               `protobuf:"varint,5,opt,name=state,enum=hadoop.yarn.QueueStateProto" json:"state,omitempty"`
+	ChildQueues                  []*QueueInfoProto              `protobuf:"bytes,6,rep,name=childQueues" json:"childQueues,omitempty"`
+	Applications                 []*ApplicationReportProto      `protobuf:"bytes,7,rep,name=applications" json:"applications,omitempty"`
+	AccessibleNodeLabels         []string                       `protobuf:"bytes,8,rep,name=accessibleNodeLabels" json:"accessibleNodeLabels,omitempty"`
+	DefaultNodeLabelExpression   *string                        `protobuf:"bytes,9,opt,name=defaultNodeLabelExpression" json:"defaultNodeLabelExpression,omitempty"`
+	QueueStatistics              *QueueStatisticsProto          `protobuf:"bytes,10,opt,name=queueStatistics" json:"queueStatistics,omitempty"`
+	PreemptionDisabled           *bool                          `protobuf:"varint,11,opt,name=preemptionDisabled" json:"preemptionDisabled,omitempty"`
+	QueueConfigurationsMap       []*QueueConfigurationsMapProto `protobuf:"bytes,12,rep,name=queueConfigurationsMap" json:"queueConfigurationsMap,omitempty"`
+	IntraQueuePreemptionDisabled *bool                          `protobuf:"varint,13,opt,name=intraQueuePreemptionDisabled" json:"intraQueuePreemptionDisabled,omitempty"`
+	XXX_unrecognized             []byte                         `json:"-"`
+}
+
+func (m *QueueInfoProto) Reset()                    { *m = QueueInfoProto{} }
+func (m *QueueInfoProto) String() string            { return proto.CompactTextString(m) }
+func (*QueueInfoProto) ProtoMessage()               {}
+func (*QueueInfoProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{52} }
 
 func (m *QueueInfoProto) GetQueueName() string {
 	if m != nil && m.QueueName != nil {
@@ -1747,7 +3668,7 @@ func (m *QueueInfoProto) GetState() QueueStateProto {
 	if m != nil && m.State != nil {
 		return *m.State
 	}
-	return 0
+	return QueueStateProto_Q_STOPPED
 }
 
 func (m *QueueInfoProto) GetChildQueues() []*QueueInfoProto {
@@ -1764,15 +3685,164 @@ func (m *QueueInfoProto) GetApplications() []*ApplicationReportProto {
 	return nil
 }
 
+func (m *QueueInfoProto) GetAccessibleNodeLabels() []string {
+	if m != nil {
+		return m.AccessibleNodeLabels
+	}
+	return nil
+}
+
+func (m *QueueInfoProto) GetDefaultNodeLabelExpression() string {
+	if m != nil && m.DefaultNodeLabelExpression != nil {
+		return *m.DefaultNodeLabelExpression
+	}
+	return ""
+}
+
+func (m *QueueInfoProto) GetQueueStatistics() *QueueStatisticsProto {
+	if m != nil {
+		return m.QueueStatistics
+	}
+	return nil
+}
+
+func (m *QueueInfoProto) GetPreemptionDisabled() bool {
+	if m != nil && m.PreemptionDisabled != nil {
+		return *m.PreemptionDisabled
+	}
+	return false
+}
+
+func (m *QueueInfoProto) GetQueueConfigurationsMap() []*QueueConfigurationsMapProto {
+	if m != nil {
+		return m.QueueConfigurationsMap
+	}
+	return nil
+}
+
+func (m *QueueInfoProto) GetIntraQueuePreemptionDisabled() bool {
+	if m != nil && m.IntraQueuePreemptionDisabled != nil {
+		return *m.IntraQueuePreemptionDisabled
+	}
+	return false
+}
+
+type QueueConfigurationsProto struct {
+	Capacity              *float32       `protobuf:"fixed32,1,opt,name=capacity" json:"capacity,omitempty"`
+	AbsoluteCapacity      *float32       `protobuf:"fixed32,2,opt,name=absoluteCapacity" json:"absoluteCapacity,omitempty"`
+	MaxCapacity           *float32       `protobuf:"fixed32,3,opt,name=maxCapacity" json:"maxCapacity,omitempty"`
+	AbsoluteMaxCapacity   *float32       `protobuf:"fixed32,4,opt,name=absoluteMaxCapacity" json:"absoluteMaxCapacity,omitempty"`
+	MaxAMPercentage       *float32       `protobuf:"fixed32,5,opt,name=maxAMPercentage" json:"maxAMPercentage,omitempty"`
+	EffectiveMinCapacity  *ResourceProto `protobuf:"bytes,6,opt,name=effectiveMinCapacity" json:"effectiveMinCapacity,omitempty"`
+	EffectiveMaxCapacity  *ResourceProto `protobuf:"bytes,7,opt,name=effectiveMaxCapacity" json:"effectiveMaxCapacity,omitempty"`
+	ConfiguredMinCapacity *ResourceProto `protobuf:"bytes,8,opt,name=configuredMinCapacity" json:"configuredMinCapacity,omitempty"`
+	ConfiguredMaxCapacity *ResourceProto `protobuf:"bytes,9,opt,name=configuredMaxCapacity" json:"configuredMaxCapacity,omitempty"`
+	XXX_unrecognized      []byte         `json:"-"`
+}
+
+func (m *QueueConfigurationsProto) Reset()                    { *m = QueueConfigurationsProto{} }
+func (m *QueueConfigurationsProto) String() string            { return proto.CompactTextString(m) }
+func (*QueueConfigurationsProto) ProtoMessage()               {}
+func (*QueueConfigurationsProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{53} }
+
+func (m *QueueConfigurationsProto) GetCapacity() float32 {
+	if m != nil && m.Capacity != nil {
+		return *m.Capacity
+	}
+	return 0
+}
+
+func (m *QueueConfigurationsProto) GetAbsoluteCapacity() float32 {
+	if m != nil && m.AbsoluteCapacity != nil {
+		return *m.AbsoluteCapacity
+	}
+	return 0
+}
+
+func (m *QueueConfigurationsProto) GetMaxCapacity() float32 {
+	if m != nil && m.MaxCapacity != nil {
+		return *m.MaxCapacity
+	}
+	return 0
+}
+
+func (m *QueueConfigurationsProto) GetAbsoluteMaxCapacity() float32 {
+	if m != nil && m.AbsoluteMaxCapacity != nil {
+		return *m.AbsoluteMaxCapacity
+	}
+	return 0
+}
+
+func (m *QueueConfigurationsProto) GetMaxAMPercentage() float32 {
+	if m != nil && m.MaxAMPercentage != nil {
+		return *m.MaxAMPercentage
+	}
+	return 0
+}
+
+func (m *QueueConfigurationsProto) GetEffectiveMinCapacity() *ResourceProto {
+	if m != nil {
+		return m.EffectiveMinCapacity
+	}
+	return nil
+}
+
+func (m *QueueConfigurationsProto) GetEffectiveMaxCapacity() *ResourceProto {
+	if m != nil {
+		return m.EffectiveMaxCapacity
+	}
+	return nil
+}
+
+func (m *QueueConfigurationsProto) GetConfiguredMinCapacity() *ResourceProto {
+	if m != nil {
+		return m.ConfiguredMinCapacity
+	}
+	return nil
+}
+
+func (m *QueueConfigurationsProto) GetConfiguredMaxCapacity() *ResourceProto {
+	if m != nil {
+		return m.ConfiguredMaxCapacity
+	}
+	return nil
+}
+
+type QueueConfigurationsMapProto struct {
+	PartitionName       *string                   `protobuf:"bytes,1,req,name=partitionName" json:"partitionName,omitempty"`
+	QueueConfigurations *QueueConfigurationsProto `protobuf:"bytes,2,opt,name=queueConfigurations" json:"queueConfigurations,omitempty"`
+	XXX_unrecognized    []byte                    `json:"-"`
+}
+
+func (m *QueueConfigurationsMapProto) Reset()                    { *m = QueueConfigurationsMapProto{} }
+func (m *QueueConfigurationsMapProto) String() string            { return proto.CompactTextString(m) }
+func (*QueueConfigurationsMapProto) ProtoMessage()               {}
+func (*QueueConfigurationsMapProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{54} }
+
+func (m *QueueConfigurationsMapProto) GetPartitionName() string {
+	if m != nil && m.PartitionName != nil {
+		return *m.PartitionName
+	}
+	return ""
+}
+
+func (m *QueueConfigurationsMapProto) GetQueueConfigurations() *QueueConfigurationsProto {
+	if m != nil {
+		return m.QueueConfigurations
+	}
+	return nil
+}
+
 type QueueUserACLInfoProto struct {
 	QueueName        *string         `protobuf:"bytes,1,opt,name=queueName" json:"queueName,omitempty"`
 	UserAcls         []QueueACLProto `protobuf:"varint,2,rep,name=userAcls,enum=hadoop.yarn.QueueACLProto" json:"userAcls,omitempty"`
 	XXX_unrecognized []byte          `json:"-"`
 }
 
-func (m *QueueUserACLInfoProto) Reset()         { *m = QueueUserACLInfoProto{} }
-func (m *QueueUserACLInfoProto) String() string { return proto.CompactTextString(m) }
-func (*QueueUserACLInfoProto) ProtoMessage()    {}
+func (m *QueueUserACLInfoProto) Reset()                    { *m = QueueUserACLInfoProto{} }
+func (m *QueueUserACLInfoProto) String() string            { return proto.CompactTextString(m) }
+func (*QueueUserACLInfoProto) ProtoMessage()               {}
+func (*QueueUserACLInfoProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{55} }
 
 func (m *QueueUserACLInfoProto) GetQueueName() string {
 	if m != nil && m.QueueName != nil {
@@ -1788,19 +3858,497 @@ func (m *QueueUserACLInfoProto) GetUserAcls() []QueueACLProto {
 	return nil
 }
 
-type ContainerLaunchContextProto struct {
-	LocalResources   []*StringLocalResourceMapProto `protobuf:"bytes,1,rep,name=localResources" json:"localResources,omitempty"`
-	Tokens           []byte                         `protobuf:"bytes,2,opt,name=tokens" json:"tokens,omitempty"`
-	ServiceData      []*StringBytesMapProto         `protobuf:"bytes,3,rep,name=service_data" json:"service_data,omitempty"`
-	Environment      []*StringStringMapProto        `protobuf:"bytes,4,rep,name=environment" json:"environment,omitempty"`
-	Command          []string                       `protobuf:"bytes,5,rep,name=command" json:"command,omitempty"`
-	Application_ACLs []*ApplicationACLMapProto      `protobuf:"bytes,6,rep,name=application_ACLs" json:"application_ACLs,omitempty"`
-	XXX_unrecognized []byte                         `json:"-"`
+type PlacementConstraintProto struct {
+	SimpleConstraint    *SimplePlacementConstraintProto    `protobuf:"bytes,1,opt,name=simpleConstraint" json:"simpleConstraint,omitempty"`
+	CompositeConstraint *CompositePlacementConstraintProto `protobuf:"bytes,2,opt,name=compositeConstraint" json:"compositeConstraint,omitempty"`
+	XXX_unrecognized    []byte                             `json:"-"`
 }
 
-func (m *ContainerLaunchContextProto) Reset()         { *m = ContainerLaunchContextProto{} }
-func (m *ContainerLaunchContextProto) String() string { return proto.CompactTextString(m) }
-func (*ContainerLaunchContextProto) ProtoMessage()    {}
+func (m *PlacementConstraintProto) Reset()                    { *m = PlacementConstraintProto{} }
+func (m *PlacementConstraintProto) String() string            { return proto.CompactTextString(m) }
+func (*PlacementConstraintProto) ProtoMessage()               {}
+func (*PlacementConstraintProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{56} }
+
+func (m *PlacementConstraintProto) GetSimpleConstraint() *SimplePlacementConstraintProto {
+	if m != nil {
+		return m.SimpleConstraint
+	}
+	return nil
+}
+
+func (m *PlacementConstraintProto) GetCompositeConstraint() *CompositePlacementConstraintProto {
+	if m != nil {
+		return m.CompositeConstraint
+	}
+	return nil
+}
+
+type SimplePlacementConstraintProto struct {
+	Scope             *string                           `protobuf:"bytes,1,req,name=scope" json:"scope,omitempty"`
+	TargetExpressions []*PlacementConstraintTargetProto `protobuf:"bytes,2,rep,name=targetExpressions" json:"targetExpressions,omitempty"`
+	MinCardinality    *int32                            `protobuf:"varint,3,opt,name=minCardinality" json:"minCardinality,omitempty"`
+	MaxCardinality    *int32                            `protobuf:"varint,4,opt,name=maxCardinality" json:"maxCardinality,omitempty"`
+	AttributeOpCode   *NodeAttributeOpCodeProto         `protobuf:"varint,5,opt,name=attributeOpCode,enum=hadoop.yarn.NodeAttributeOpCodeProto" json:"attributeOpCode,omitempty"`
+	XXX_unrecognized  []byte                            `json:"-"`
+}
+
+func (m *SimplePlacementConstraintProto) Reset()         { *m = SimplePlacementConstraintProto{} }
+func (m *SimplePlacementConstraintProto) String() string { return proto.CompactTextString(m) }
+func (*SimplePlacementConstraintProto) ProtoMessage()    {}
+func (*SimplePlacementConstraintProto) Descriptor() ([]byte, []int) {
+	return fileDescriptor5, []int{57}
+}
+
+func (m *SimplePlacementConstraintProto) GetScope() string {
+	if m != nil && m.Scope != nil {
+		return *m.Scope
+	}
+	return ""
+}
+
+func (m *SimplePlacementConstraintProto) GetTargetExpressions() []*PlacementConstraintTargetProto {
+	if m != nil {
+		return m.TargetExpressions
+	}
+	return nil
+}
+
+func (m *SimplePlacementConstraintProto) GetMinCardinality() int32 {
+	if m != nil && m.MinCardinality != nil {
+		return *m.MinCardinality
+	}
+	return 0
+}
+
+func (m *SimplePlacementConstraintProto) GetMaxCardinality() int32 {
+	if m != nil && m.MaxCardinality != nil {
+		return *m.MaxCardinality
+	}
+	return 0
+}
+
+func (m *SimplePlacementConstraintProto) GetAttributeOpCode() NodeAttributeOpCodeProto {
+	if m != nil && m.AttributeOpCode != nil {
+		return *m.AttributeOpCode
+	}
+	return NodeAttributeOpCodeProto_NO_OP
+}
+
+type PlacementConstraintTargetProto struct {
+	TargetType       *PlacementConstraintTargetProto_TargetType `protobuf:"varint,1,req,name=targetType,enum=hadoop.yarn.PlacementConstraintTargetProto_TargetType" json:"targetType,omitempty"`
+	TargetKey        *string                                    `protobuf:"bytes,2,opt,name=targetKey" json:"targetKey,omitempty"`
+	TargetValues     []string                                   `protobuf:"bytes,3,rep,name=targetValues" json:"targetValues,omitempty"`
+	XXX_unrecognized []byte                                     `json:"-"`
+}
+
+func (m *PlacementConstraintTargetProto) Reset()         { *m = PlacementConstraintTargetProto{} }
+func (m *PlacementConstraintTargetProto) String() string { return proto.CompactTextString(m) }
+func (*PlacementConstraintTargetProto) ProtoMessage()    {}
+func (*PlacementConstraintTargetProto) Descriptor() ([]byte, []int) {
+	return fileDescriptor5, []int{58}
+}
+
+func (m *PlacementConstraintTargetProto) GetTargetType() PlacementConstraintTargetProto_TargetType {
+	if m != nil && m.TargetType != nil {
+		return *m.TargetType
+	}
+	return PlacementConstraintTargetProto_NODE_ATTRIBUTE
+}
+
+func (m *PlacementConstraintTargetProto) GetTargetKey() string {
+	if m != nil && m.TargetKey != nil {
+		return *m.TargetKey
+	}
+	return ""
+}
+
+func (m *PlacementConstraintTargetProto) GetTargetValues() []string {
+	if m != nil {
+		return m.TargetValues
+	}
+	return nil
+}
+
+type TimedPlacementConstraintProto struct {
+	PlacementConstraint *PlacementConstraintProto                `protobuf:"bytes,1,req,name=placementConstraint" json:"placementConstraint,omitempty"`
+	SchedulingDelay     *int64                                   `protobuf:"varint,2,req,name=schedulingDelay" json:"schedulingDelay,omitempty"`
+	DelayUnit           *TimedPlacementConstraintProto_DelayUnit `protobuf:"varint,3,opt,name=delayUnit,enum=hadoop.yarn.TimedPlacementConstraintProto_DelayUnit,def=1" json:"delayUnit,omitempty"`
+	XXX_unrecognized    []byte                                   `json:"-"`
+}
+
+func (m *TimedPlacementConstraintProto) Reset()                    { *m = TimedPlacementConstraintProto{} }
+func (m *TimedPlacementConstraintProto) String() string            { return proto.CompactTextString(m) }
+func (*TimedPlacementConstraintProto) ProtoMessage()               {}
+func (*TimedPlacementConstraintProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{59} }
+
+const Default_TimedPlacementConstraintProto_DelayUnit TimedPlacementConstraintProto_DelayUnit = TimedPlacementConstraintProto_MILLISECONDS
+
+func (m *TimedPlacementConstraintProto) GetPlacementConstraint() *PlacementConstraintProto {
+	if m != nil {
+		return m.PlacementConstraint
+	}
+	return nil
+}
+
+func (m *TimedPlacementConstraintProto) GetSchedulingDelay() int64 {
+	if m != nil && m.SchedulingDelay != nil {
+		return *m.SchedulingDelay
+	}
+	return 0
+}
+
+func (m *TimedPlacementConstraintProto) GetDelayUnit() TimedPlacementConstraintProto_DelayUnit {
+	if m != nil && m.DelayUnit != nil {
+		return *m.DelayUnit
+	}
+	return Default_TimedPlacementConstraintProto_DelayUnit
+}
+
+type CompositePlacementConstraintProto struct {
+	CompositeType         *CompositePlacementConstraintProto_CompositeType `protobuf:"varint,1,req,name=compositeType,enum=hadoop.yarn.CompositePlacementConstraintProto_CompositeType" json:"compositeType,omitempty"`
+	ChildConstraints      []*PlacementConstraintProto                      `protobuf:"bytes,2,rep,name=childConstraints" json:"childConstraints,omitempty"`
+	TimedChildConstraints []*TimedPlacementConstraintProto                 `protobuf:"bytes,3,rep,name=timedChildConstraints" json:"timedChildConstraints,omitempty"`
+	XXX_unrecognized      []byte                                           `json:"-"`
+}
+
+func (m *CompositePlacementConstraintProto) Reset()         { *m = CompositePlacementConstraintProto{} }
+func (m *CompositePlacementConstraintProto) String() string { return proto.CompactTextString(m) }
+func (*CompositePlacementConstraintProto) ProtoMessage()    {}
+func (*CompositePlacementConstraintProto) Descriptor() ([]byte, []int) {
+	return fileDescriptor5, []int{60}
+}
+
+func (m *CompositePlacementConstraintProto) GetCompositeType() CompositePlacementConstraintProto_CompositeType {
+	if m != nil && m.CompositeType != nil {
+		return *m.CompositeType
+	}
+	return CompositePlacementConstraintProto_AND
+}
+
+func (m *CompositePlacementConstraintProto) GetChildConstraints() []*PlacementConstraintProto {
+	if m != nil {
+		return m.ChildConstraints
+	}
+	return nil
+}
+
+func (m *CompositePlacementConstraintProto) GetTimedChildConstraints() []*TimedPlacementConstraintProto {
+	if m != nil {
+		return m.TimedChildConstraints
+	}
+	return nil
+}
+
+// This associates a set of allocation tags to a Placement Constraint.
+type PlacementConstraintMapEntryProto struct {
+	AllocationTags      []string                  `protobuf:"bytes,1,rep,name=allocation_tags" json:"allocation_tags,omitempty"`
+	PlacementConstraint *PlacementConstraintProto `protobuf:"bytes,2,opt,name=placement_constraint" json:"placement_constraint,omitempty"`
+	XXX_unrecognized    []byte                    `json:"-"`
+}
+
+func (m *PlacementConstraintMapEntryProto) Reset()         { *m = PlacementConstraintMapEntryProto{} }
+func (m *PlacementConstraintMapEntryProto) String() string { return proto.CompactTextString(m) }
+func (*PlacementConstraintMapEntryProto) ProtoMessage()    {}
+func (*PlacementConstraintMapEntryProto) Descriptor() ([]byte, []int) {
+	return fileDescriptor5, []int{61}
+}
+
+func (m *PlacementConstraintMapEntryProto) GetAllocationTags() []string {
+	if m != nil {
+		return m.AllocationTags
+	}
+	return nil
+}
+
+func (m *PlacementConstraintMapEntryProto) GetPlacementConstraint() *PlacementConstraintProto {
+	if m != nil {
+		return m.PlacementConstraint
+	}
+	return nil
+}
+
+type ReservationIdProto struct {
+	Id               *int64 `protobuf:"varint,1,opt,name=id" json:"id,omitempty"`
+	ClusterTimestamp *int64 `protobuf:"varint,2,opt,name=cluster_timestamp" json:"cluster_timestamp,omitempty"`
+	XXX_unrecognized []byte `json:"-"`
+}
+
+func (m *ReservationIdProto) Reset()                    { *m = ReservationIdProto{} }
+func (m *ReservationIdProto) String() string            { return proto.CompactTextString(m) }
+func (*ReservationIdProto) ProtoMessage()               {}
+func (*ReservationIdProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{62} }
+
+func (m *ReservationIdProto) GetId() int64 {
+	if m != nil && m.Id != nil {
+		return *m.Id
+	}
+	return 0
+}
+
+func (m *ReservationIdProto) GetClusterTimestamp() int64 {
+	if m != nil && m.ClusterTimestamp != nil {
+		return *m.ClusterTimestamp
+	}
+	return 0
+}
+
+type ReservationRequestProto struct {
+	Capability       *ResourceProto `protobuf:"bytes,1,opt,name=capability" json:"capability,omitempty"`
+	NumContainers    *int32         `protobuf:"varint,2,opt,name=num_containers,def=1" json:"num_containers,omitempty"`
+	Concurrency      *int32         `protobuf:"varint,3,opt,name=concurrency,def=1" json:"concurrency,omitempty"`
+	Duration         *int64         `protobuf:"varint,4,opt,name=duration,def=-1" json:"duration,omitempty"`
+	XXX_unrecognized []byte         `json:"-"`
+}
+
+func (m *ReservationRequestProto) Reset()                    { *m = ReservationRequestProto{} }
+func (m *ReservationRequestProto) String() string            { return proto.CompactTextString(m) }
+func (*ReservationRequestProto) ProtoMessage()               {}
+func (*ReservationRequestProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{63} }
+
+const Default_ReservationRequestProto_NumContainers int32 = 1
+const Default_ReservationRequestProto_Concurrency int32 = 1
+const Default_ReservationRequestProto_Duration int64 = -1
+
+func (m *ReservationRequestProto) GetCapability() *ResourceProto {
+	if m != nil {
+		return m.Capability
+	}
+	return nil
+}
+
+func (m *ReservationRequestProto) GetNumContainers() int32 {
+	if m != nil && m.NumContainers != nil {
+		return *m.NumContainers
+	}
+	return Default_ReservationRequestProto_NumContainers
+}
+
+func (m *ReservationRequestProto) GetConcurrency() int32 {
+	if m != nil && m.Concurrency != nil {
+		return *m.Concurrency
+	}
+	return Default_ReservationRequestProto_Concurrency
+}
+
+func (m *ReservationRequestProto) GetDuration() int64 {
+	if m != nil && m.Duration != nil {
+		return *m.Duration
+	}
+	return Default_ReservationRequestProto_Duration
+}
+
+type ReservationRequestsProto struct {
+	ReservationResources []*ReservationRequestProto          `protobuf:"bytes,1,rep,name=reservation_resources" json:"reservation_resources,omitempty"`
+	Interpreter          *ReservationRequestInterpreterProto `protobuf:"varint,2,opt,name=interpreter,enum=hadoop.yarn.ReservationRequestInterpreterProto,def=1" json:"interpreter,omitempty"`
+	XXX_unrecognized     []byte                              `json:"-"`
+}
+
+func (m *ReservationRequestsProto) Reset()                    { *m = ReservationRequestsProto{} }
+func (m *ReservationRequestsProto) String() string            { return proto.CompactTextString(m) }
+func (*ReservationRequestsProto) ProtoMessage()               {}
+func (*ReservationRequestsProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{64} }
+
+const Default_ReservationRequestsProto_Interpreter ReservationRequestInterpreterProto = ReservationRequestInterpreterProto_R_ALL
+
+func (m *ReservationRequestsProto) GetReservationResources() []*ReservationRequestProto {
+	if m != nil {
+		return m.ReservationResources
+	}
+	return nil
+}
+
+func (m *ReservationRequestsProto) GetInterpreter() ReservationRequestInterpreterProto {
+	if m != nil && m.Interpreter != nil {
+		return *m.Interpreter
+	}
+	return Default_ReservationRequestsProto_Interpreter
+}
+
+type ReservationDefinitionProto struct {
+	ReservationRequests  *ReservationRequestsProto `protobuf:"bytes,1,opt,name=reservation_requests" json:"reservation_requests,omitempty"`
+	Arrival              *int64                    `protobuf:"varint,2,opt,name=arrival" json:"arrival,omitempty"`
+	Deadline             *int64                    `protobuf:"varint,3,opt,name=deadline" json:"deadline,omitempty"`
+	ReservationName      *string                   `protobuf:"bytes,4,opt,name=reservation_name" json:"reservation_name,omitempty"`
+	RecurrenceExpression *string                   `protobuf:"bytes,5,opt,name=recurrence_expression,def=0" json:"recurrence_expression,omitempty"`
+	Priority             *PriorityProto            `protobuf:"bytes,6,opt,name=priority" json:"priority,omitempty"`
+	XXX_unrecognized     []byte                    `json:"-"`
+}
+
+func (m *ReservationDefinitionProto) Reset()                    { *m = ReservationDefinitionProto{} }
+func (m *ReservationDefinitionProto) String() string            { return proto.CompactTextString(m) }
+func (*ReservationDefinitionProto) ProtoMessage()               {}
+func (*ReservationDefinitionProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{65} }
+
+const Default_ReservationDefinitionProto_RecurrenceExpression string = "0"
+
+func (m *ReservationDefinitionProto) GetReservationRequests() *ReservationRequestsProto {
+	if m != nil {
+		return m.ReservationRequests
+	}
+	return nil
+}
+
+func (m *ReservationDefinitionProto) GetArrival() int64 {
+	if m != nil && m.Arrival != nil {
+		return *m.Arrival
+	}
+	return 0
+}
+
+func (m *ReservationDefinitionProto) GetDeadline() int64 {
+	if m != nil && m.Deadline != nil {
+		return *m.Deadline
+	}
+	return 0
+}
+
+func (m *ReservationDefinitionProto) GetReservationName() string {
+	if m != nil && m.ReservationName != nil {
+		return *m.ReservationName
+	}
+	return ""
+}
+
+func (m *ReservationDefinitionProto) GetRecurrenceExpression() string {
+	if m != nil && m.RecurrenceExpression != nil {
+		return *m.RecurrenceExpression
+	}
+	return Default_ReservationDefinitionProto_RecurrenceExpression
+}
+
+func (m *ReservationDefinitionProto) GetPriority() *PriorityProto {
+	if m != nil {
+		return m.Priority
+	}
+	return nil
+}
+
+type ResourceAllocationRequestProto struct {
+	StartTime        *int64         `protobuf:"varint,1,opt,name=start_time" json:"start_time,omitempty"`
+	EndTime          *int64         `protobuf:"varint,2,opt,name=end_time" json:"end_time,omitempty"`
+	Resource         *ResourceProto `protobuf:"bytes,3,opt,name=resource" json:"resource,omitempty"`
+	XXX_unrecognized []byte         `json:"-"`
+}
+
+func (m *ResourceAllocationRequestProto) Reset()         { *m = ResourceAllocationRequestProto{} }
+func (m *ResourceAllocationRequestProto) String() string { return proto.CompactTextString(m) }
+func (*ResourceAllocationRequestProto) ProtoMessage()    {}
+func (*ResourceAllocationRequestProto) Descriptor() ([]byte, []int) {
+	return fileDescriptor5, []int{66}
+}
+
+func (m *ResourceAllocationRequestProto) GetStartTime() int64 {
+	if m != nil && m.StartTime != nil {
+		return *m.StartTime
+	}
+	return 0
+}
+
+func (m *ResourceAllocationRequestProto) GetEndTime() int64 {
+	if m != nil && m.EndTime != nil {
+		return *m.EndTime
+	}
+	return 0
+}
+
+func (m *ResourceAllocationRequestProto) GetResource() *ResourceProto {
+	if m != nil {
+		return m.Resource
+	}
+	return nil
+}
+
+type ReservationAllocationStateProto struct {
+	ReservationDefinition *ReservationDefinitionProto       `protobuf:"bytes,1,opt,name=reservation_definition" json:"reservation_definition,omitempty"`
+	AllocationRequests    []*ResourceAllocationRequestProto `protobuf:"bytes,2,rep,name=allocation_requests" json:"allocation_requests,omitempty"`
+	StartTime             *int64                            `protobuf:"varint,3,opt,name=start_time" json:"start_time,omitempty"`
+	EndTime               *int64                            `protobuf:"varint,4,opt,name=end_time" json:"end_time,omitempty"`
+	User                  *string                           `protobuf:"bytes,5,opt,name=user" json:"user,omitempty"`
+	ContainsGangs         *bool                             `protobuf:"varint,6,opt,name=contains_gangs" json:"contains_gangs,omitempty"`
+	AcceptanceTime        *int64                            `protobuf:"varint,7,opt,name=acceptance_time" json:"acceptance_time,omitempty"`
+	ReservationId         *ReservationIdProto               `protobuf:"bytes,8,opt,name=reservation_id" json:"reservation_id,omitempty"`
+	XXX_unrecognized      []byte                            `json:"-"`
+}
+
+func (m *ReservationAllocationStateProto) Reset()         { *m = ReservationAllocationStateProto{} }
+func (m *ReservationAllocationStateProto) String() string { return proto.CompactTextString(m) }
+func (*ReservationAllocationStateProto) ProtoMessage()    {}
+func (*ReservationAllocationStateProto) Descriptor() ([]byte, []int) {
+	return fileDescriptor5, []int{67}
+}
+
+func (m *ReservationAllocationStateProto) GetReservationDefinition() *ReservationDefinitionProto {
+	if m != nil {
+		return m.ReservationDefinition
+	}
+	return nil
+}
+
+func (m *ReservationAllocationStateProto) GetAllocationRequests() []*ResourceAllocationRequestProto {
+	if m != nil {
+		return m.AllocationRequests
+	}
+	return nil
+}
+
+func (m *ReservationAllocationStateProto) GetStartTime() int64 {
+	if m != nil && m.StartTime != nil {
+		return *m.StartTime
+	}
+	return 0
+}
+
+func (m *ReservationAllocationStateProto) GetEndTime() int64 {
+	if m != nil && m.EndTime != nil {
+		return *m.EndTime
+	}
+	return 0
+}
+
+func (m *ReservationAllocationStateProto) GetUser() string {
+	if m != nil && m.User != nil {
+		return *m.User
+	}
+	return ""
+}
+
+func (m *ReservationAllocationStateProto) GetContainsGangs() bool {
+	if m != nil && m.ContainsGangs != nil {
+		return *m.ContainsGangs
+	}
+	return false
+}
+
+func (m *ReservationAllocationStateProto) GetAcceptanceTime() int64 {
+	if m != nil && m.AcceptanceTime != nil {
+		return *m.AcceptanceTime
+	}
+	return 0
+}
+
+func (m *ReservationAllocationStateProto) GetReservationId() *ReservationIdProto {
+	if m != nil {
+		return m.ReservationId
+	}
+	return nil
+}
+
+type ContainerLaunchContextProto struct {
+	LocalResources        []*StringLocalResourceMapProto `protobuf:"bytes,1,rep,name=localResources" json:"localResources,omitempty"`
+	Tokens                []byte                         `protobuf:"bytes,2,opt,name=tokens" json:"tokens,omitempty"`
+	ServiceData           []*StringBytesMapProto         `protobuf:"bytes,3,rep,name=service_data" json:"service_data,omitempty"`
+	Environment           []*StringStringMapProto        `protobuf:"bytes,4,rep,name=environment" json:"environment,omitempty"`
+	Command               []string                       `protobuf:"bytes,5,rep,name=command" json:"command,omitempty"`
+	Application_ACLs      []*ApplicationACLMapProto      `protobuf:"bytes,6,rep,name=application_ACLs" json:"application_ACLs,omitempty"`
+	ContainerRetryContext *ContainerRetryContextProto    `protobuf:"bytes,7,opt,name=container_retry_context" json:"container_retry_context,omitempty"`
+	TokensConf            []byte                         `protobuf:"bytes,8,opt,name=tokens_conf" json:"tokens_conf,omitempty"`
+	XXX_unrecognized      []byte                         `json:"-"`
+}
+
+func (m *ContainerLaunchContextProto) Reset()                    { *m = ContainerLaunchContextProto{} }
+func (m *ContainerLaunchContextProto) String() string            { return proto.CompactTextString(m) }
+func (*ContainerLaunchContextProto) ProtoMessage()               {}
+func (*ContainerLaunchContextProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{68} }
 
 func (m *ContainerLaunchContextProto) GetLocalResources() []*StringLocalResourceMapProto {
 	if m != nil {
@@ -1844,20 +4392,40 @@ func (m *ContainerLaunchContextProto) GetApplication_ACLs() []*ApplicationACLMap
 	return nil
 }
 
-type ContainerStatusProto struct {
-	ContainerId      *ContainerIdProto    `protobuf:"bytes,1,opt,name=container_id" json:"container_id,omitempty"`
-	State            *ContainerStateProto `protobuf:"varint,2,opt,name=state,enum=hadoop.yarn.ContainerStateProto" json:"state,omitempty"`
-	Diagnostics      *string              `protobuf:"bytes,3,opt,name=diagnostics,def=N/A" json:"diagnostics,omitempty"`
-	ExitStatus       *int32               `protobuf:"varint,4,opt,name=exit_status,def=-1000" json:"exit_status,omitempty"`
-	XXX_unrecognized []byte               `json:"-"`
+func (m *ContainerLaunchContextProto) GetContainerRetryContext() *ContainerRetryContextProto {
+	if m != nil {
+		return m.ContainerRetryContext
+	}
+	return nil
 }
 
-func (m *ContainerStatusProto) Reset()         { *m = ContainerStatusProto{} }
-func (m *ContainerStatusProto) String() string { return proto.CompactTextString(m) }
-func (*ContainerStatusProto) ProtoMessage()    {}
+func (m *ContainerLaunchContextProto) GetTokensConf() []byte {
+	if m != nil {
+		return m.TokensConf
+	}
+	return nil
+}
+
+type ContainerStatusProto struct {
+	ContainerId         *ContainerIdProto       `protobuf:"bytes,1,opt,name=container_id" json:"container_id,omitempty"`
+	State               *ContainerStateProto    `protobuf:"varint,2,opt,name=state,enum=hadoop.yarn.ContainerStateProto" json:"state,omitempty"`
+	Diagnostics         *string                 `protobuf:"bytes,3,opt,name=diagnostics,def=N/A" json:"diagnostics,omitempty"`
+	ExitStatus          *int32                  `protobuf:"varint,4,opt,name=exit_status,def=-1000" json:"exit_status,omitempty"`
+	Capability          *ResourceProto          `protobuf:"bytes,5,opt,name=capability" json:"capability,omitempty"`
+	ExecutionType       *ExecutionTypeProto     `protobuf:"varint,6,opt,name=executionType,enum=hadoop.yarn.ExecutionTypeProto,def=1" json:"executionType,omitempty"`
+	ContainerAttributes []*StringStringMapProto `protobuf:"bytes,7,rep,name=container_attributes" json:"container_attributes,omitempty"`
+	ContainerSubState   *ContainerSubStateProto `protobuf:"varint,8,opt,name=container_sub_state,enum=hadoop.yarn.ContainerSubStateProto" json:"container_sub_state,omitempty"`
+	XXX_unrecognized    []byte                  `json:"-"`
+}
+
+func (m *ContainerStatusProto) Reset()                    { *m = ContainerStatusProto{} }
+func (m *ContainerStatusProto) String() string            { return proto.CompactTextString(m) }
+func (*ContainerStatusProto) ProtoMessage()               {}
+func (*ContainerStatusProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{69} }
 
 const Default_ContainerStatusProto_Diagnostics string = "N/A"
 const Default_ContainerStatusProto_ExitStatus int32 = -1000
+const Default_ContainerStatusProto_ExecutionType ExecutionTypeProto = ExecutionTypeProto_GUARANTEED
 
 func (m *ContainerStatusProto) GetContainerId() *ContainerIdProto {
 	if m != nil {
@@ -1870,7 +4438,7 @@ func (m *ContainerStatusProto) GetState() ContainerStateProto {
 	if m != nil && m.State != nil {
 		return *m.State
 	}
-	return 0
+	return ContainerStateProto_C_NEW
 }
 
 func (m *ContainerStatusProto) GetDiagnostics() string {
@@ -1887,84 +4455,86 @@ func (m *ContainerStatusProto) GetExitStatus() int32 {
 	return Default_ContainerStatusProto_ExitStatus
 }
 
-type ContainerResourceIncreaseRequestProto struct {
-	ContainerId      *ContainerIdProto `protobuf:"bytes,1,opt,name=container_id" json:"container_id,omitempty"`
-	Capability       *ResourceProto    `protobuf:"bytes,2,opt,name=capability" json:"capability,omitempty"`
-	XXX_unrecognized []byte            `json:"-"`
-}
-
-func (m *ContainerResourceIncreaseRequestProto) Reset()         { *m = ContainerResourceIncreaseRequestProto{} }
-func (m *ContainerResourceIncreaseRequestProto) String() string { return proto.CompactTextString(m) }
-func (*ContainerResourceIncreaseRequestProto) ProtoMessage()    {}
-
-func (m *ContainerResourceIncreaseRequestProto) GetContainerId() *ContainerIdProto {
-	if m != nil {
-		return m.ContainerId
-	}
-	return nil
-}
-
-func (m *ContainerResourceIncreaseRequestProto) GetCapability() *ResourceProto {
+func (m *ContainerStatusProto) GetCapability() *ResourceProto {
 	if m != nil {
 		return m.Capability
 	}
 	return nil
 }
 
-type ContainerResourceIncreaseProto struct {
-	ContainerId      *ContainerIdProto         `protobuf:"bytes,1,opt,name=container_id" json:"container_id,omitempty"`
-	Capability       *ResourceProto            `protobuf:"bytes,2,opt,name=capability" json:"capability,omitempty"`
-	ContainerToken   *hadoop_common.TokenProto `protobuf:"bytes,3,opt,name=container_token" json:"container_token,omitempty"`
-	XXX_unrecognized []byte                    `json:"-"`
+func (m *ContainerStatusProto) GetExecutionType() ExecutionTypeProto {
+	if m != nil && m.ExecutionType != nil {
+		return *m.ExecutionType
+	}
+	return Default_ContainerStatusProto_ExecutionType
 }
 
-func (m *ContainerResourceIncreaseProto) Reset()         { *m = ContainerResourceIncreaseProto{} }
-func (m *ContainerResourceIncreaseProto) String() string { return proto.CompactTextString(m) }
-func (*ContainerResourceIncreaseProto) ProtoMessage()    {}
-
-func (m *ContainerResourceIncreaseProto) GetContainerId() *ContainerIdProto {
+func (m *ContainerStatusProto) GetContainerAttributes() []*StringStringMapProto {
 	if m != nil {
-		return m.ContainerId
+		return m.ContainerAttributes
 	}
 	return nil
 }
 
-func (m *ContainerResourceIncreaseProto) GetCapability() *ResourceProto {
+func (m *ContainerStatusProto) GetContainerSubState() ContainerSubStateProto {
+	if m != nil && m.ContainerSubState != nil {
+		return *m.ContainerSubState
+	}
+	return ContainerSubStateProto_CSS_SCHEDULED
+}
+
+type ContainerRetryContextProto struct {
+	RetryPolicy              *ContainerRetryPolicyProto `protobuf:"varint,1,opt,name=retry_policy,enum=hadoop.yarn.ContainerRetryPolicyProto,def=0" json:"retry_policy,omitempty"`
+	ErrorCodes               []int32                    `protobuf:"varint,2,rep,name=error_codes" json:"error_codes,omitempty"`
+	MaxRetries               *int32                     `protobuf:"varint,3,opt,name=max_retries,def=0" json:"max_retries,omitempty"`
+	RetryInterval            *int32                     `protobuf:"varint,4,opt,name=retry_interval,def=0" json:"retry_interval,omitempty"`
+	FailuresValidityInterval *int64                     `protobuf:"varint,5,opt,name=failures_validity_interval,def=-1" json:"failures_validity_interval,omitempty"`
+	XXX_unrecognized         []byte                     `json:"-"`
+}
+
+func (m *ContainerRetryContextProto) Reset()                    { *m = ContainerRetryContextProto{} }
+func (m *ContainerRetryContextProto) String() string            { return proto.CompactTextString(m) }
+func (*ContainerRetryContextProto) ProtoMessage()               {}
+func (*ContainerRetryContextProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{70} }
+
+const Default_ContainerRetryContextProto_RetryPolicy ContainerRetryPolicyProto = ContainerRetryPolicyProto_NEVER_RETRY
+const Default_ContainerRetryContextProto_MaxRetries int32 = 0
+const Default_ContainerRetryContextProto_RetryInterval int32 = 0
+const Default_ContainerRetryContextProto_FailuresValidityInterval int64 = -1
+
+func (m *ContainerRetryContextProto) GetRetryPolicy() ContainerRetryPolicyProto {
+	if m != nil && m.RetryPolicy != nil {
+		return *m.RetryPolicy
+	}
+	return Default_ContainerRetryContextProto_RetryPolicy
+}
+
+func (m *ContainerRetryContextProto) GetErrorCodes() []int32 {
 	if m != nil {
-		return m.Capability
+		return m.ErrorCodes
 	}
 	return nil
 }
 
-func (m *ContainerResourceIncreaseProto) GetContainerToken() *hadoop_common.TokenProto {
-	if m != nil {
-		return m.ContainerToken
+func (m *ContainerRetryContextProto) GetMaxRetries() int32 {
+	if m != nil && m.MaxRetries != nil {
+		return *m.MaxRetries
 	}
-	return nil
+	return Default_ContainerRetryContextProto_MaxRetries
 }
 
-type ContainerResourceDecreaseProto struct {
-	ContainerId      *ContainerIdProto `protobuf:"bytes,1,opt,name=container_id" json:"container_id,omitempty"`
-	Capability       *ResourceProto    `protobuf:"bytes,2,opt,name=capability" json:"capability,omitempty"`
-	XXX_unrecognized []byte            `json:"-"`
+func (m *ContainerRetryContextProto) GetRetryInterval() int32 {
+	if m != nil && m.RetryInterval != nil {
+		return *m.RetryInterval
+	}
+	return Default_ContainerRetryContextProto_RetryInterval
 }
 
-func (m *ContainerResourceDecreaseProto) Reset()         { *m = ContainerResourceDecreaseProto{} }
-func (m *ContainerResourceDecreaseProto) String() string { return proto.CompactTextString(m) }
-func (*ContainerResourceDecreaseProto) ProtoMessage()    {}
-
-func (m *ContainerResourceDecreaseProto) GetContainerId() *ContainerIdProto {
-	if m != nil {
-		return m.ContainerId
+func (m *ContainerRetryContextProto) GetFailuresValidityInterval() int64 {
+	if m != nil && m.FailuresValidityInterval != nil {
+		return *m.FailuresValidityInterval
 	}
-	return nil
-}
-
-func (m *ContainerResourceDecreaseProto) GetCapability() *ResourceProto {
-	if m != nil {
-		return m.Capability
-	}
-	return nil
+	return Default_ContainerRetryContextProto_FailuresValidityInterval
 }
 
 // //////////////////////////////////////////////////////////////////////
@@ -1976,9 +4546,10 @@ type StringLocalResourceMapProto struct {
 	XXX_unrecognized []byte              `json:"-"`
 }
 
-func (m *StringLocalResourceMapProto) Reset()         { *m = StringLocalResourceMapProto{} }
-func (m *StringLocalResourceMapProto) String() string { return proto.CompactTextString(m) }
-func (*StringLocalResourceMapProto) ProtoMessage()    {}
+func (m *StringLocalResourceMapProto) Reset()                    { *m = StringLocalResourceMapProto{} }
+func (m *StringLocalResourceMapProto) String() string            { return proto.CompactTextString(m) }
+func (*StringLocalResourceMapProto) ProtoMessage()               {}
+func (*StringLocalResourceMapProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{71} }
 
 func (m *StringLocalResourceMapProto) GetKey() string {
 	if m != nil && m.Key != nil {
@@ -2000,9 +4571,10 @@ type StringStringMapProto struct {
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *StringStringMapProto) Reset()         { *m = StringStringMapProto{} }
-func (m *StringStringMapProto) String() string { return proto.CompactTextString(m) }
-func (*StringStringMapProto) ProtoMessage()    {}
+func (m *StringStringMapProto) Reset()                    { *m = StringStringMapProto{} }
+func (m *StringStringMapProto) String() string            { return proto.CompactTextString(m) }
+func (*StringStringMapProto) ProtoMessage()               {}
+func (*StringStringMapProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{72} }
 
 func (m *StringStringMapProto) GetKey() string {
 	if m != nil && m.Key != nil {
@@ -2024,9 +4596,10 @@ type StringBytesMapProto struct {
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *StringBytesMapProto) Reset()         { *m = StringBytesMapProto{} }
-func (m *StringBytesMapProto) String() string { return proto.CompactTextString(m) }
-func (*StringBytesMapProto) ProtoMessage()    {}
+func (m *StringBytesMapProto) Reset()                    { *m = StringBytesMapProto{} }
+func (m *StringBytesMapProto) String() string            { return proto.CompactTextString(m) }
+func (*StringBytesMapProto) ProtoMessage()               {}
+func (*StringBytesMapProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{73} }
 
 func (m *StringBytesMapProto) GetKey() string {
 	if m != nil && m.Key != nil {
@@ -2042,17 +4615,510 @@ func (m *StringBytesMapProto) GetValue() []byte {
 	return nil
 }
 
+type CollectorInfoProto struct {
+	CollectorAddr    *string                   `protobuf:"bytes,1,opt,name=collector_addr" json:"collector_addr,omitempty"`
+	CollectorToken   *hadoop_common.TokenProto `protobuf:"bytes,2,opt,name=collector_token" json:"collector_token,omitempty"`
+	XXX_unrecognized []byte                    `json:"-"`
+}
+
+func (m *CollectorInfoProto) Reset()                    { *m = CollectorInfoProto{} }
+func (m *CollectorInfoProto) String() string            { return proto.CompactTextString(m) }
+func (*CollectorInfoProto) ProtoMessage()               {}
+func (*CollectorInfoProto) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{74} }
+
+func (m *CollectorInfoProto) GetCollectorAddr() string {
+	if m != nil && m.CollectorAddr != nil {
+		return *m.CollectorAddr
+	}
+	return ""
+}
+
+func (m *CollectorInfoProto) GetCollectorToken() *hadoop_common.TokenProto {
+	if m != nil {
+		return m.CollectorToken
+	}
+	return nil
+}
+
 func init() {
+	proto.RegisterType((*SerializedExceptionProto)(nil), "hadoop.yarn.SerializedExceptionProto")
+	proto.RegisterType((*ApplicationIdProto)(nil), "hadoop.yarn.ApplicationIdProto")
+	proto.RegisterType((*ApplicationAttemptIdProto)(nil), "hadoop.yarn.ApplicationAttemptIdProto")
+	proto.RegisterType((*ContainerIdProto)(nil), "hadoop.yarn.ContainerIdProto")
+	proto.RegisterType((*ResourceInformationProto)(nil), "hadoop.yarn.ResourceInformationProto")
+	proto.RegisterType((*ResourceTypeInfoProto)(nil), "hadoop.yarn.ResourceTypeInfoProto")
+	proto.RegisterType((*ResourceProto)(nil), "hadoop.yarn.ResourceProto")
+	proto.RegisterType((*ResourceUtilizationProto)(nil), "hadoop.yarn.ResourceUtilizationProto")
+	proto.RegisterType((*ResourceOptionProto)(nil), "hadoop.yarn.ResourceOptionProto")
+	proto.RegisterType((*ResourceProfileEntry)(nil), "hadoop.yarn.ResourceProfileEntry")
+	proto.RegisterType((*ResourceProfilesProto)(nil), "hadoop.yarn.ResourceProfilesProto")
+	proto.RegisterType((*NodeResourceMapProto)(nil), "hadoop.yarn.NodeResourceMapProto")
+	proto.RegisterType((*PriorityProto)(nil), "hadoop.yarn.PriorityProto")
+	proto.RegisterType((*ContainerProto)(nil), "hadoop.yarn.ContainerProto")
+	proto.RegisterType((*ContainerReportProto)(nil), "hadoop.yarn.ContainerReportProto")
+	proto.RegisterType((*URLProto)(nil), "hadoop.yarn.URLProto")
+	proto.RegisterType((*LocalResourceProto)(nil), "hadoop.yarn.LocalResourceProto")
+	proto.RegisterType((*StringLongMapProto)(nil), "hadoop.yarn.StringLongMapProto")
+	proto.RegisterType((*ApplicationResourceUsageReportProto)(nil), "hadoop.yarn.ApplicationResourceUsageReportProto")
+	proto.RegisterType((*ApplicationReportProto)(nil), "hadoop.yarn.ApplicationReportProto")
+	proto.RegisterType((*AppTimeoutsMapProto)(nil), "hadoop.yarn.AppTimeoutsMapProto")
+	proto.RegisterType((*ApplicationTimeoutProto)(nil), "hadoop.yarn.ApplicationTimeoutProto")
+	proto.RegisterType((*ApplicationAttemptReportProto)(nil), "hadoop.yarn.ApplicationAttemptReportProto")
+	proto.RegisterType((*NodeIdProto)(nil), "hadoop.yarn.NodeIdProto")
+	proto.RegisterType((*NodeReportProto)(nil), "hadoop.yarn.NodeReportProto")
+	proto.RegisterType((*NodeIdToLabelsProto)(nil), "hadoop.yarn.NodeIdToLabelsProto")
+	proto.RegisterType((*LabelsToNodeIdsProto)(nil), "hadoop.yarn.LabelsToNodeIdsProto")
+	proto.RegisterType((*NodeLabelProto)(nil), "hadoop.yarn.NodeLabelProto")
+	proto.RegisterType((*NodeAttributeKeyProto)(nil), "hadoop.yarn.NodeAttributeKeyProto")
+	proto.RegisterType((*NodeAttributeProto)(nil), "hadoop.yarn.NodeAttributeProto")
+	proto.RegisterType((*NodeAttributeInfoProto)(nil), "hadoop.yarn.NodeAttributeInfoProto")
+	proto.RegisterType((*NodeToAttributeValueProto)(nil), "hadoop.yarn.NodeToAttributeValueProto")
+	proto.RegisterType((*AttributeToNodesProto)(nil), "hadoop.yarn.AttributeToNodesProto")
+	proto.RegisterType((*NodeToAttributesProto)(nil), "hadoop.yarn.NodeToAttributesProto")
+	proto.RegisterType((*ResourceRequestProto)(nil), "hadoop.yarn.ResourceRequestProto")
+	proto.RegisterType((*ExecutionTypeRequestProto)(nil), "hadoop.yarn.ExecutionTypeRequestProto")
+	proto.RegisterType((*SchedulingRequestProto)(nil), "hadoop.yarn.SchedulingRequestProto")
+	proto.RegisterType((*ResourceSizingProto)(nil), "hadoop.yarn.ResourceSizingProto")
+	proto.RegisterType((*RejectedSchedulingRequestProto)(nil), "hadoop.yarn.RejectedSchedulingRequestProto")
+	proto.RegisterType((*PreemptionMessageProto)(nil), "hadoop.yarn.PreemptionMessageProto")
+	proto.RegisterType((*StrictPreemptionContractProto)(nil), "hadoop.yarn.StrictPreemptionContractProto")
+	proto.RegisterType((*PreemptionContractProto)(nil), "hadoop.yarn.PreemptionContractProto")
+	proto.RegisterType((*PreemptionContainerProto)(nil), "hadoop.yarn.PreemptionContainerProto")
+	proto.RegisterType((*PreemptionResourceRequestProto)(nil), "hadoop.yarn.PreemptionResourceRequestProto")
+	proto.RegisterType((*ResourceBlacklistRequestProto)(nil), "hadoop.yarn.ResourceBlacklistRequestProto")
+	proto.RegisterType((*ApplicationSubmissionContextProto)(nil), "hadoop.yarn.ApplicationSubmissionContextProto")
+	proto.RegisterType((*ApplicationTimeoutMapProto)(nil), "hadoop.yarn.ApplicationTimeoutMapProto")
+	proto.RegisterType((*ApplicationUpdateTimeoutMapProto)(nil), "hadoop.yarn.ApplicationUpdateTimeoutMapProto")
+	proto.RegisterType((*LogAggregationContextProto)(nil), "hadoop.yarn.LogAggregationContextProto")
+	proto.RegisterType((*ApplicationACLMapProto)(nil), "hadoop.yarn.ApplicationACLMapProto")
+	proto.RegisterType((*YarnClusterMetricsProto)(nil), "hadoop.yarn.YarnClusterMetricsProto")
+	proto.RegisterType((*QueueStatisticsProto)(nil), "hadoop.yarn.QueueStatisticsProto")
+	proto.RegisterType((*QueueInfoProto)(nil), "hadoop.yarn.QueueInfoProto")
+	proto.RegisterType((*QueueConfigurationsProto)(nil), "hadoop.yarn.QueueConfigurationsProto")
+	proto.RegisterType((*QueueConfigurationsMapProto)(nil), "hadoop.yarn.QueueConfigurationsMapProto")
+	proto.RegisterType((*QueueUserACLInfoProto)(nil), "hadoop.yarn.QueueUserACLInfoProto")
+	proto.RegisterType((*PlacementConstraintProto)(nil), "hadoop.yarn.PlacementConstraintProto")
+	proto.RegisterType((*SimplePlacementConstraintProto)(nil), "hadoop.yarn.SimplePlacementConstraintProto")
+	proto.RegisterType((*PlacementConstraintTargetProto)(nil), "hadoop.yarn.PlacementConstraintTargetProto")
+	proto.RegisterType((*TimedPlacementConstraintProto)(nil), "hadoop.yarn.TimedPlacementConstraintProto")
+	proto.RegisterType((*CompositePlacementConstraintProto)(nil), "hadoop.yarn.CompositePlacementConstraintProto")
+	proto.RegisterType((*PlacementConstraintMapEntryProto)(nil), "hadoop.yarn.PlacementConstraintMapEntryProto")
+	proto.RegisterType((*ReservationIdProto)(nil), "hadoop.yarn.ReservationIdProto")
+	proto.RegisterType((*ReservationRequestProto)(nil), "hadoop.yarn.ReservationRequestProto")
+	proto.RegisterType((*ReservationRequestsProto)(nil), "hadoop.yarn.ReservationRequestsProto")
+	proto.RegisterType((*ReservationDefinitionProto)(nil), "hadoop.yarn.ReservationDefinitionProto")
+	proto.RegisterType((*ResourceAllocationRequestProto)(nil), "hadoop.yarn.ResourceAllocationRequestProto")
+	proto.RegisterType((*ReservationAllocationStateProto)(nil), "hadoop.yarn.ReservationAllocationStateProto")
+	proto.RegisterType((*ContainerLaunchContextProto)(nil), "hadoop.yarn.ContainerLaunchContextProto")
+	proto.RegisterType((*ContainerStatusProto)(nil), "hadoop.yarn.ContainerStatusProto")
+	proto.RegisterType((*ContainerRetryContextProto)(nil), "hadoop.yarn.ContainerRetryContextProto")
+	proto.RegisterType((*StringLocalResourceMapProto)(nil), "hadoop.yarn.StringLocalResourceMapProto")
+	proto.RegisterType((*StringStringMapProto)(nil), "hadoop.yarn.StringStringMapProto")
+	proto.RegisterType((*StringBytesMapProto)(nil), "hadoop.yarn.StringBytesMapProto")
+	proto.RegisterType((*CollectorInfoProto)(nil), "hadoop.yarn.CollectorInfoProto")
+	proto.RegisterEnum("hadoop.yarn.ResourceTypesProto", ResourceTypesProto_name, ResourceTypesProto_value)
 	proto.RegisterEnum("hadoop.yarn.ContainerStateProto", ContainerStateProto_name, ContainerStateProto_value)
+	proto.RegisterEnum("hadoop.yarn.ContainerSubStateProto", ContainerSubStateProto_name, ContainerSubStateProto_value)
 	proto.RegisterEnum("hadoop.yarn.YarnApplicationStateProto", YarnApplicationStateProto_name, YarnApplicationStateProto_value)
 	proto.RegisterEnum("hadoop.yarn.YarnApplicationAttemptStateProto", YarnApplicationAttemptStateProto_name, YarnApplicationAttemptStateProto_value)
 	proto.RegisterEnum("hadoop.yarn.FinalApplicationStatusProto", FinalApplicationStatusProto_name, FinalApplicationStatusProto_value)
 	proto.RegisterEnum("hadoop.yarn.LocalResourceVisibilityProto", LocalResourceVisibilityProto_name, LocalResourceVisibilityProto_value)
 	proto.RegisterEnum("hadoop.yarn.LocalResourceTypeProto", LocalResourceTypeProto_name, LocalResourceTypeProto_value)
+	proto.RegisterEnum("hadoop.yarn.LogAggregationStatusProto", LogAggregationStatusProto_name, LogAggregationStatusProto_value)
 	proto.RegisterEnum("hadoop.yarn.NodeStateProto", NodeStateProto_name, NodeStateProto_value)
+	proto.RegisterEnum("hadoop.yarn.NodeUpdateTypeProto", NodeUpdateTypeProto_name, NodeUpdateTypeProto_value)
+	proto.RegisterEnum("hadoop.yarn.NodeAttributeTypeProto", NodeAttributeTypeProto_name, NodeAttributeTypeProto_value)
+	proto.RegisterEnum("hadoop.yarn.ContainerTypeProto", ContainerTypeProto_name, ContainerTypeProto_value)
+	proto.RegisterEnum("hadoop.yarn.ExecutionTypeProto", ExecutionTypeProto_name, ExecutionTypeProto_value)
 	proto.RegisterEnum("hadoop.yarn.AMCommandProto", AMCommandProto_name, AMCommandProto_value)
+	proto.RegisterEnum("hadoop.yarn.RejectionReasonProto", RejectionReasonProto_name, RejectionReasonProto_value)
+	proto.RegisterEnum("hadoop.yarn.ApplicationTimeoutTypeProto", ApplicationTimeoutTypeProto_name, ApplicationTimeoutTypeProto_value)
 	proto.RegisterEnum("hadoop.yarn.ApplicationAccessTypeProto", ApplicationAccessTypeProto_name, ApplicationAccessTypeProto_value)
 	proto.RegisterEnum("hadoop.yarn.QueueStateProto", QueueStateProto_name, QueueStateProto_value)
 	proto.RegisterEnum("hadoop.yarn.QueueACLProto", QueueACLProto_name, QueueACLProto_value)
+	proto.RegisterEnum("hadoop.yarn.SignalContainerCommandProto", SignalContainerCommandProto_name, SignalContainerCommandProto_value)
+	proto.RegisterEnum("hadoop.yarn.NodeAttributeOpCodeProto", NodeAttributeOpCodeProto_name, NodeAttributeOpCodeProto_value)
+	proto.RegisterEnum("hadoop.yarn.ReservationRequestInterpreterProto", ReservationRequestInterpreterProto_name, ReservationRequestInterpreterProto_value)
 	proto.RegisterEnum("hadoop.yarn.ContainerExitStatusProto", ContainerExitStatusProto_name, ContainerExitStatusProto_value)
+	proto.RegisterEnum("hadoop.yarn.ContainerRetryPolicyProto", ContainerRetryPolicyProto_name, ContainerRetryPolicyProto_value)
+	proto.RegisterEnum("hadoop.yarn.PlacementConstraintTargetProto_TargetType", PlacementConstraintTargetProto_TargetType_name, PlacementConstraintTargetProto_TargetType_value)
+	proto.RegisterEnum("hadoop.yarn.TimedPlacementConstraintProto_DelayUnit", TimedPlacementConstraintProto_DelayUnit_name, TimedPlacementConstraintProto_DelayUnit_value)
+	proto.RegisterEnum("hadoop.yarn.CompositePlacementConstraintProto_CompositeType", CompositePlacementConstraintProto_CompositeType_name, CompositePlacementConstraintProto_CompositeType_value)
+}
+
+func init() { proto.RegisterFile("yarn_protos.proto", fileDescriptor5) }
+
+var fileDescriptor5 = []byte{
+	// 5933 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x5c, 0x4d, 0x70, 0x23, 0xd9,
+	0x5d, 0x9f, 0xd6, 0x87, 0x6d, 0xfd, 0x25, 0xcb, 0xed, 0xf6, 0xc7, 0xc8, 0xe3, 0xf9, 0xf0, 0xf4,
+	0x7e, 0xcd, 0x7a, 0xb3, 0xde, 0xd9, 0x49, 0x32, 0xd9, 0xf5, 0x66, 0xb3, 0x69, 0x4b, 0xed, 0xb1,
+	0x32, 0xb2, 0xa4, 0x51, 0x4b, 0xb3, 0x0c, 0xa1, 0xe8, 0xbc, 0x69, 0x3d, 0xdb, 0xcd, 0xb6, 0xba,
+	0x3b, 0xdd, 0x2d, 0x63, 0x6f, 0x71, 0xa0, 0x8a, 0x50, 0x40, 0x01, 0x81, 0x4a, 0x71, 0xa0, 0x8a,
+	0x1c, 0x38, 0x84, 0x03, 0x55, 0x29, 0x8e, 0x70, 0x80, 0x13, 0x57, 0x6e, 0x54, 0xa5, 0xb8, 0xc1,
+	0x31, 0x37, 0x8a, 0x23, 0x05, 0x87, 0x50, 0xef, 0xa3, 0xbf, 0xa4, 0x96, 0x65, 0x07, 0xc8, 0x21,
+	0x63, 0xbd, 0x8f, 0xff, 0xfb, 0xbf, 0xff, 0xd7, 0xfb, 0xff, 0x7f, 0xef, 0xf5, 0xc2, 0xea, 0x25,
+	0xf2, 0x6c, 0xdd, 0xf5, 0x9c, 0xc0, 0xf1, 0xf7, 0xe8, 0x3f, 0x52, 0xf9, 0x0c, 0x0d, 0x1d, 0xc7,
+	0xdd, 0x23, 0x3d, 0x77, 0xaa, 0x1a, 0x36, 0xc6, 0x9e, 0x19, 0x5c, 0xb2, 0x4e, 0xf9, 0x07, 0x02,
+	0xd4, 0x34, 0xec, 0x99, 0xc8, 0x32, 0xbf, 0xc4, 0x43, 0xf5, 0xc2, 0xc0, 0x6e, 0x60, 0x3a, 0x76,
+	0x97, 0xce, 0x5c, 0x81, 0xc5, 0x11, 0xf6, 0x7d, 0x74, 0x8a, 0x6b, 0xc2, 0x8e, 0xf0, 0xa8, 0x24,
+	0x2d, 0x43, 0x31, 0xf0, 0x90, 0x81, 0x6b, 0x39, 0xfa, 0x53, 0x02, 0x30, 0x2c, 0xe4, 0xfb, 0xba,
+	0x8d, 0x46, 0xb8, 0x96, 0xa7, 0x6d, 0x5f, 0x83, 0xa2, 0x81, 0xc6, 0x3e, 0xae, 0x15, 0x76, 0x84,
+	0x47, 0xe5, 0x27, 0x6f, 0xed, 0x25, 0x56, 0xdf, 0x9b, 0xb5, 0x92, 0xfc, 0x09, 0x48, 0x8a, 0xeb,
+	0x5a, 0xa6, 0x81, 0x48, 0x5b, 0x73, 0xc8, 0xd6, 0x07, 0xc8, 0x99, 0x43, 0xba, 0x74, 0x51, 0xda,
+	0x82, 0x55, 0xc3, 0x1a, 0xfb, 0x01, 0xf6, 0xf4, 0xc0, 0x1c, 0x61, 0x3f, 0x40, 0x23, 0x97, 0xb2,
+	0x91, 0x97, 0x4f, 0x61, 0x2b, 0x31, 0x59, 0x09, 0x02, 0x3c, 0x72, 0x83, 0x90, 0xc6, 0x37, 0xa0,
+	0x8a, 0xe2, 0x4e, 0x9d, 0xd3, 0x2b, 0x3f, 0x79, 0x90, 0x62, 0x2c, 0x63, 0xf1, 0x55, 0x28, 0xa1,
+	0x90, 0x14, 0x5d, 0xa8, 0x28, 0xff, 0x89, 0x00, 0x62, 0xdd, 0xb1, 0x03, 0x64, 0xda, 0xd8, 0x0b,
+	0xc7, 0x7d, 0x00, 0x0b, 0xc8, 0x75, 0x6f, 0x40, 0xf8, 0x5b, 0x94, 0x23, 0x9d, 0x13, 0x27, 0x13,
+	0x73, 0x74, 0xe2, 0xdb, 0xb3, 0x26, 0x4e, 0xec, 0x88, 0x49, 0x25, 0x4f, 0xb7, 0x1e, 0x40, 0xad,
+	0x87, 0x7d, 0x67, 0xec, 0x19, 0xb8, 0x69, 0x9f, 0x38, 0xde, 0x08, 0xc5, 0xda, 0x2b, 0x43, 0xfe,
+	0x0b, 0x7c, 0x59, 0x13, 0x76, 0x72, 0x4c, 0x73, 0xe7, 0xc8, 0x1a, 0x33, 0xcd, 0xe5, 0xc9, 0xcf,
+	0xb1, 0x6d, 0x06, 0x3e, 0x57, 0xda, 0xfb, 0x50, 0x08, 0x2e, 0x5d, 0xa6, 0xb3, 0xea, 0xc4, 0x0e,
+	0x42, 0xfa, 0xfd, 0x4b, 0x17, 0xfb, 0x4c, 0x5b, 0x06, 0x6c, 0x24, 0x5b, 0xc9, 0xca, 0x6c, 0xc9,
+	0x0a, 0x14, 0xa8, 0x29, 0x44, 0x6b, 0xb2, 0x45, 0x72, 0xa9, 0x45, 0xf2, 0xd7, 0x5b, 0xe4, 0x12,
+	0x96, 0xc3, 0x56, 0x46, 0xbc, 0x0a, 0x0b, 0x23, 0x3c, 0x72, 0xbc, 0x4b, 0x2a, 0xe8, 0xbc, 0xb4,
+	0x01, 0xcb, 0xe7, 0xa6, 0x17, 0x8c, 0x91, 0xa5, 0x1b, 0x8e, 0x87, 0xd9, 0x32, 0x45, 0x49, 0x01,
+	0xc9, 0xe3, 0xf3, 0x74, 0xba, 0x65, 0x7d, 0x84, 0xdc, 0x5a, 0x7e, 0x27, 0x3f, 0x65, 0x8d, 0xb3,
+	0x24, 0x27, 0xd7, 0x63, 0xa9, 0x0e, 0x02, 0xd3, 0x32, 0xbf, 0x4c, 0x48, 0xb5, 0x02, 0x05, 0x77,
+	0x84, 0x47, 0xdc, 0x2a, 0x2b, 0x50, 0x38, 0x27, 0xbf, 0xd8, 0xd2, 0x65, 0xc8, 0x1b, 0xee, 0x98,
+	0x6e, 0x30, 0x27, 0x7f, 0x0f, 0xd6, 0x42, 0x22, 0x9d, 0x84, 0x4f, 0x7d, 0x05, 0x96, 0x42, 0xf6,
+	0xb8, 0xc1, 0xdc, 0xc9, 0x64, 0x8a, 0x8d, 0xde, 0x86, 0x35, 0xe7, 0x1c, 0x7b, 0xba, 0xe1, 0x8c,
+	0x46, 0x66, 0x40, 0x2d, 0xdf, 0x19, 0x07, 0xdc, 0x1c, 0x35, 0x58, 0x4f, 0x8c, 0x3e, 0x31, 0x2d,
+	0xac, 0xda, 0x81, 0x77, 0x39, 0xa1, 0x85, 0xf7, 0xa1, 0x14, 0x2e, 0x48, 0x44, 0x94, 0xbb, 0x7a,
+	0x45, 0xf9, 0x55, 0xac, 0x5b, 0x4e, 0x94, 0xe9, 0x43, 0xfa, 0x36, 0x6c, 0x44, 0x72, 0x75, 0x79,
+	0x0f, 0x15, 0xad, 0x40, 0x45, 0xfb, 0x70, 0x16, 0xcd, 0x88, 0x2f, 0xf9, 0xb7, 0x60, 0xbd, 0xed,
+	0x0c, 0x71, 0xd8, 0x77, 0x8c, 0x5c, 0x46, 0xf9, 0x5d, 0x58, 0xb4, 0x9d, 0x21, 0x8e, 0x5d, 0xa8,
+	0x96, 0xa2, 0x45, 0xe6, 0x84, 0xb6, 0xff, 0x31, 0xac, 0x44, 0x4c, 0x38, 0x54, 0xaa, 0xdc, 0x79,
+	0x76, 0x32, 0x97, 0x4f, 0x08, 0x5e, 0x7e, 0x08, 0xcb, 0x5d, 0xcf, 0x74, 0x48, 0xec, 0x63, 0xb4,
+	0x44, 0x58, 0x72, 0x79, 0x03, 0xd3, 0xa6, 0xfc, 0x57, 0x79, 0xa8, 0x46, 0xfe, 0x1d, 0xf2, 0x96,
+	0x8b, 0xd8, 0xba, 0x97, 0x5a, 0x63, 0x2a, 0x10, 0x3c, 0x82, 0x05, 0x9b, 0xb2, 0xca, 0x59, 0x9a,
+	0xbd, 0x8b, 0x2d, 0x58, 0xa5, 0x1b, 0x3e, 0x0b, 0x02, 0x57, 0x47, 0xc3, 0xa1, 0x87, 0xfd, 0xd0,
+	0x13, 0x93, 0xe6, 0x51, 0x98, 0x6b, 0x1e, 0x5f, 0x49, 0x6c, 0xa1, 0x98, 0x31, 0x3a, 0xbd, 0xe1,
+	0x27, 0xb0, 0x62, 0x84, 0x4c, 0xeb, 0x81, 0xf3, 0x05, 0xb6, 0x6b, 0x0b, 0x74, 0xd2, 0x56, 0x38,
+	0x89, 0x98, 0x99, 0x63, 0xef, 0xf5, 0x49, 0x1f, 0x9b, 0x53, 0x87, 0x2a, 0xbe, 0xc0, 0xc6, 0x98,
+	0x06, 0x4f, 0xea, 0xbe, 0x8b, 0x19, 0xee, 0xab, 0x86, 0x43, 0x88, 0xff, 0xd2, 0x89, 0xfb, 0xf0,
+	0x6c, 0xa0, 0xf4, 0x94, 0x76, 0x5f, 0x55, 0x1b, 0xd2, 0x43, 0xd8, 0x40, 0x96, 0xe5, 0xf0, 0x10,
+	0xec, 0xe1, 0xef, 0x8f, 0xb1, 0x4f, 0x03, 0xdf, 0x12, 0x71, 0xe4, 0xfd, 0xdc, 0xfb, 0x1f, 0x4a,
+	0x12, 0x2c, 0x9e, 0x63, 0xcf, 0x27, 0x0a, 0x2d, 0x11, 0x5d, 0xec, 0x0b, 0x8f, 0xa5, 0xdb, 0xb0,
+	0x92, 0x98, 0x16, 0xa0, 0x53, 0xbf, 0x06, 0x3b, 0xf9, 0x47, 0x25, 0xf9, 0xe7, 0x79, 0x58, 0x8f,
+	0xc4, 0xdf, 0xc3, 0xae, 0xe3, 0x05, 0x8c, 0xdb, 0xaf, 0x42, 0x25, 0xde, 0xe1, 0x75, 0xf5, 0x96,
+	0x14, 0x79, 0x6e, 0xae, 0xc8, 0x13, 0xc6, 0x9a, 0x9f, 0xa3, 0xe6, 0xa4, 0x76, 0x0a, 0x73, 0xb5,
+	0xb3, 0x01, 0xcb, 0x86, 0x87, 0xf9, 0x5e, 0xcd, 0x11, 0xa6, 0x0a, 0xcd, 0x4b, 0x6b, 0x50, 0x3e,
+	0x31, 0x6d, 0xd3, 0x3f, 0x63, 0x8d, 0x0b, 0xb4, 0xf1, 0x1e, 0x88, 0x43, 0x13, 0x9d, 0xda, 0x8e,
+	0x1f, 0x98, 0x86, 0xaf, 0x9b, 0xf6, 0x89, 0x43, 0xf5, 0x52, 0xda, 0xcf, 0xb7, 0x3f, 0x50, 0xc8,
+	0xb9, 0x6d, 0x39, 0xa7, 0xfa, 0xd8, 0xb3, 0xa8, 0x84, 0x4b, 0xd2, 0x3d, 0xd8, 0x88, 0xe5, 0x82,
+	0x2f, 0xcc, 0x40, 0xf7, 0x03, 0x14, 0x8c, 0x7d, 0x26, 0x6b, 0xe2, 0x55, 0x71, 0x37, 0xe9, 0xc1,
+	0x35, 0xa0, 0x5a, 0xde, 0xc9, 0x96, 0x9c, 0x46, 0x86, 0x5c, 0x61, 0xca, 0x65, 0xba, 0xe8, 0x01,
+	0x2c, 0xe3, 0xa4, 0x5d, 0xd4, 0x2a, 0x37, 0xb6, 0x1c, 0xf9, 0x25, 0x2c, 0x0d, 0x7a, 0xad, 0x28,
+	0xfe, 0xfb, 0xc6, 0x19, 0x1e, 0x85, 0xc9, 0x48, 0x05, 0x0a, 0x67, 0x8e, 0x1f, 0xf0, 0xd3, 0x85,
+	0xc4, 0x65, 0xc7, 0x0b, 0xa8, 0x52, 0x68, 0x5c, 0x26, 0x71, 0x87, 0x8a, 0xbd, 0x44, 0x3c, 0x7d,
+	0xec, 0x63, 0x8f, 0xc4, 0x79, 0x2a, 0xd5, 0x92, 0xfc, 0xc7, 0x39, 0x90, 0x5a, 0x8e, 0x81, 0xac,
+	0xb4, 0x72, 0xdf, 0x99, 0x0a, 0xce, 0x1b, 0x29, 0x6e, 0x23, 0x5e, 0x2a, 0x50, 0xf0, 0xcd, 0x2f,
+	0xc3, 0xd3, 0x74, 0x15, 0x4a, 0x71, 0x4e, 0x42, 0x0f, 0x66, 0xe9, 0xc3, 0xd4, 0x89, 0xfa, 0x46,
+	0x8a, 0x4a, 0x6a, 0xe1, 0x68, 0xdf, 0xd2, 0xa7, 0x00, 0xe7, 0xa6, 0x6f, 0xbe, 0x36, 0xad, 0xd0,
+	0x9d, 0xab, 0x4f, 0xde, 0x9d, 0x3d, 0xf1, 0x65, 0x34, 0x36, 0x4a, 0xd6, 0x5c, 0x92, 0x53, 0x78,
+	0xcc, 0xab, 0x4b, 0xd2, 0x2e, 0xc8, 0xfe, 0x99, 0x33, 0xb6, 0x86, 0xfa, 0x6b, 0xac, 0x8f, 0x5d,
+	0xcb, 0x41, 0x43, 0x3c, 0xd4, 0x03, 0x47, 0xf7, 0xcf, 0x90, 0x87, 0x87, 0xba, 0x81, 0x8c, 0x33,
+	0xe6, 0xce, 0x4b, 0xf2, 0x63, 0x90, 0xb4, 0xc0, 0x33, 0xed, 0xd3, 0x96, 0x63, 0x9f, 0x46, 0x81,
+	0x79, 0x56, 0x06, 0x91, 0x7b, 0x94, 0x97, 0x7f, 0x56, 0x80, 0x37, 0x12, 0x39, 0x4a, 0x74, 0x5e,
+	0x92, 0x6c, 0x31, 0xe9, 0x92, 0xdb, 0xb0, 0x66, 0x8f, 0x47, 0xfa, 0xd8, 0x27, 0x2b, 0x86, 0x06,
+	0xe4, 0xf3, 0xe3, 0xf3, 0x01, 0xdc, 0x26, 0x9d, 0x1e, 0xf6, 0xb1, 0x77, 0x9e, 0x1e, 0xc0, 0x4e,
+	0xd4, 0x27, 0x50, 0xa5, 0x33, 0xe3, 0x13, 0x2c, 0x3f, 0xd7, 0x43, 0x9f, 0xd2, 0x04, 0x80, 0x11,
+	0x8c, 0xe7, 0xcd, 0x0f, 0xa6, 0x5f, 0x03, 0xd1, 0xc6, 0x78, 0x98, 0x9a, 0x55, 0x9c, 0x3b, 0x6b,
+	0x13, 0xaa, 0x2c, 0x2b, 0xd1, 0x7d, 0x6c, 0x38, 0xf6, 0xd0, 0xe7, 0x2e, 0x4a, 0xb2, 0x13, 0x92,
+	0x96, 0x44, 0xcd, 0x8b, 0xb4, 0xf9, 0x3e, 0x6c, 0x7e, 0x7f, 0x8c, 0xc7, 0x58, 0x1f, 0x13, 0x41,
+	0xe9, 0x2e, 0xf6, 0x0c, 0x6c, 0x07, 0x24, 0xc3, 0x26, 0x9e, 0x9a, 0x93, 0x76, 0xa0, 0x16, 0xa6,
+	0xb9, 0x53, 0x23, 0x4a, 0xe1, 0x08, 0xd7, 0xc3, 0x24, 0x21, 0xc4, 0x43, 0x7d, 0x62, 0x69, 0xa0,
+	0x6b, 0x3c, 0x80, 0xdb, 0xf1, 0x88, 0x34, 0x13, 0x65, 0x3a, 0xe0, 0x19, 0xdc, 0x4f, 0xe6, 0xc4,
+	0xd1, 0x89, 0xca, 0x56, 0x24, 0x67, 0x7a, 0x85, 0x9e, 0xe9, 0x69, 0x57, 0xcd, 0x30, 0x90, 0x17,
+	0xf0, 0x28, 0x49, 0x28, 0x5e, 0x35, 0x83, 0xe4, 0xf2, 0xb5, 0x48, 0xca, 0xff, 0xb6, 0x04, 0x9b,
+	0x29, 0xbb, 0x8a, 0x4d, 0xe9, 0x29, 0x2c, 0xa3, 0x64, 0x3a, 0x7d, 0xdd, 0x84, 0xbb, 0x02, 0x05,
+	0xe2, 0xfe, 0x3c, 0x50, 0x2c, 0x43, 0x91, 0x6a, 0x80, 0x1f, 0xb8, 0x61, 0xb2, 0x54, 0x48, 0xc5,
+	0x94, 0x62, 0x18, 0x37, 0x3c, 0xd7, 0xd0, 0x69, 0x5c, 0x59, 0xa0, 0xf6, 0xf8, 0x75, 0x90, 0x0c,
+	0xcb, 0xc4, 0x76, 0x40, 0xfc, 0x08, 0x8d, 0xf8, 0x29, 0xba, 0x38, 0xef, 0x14, 0x3d, 0x84, 0x4d,
+	0x5a, 0x97, 0x25, 0x85, 0xc5, 0xe2, 0xec, 0x12, 0x75, 0xf3, 0x74, 0xea, 0xff, 0x0a, 0x79, 0x76,
+	0x62, 0x1b, 0x89, 0x68, 0xbb, 0x06, 0x65, 0x52, 0x7f, 0x7d, 0x61, 0xda, 0xa7, 0x03, 0xcf, 0xa2,
+	0x06, 0x51, 0x92, 0x6a, 0x50, 0x4e, 0x1c, 0x06, 0xd4, 0x06, 0xf8, 0x39, 0xb0, 0x0a, 0x25, 0x3f,
+	0x40, 0x5e, 0xd0, 0x27, 0x27, 0x07, 0x53, 0xbd, 0x04, 0xc0, 0x8e, 0x13, 0xda, 0x56, 0xa1, 0x6d,
+	0xdf, 0x81, 0xda, 0x89, 0x69, 0x23, 0x6b, 0x8a, 0xbd, 0xb1, 0x5f, 0x5b, 0xa6, 0xfc, 0x3d, 0x4a,
+	0xf1, 0x77, 0x48, 0x06, 0x4f, 0x30, 0x38, 0xe6, 0x59, 0x62, 0x0b, 0x24, 0x52, 0xdc, 0x44, 0xfa,
+	0xa7, 0xf1, 0xa0, 0x56, 0xa5, 0x02, 0x7a, 0x3c, 0x4b, 0x51, 0x57, 0x05, 0x0f, 0xc7, 0x33, 0x4f,
+	0xc9, 0x7a, 0xfd, 0xc4, 0xbe, 0x57, 0xe8, 0xbe, 0x9f, 0xc3, 0xb6, 0x31, 0xf6, 0x3c, 0x6c, 0x07,
+	0x59, 0xb5, 0x52, 0x4d, 0xbc, 0x51, 0x51, 0x45, 0x93, 0x41, 0xe7, 0x94, 0x1e, 0x5f, 0xab, 0xd4,
+	0xcf, 0x48, 0xf6, 0x11, 0x0f, 0xa7, 0x07, 0x98, 0x44, 0xd7, 0xdd, 0x83, 0x32, 0x1a, 0xe9, 0x5e,
+	0xa8, 0xfc, 0xb5, 0x79, 0xca, 0x9f, 0x20, 0x44, 0xd2, 0x98, 0x75, 0x92, 0xc6, 0x10, 0xab, 0x20,
+	0xc7, 0x34, 0x3a, 0x3d, 0xf5, 0xf0, 0x69, 0x4a, 0xea, 0x1b, 0x19, 0x56, 0xd1, 0x72, 0x4e, 0x95,
+	0x78, 0x64, 0x52, 0xe6, 0x6f, 0xc2, 0xc6, 0xd8, 0x1e, 0x21, 0x1b, 0x9d, 0xe2, 0x61, 0x52, 0x87,
+	0xb5, 0x4d, 0x12, 0xdb, 0xf7, 0x8b, 0x27, 0xc8, 0xf2, 0x71, 0x2a, 0x1b, 0xb9, 0x3d, 0x37, 0x1b,
+	0xb9, 0x0f, 0x9b, 0xc8, 0x75, 0x49, 0x36, 0xd3, 0x42, 0xaf, 0xb1, 0xa5, 0x5e, 0xb8, 0x44, 0x34,
+	0x84, 0x68, 0x2d, 0xcc, 0x28, 0xd0, 0x28, 0xab, 0x7b, 0x8b, 0x76, 0x7f, 0x1d, 0xca, 0xc8, 0x75,
+	0xfb, 0xac, 0x5c, 0xf1, 0x6b, 0x77, 0xa8, 0xef, 0xef, 0x4c, 0xea, 0x22, 0xec, 0x8f, 0xe2, 0x89,
+	0x04, 0x60, 0xa1, 0xb1, 0x6d, 0x30, 0xeb, 0xdc, 0x0e, 0x2d, 0xd6, 0x1f, 0xbf, 0x1e, 0x99, 0xcc,
+	0x8a, 0xef, 0xd2, 0xb6, 0x4f, 0x40, 0x0c, 0x2d, 0xac, 0xc7, 0xb2, 0x49, 0xbf, 0x76, 0xef, 0x8a,
+	0x32, 0x84, 0x0f, 0x62, 0x11, 0xe6, 0x27, 0x02, 0xac, 0x65, 0x2d, 0xfe, 0x1d, 0xa8, 0x25, 0x1d,
+	0x80, 0xd7, 0x5a, 0x2c, 0xe9, 0x15, 0x32, 0xdc, 0x20, 0x61, 0x4c, 0x9c, 0x56, 0x7c, 0x96, 0x2b,
+	0xb0, 0x96, 0x41, 0x8b, 0xa7, 0x97, 0x6f, 0xce, 0x21, 0xc3, 0xd8, 0xfc, 0x91, 0x00, 0xb7, 0x67,
+	0xf4, 0xcd, 0x61, 0x35, 0x77, 0x23, 0x56, 0xd7, 0xa0, 0x8c, 0x2f, 0x5c, 0xd3, 0xc3, 0x2c, 0xc1,
+	0x64, 0x41, 0x72, 0x13, 0xaa, 0x1e, 0x1e, 0x21, 0xd3, 0x36, 0xed, 0x53, 0xd6, 0xce, 0xf0, 0x86,
+	0x3f, 0xca, 0xc3, 0xbd, 0x69, 0x27, 0x4a, 0xba, 0xec, 0x21, 0x35, 0x9c, 0x88, 0xb5, 0x04, 0xca,
+	0x21, 0xdc, 0xc8, 0x21, 0xd3, 0xd9, 0x5d, 0x32, 0x12, 0xb3, 0x0c, 0x6f, 0x1d, 0x2a, 0x61, 0x28,
+	0xa4, 0x89, 0x6e, 0x21, 0x2b, 0x16, 0x16, 0xe3, 0x58, 0x38, 0x80, 0xfb, 0x53, 0x21, 0x38, 0x64,
+	0x8e, 0x85, 0xe2, 0x05, 0xaa, 0xe3, 0xf7, 0xaf, 0x0a, 0xc5, 0x9c, 0xc7, 0x44, 0x44, 0x7e, 0x0a,
+	0x2b, 0x68, 0xa4, 0xa7, 0x8a, 0x8e, 0xc5, 0xeb, 0x14, 0x1d, 0xf7, 0x60, 0x23, 0x8c, 0x6c, 0x7a,
+	0x6a, 0x1f, 0x2c, 0x61, 0x4f, 0x45, 0xee, 0x52, 0x46, 0xe4, 0xa6, 0x27, 0xbd, 0xfc, 0x2e, 0x94,
+	0x93, 0x05, 0x47, 0x28, 0x33, 0x21, 0x95, 0x11, 0x33, 0xb0, 0xe0, 0x3f, 0x0a, 0xb0, 0xc2, 0xaa,
+	0xef, 0x58, 0x57, 0x71, 0xc5, 0x3a, 0xaf, 0xee, 0x5e, 0x83, 0x32, 0xc9, 0xf0, 0x15, 0x9e, 0xe0,
+	0xc7, 0x4a, 0x41, 0xc6, 0x17, 0xed, 0x18, 0xfc, 0x7b, 0x44, 0x4f, 0xda, 0xe1, 0x35, 0x92, 0xad,
+	0x3d, 0x00, 0x03, 0xb9, 0x28, 0x91, 0xec, 0x5e, 0x3d, 0x7e, 0x03, 0x96, 0xed, 0xf1, 0xa8, 0x1e,
+	0xe7, 0x87, 0xec, 0x3c, 0xfe, 0x00, 0x80, 0x96, 0x1f, 0x4c, 0x83, 0xac, 0x34, 0xdd, 0x9e, 0xda,
+	0x45, 0x42, 0x5f, 0x1b, 0xb0, 0x7c, 0x86, 0x91, 0x15, 0x9c, 0xe9, 0x1e, 0x15, 0x04, 0x97, 0xf7,
+	0x03, 0xb8, 0x6d, 0x21, 0x3f, 0xd0, 0x53, 0x7d, 0xcc, 0xf0, 0x4b, 0x61, 0x19, 0x46, 0x17, 0xb2,
+	0x48, 0xb8, 0xe3, 0x75, 0xa8, 0xa4, 0xc2, 0x66, 0x9c, 0xb1, 0xea, 0xe3, 0x18, 0x2a, 0xa2, 0x87,
+	0xed, 0x2c, 0xb8, 0x69, 0x0a, 0x52, 0xfa, 0x0c, 0x44, 0x4a, 0x3b, 0x49, 0xa0, 0x72, 0x13, 0x02,
+	0x0f, 0xe0, 0xf6, 0x10, 0x53, 0x88, 0x88, 0xc6, 0xe0, 0xd0, 0x67, 0x49, 0xc4, 0x21, 0xe7, 0xf7,
+	0xb2, 0xb4, 0x1f, 0xae, 0xe0, 0x0e, 0x51, 0x80, 0x59, 0x9c, 0xa8, 0x66, 0x54, 0x78, 0x44, 0x58,
+	0x03, 0x3a, 0x26, 0x8e, 0x0f, 0x1f, 0xc1, 0x0a, 0x9d, 0x8b, 0x82, 0xc0, 0x33, 0x5f, 0x8f, 0x03,
+	0xec, 0xd7, 0x56, 0x32, 0x52, 0x39, 0x32, 0x55, 0x09, 0x87, 0xb0, 0x08, 0xa6, 0xc1, 0x1a, 0xb3,
+	0xa1, 0xbe, 0x43, 0x4f, 0x09, 0xff, 0xa6, 0x56, 0x27, 0x31, 0xed, 0xb2, 0xc9, 0xb5, 0x1c, 0xad,
+	0xfd, 0xfb, 0xb0, 0xce, 0x7e, 0xf7, 0x1d, 0x36, 0xd4, 0xcf, 0x1a, 0x2b, 0x70, 0x73, 0x8c, 0x11,
+	0x99, 0xfc, 0x55, 0x2b, 0xc9, 0x1f, 0x43, 0x35, 0x3a, 0xcc, 0x26, 0xa1, 0x4c, 0x42, 0x69, 0x0b,
+	0xca, 0xa6, 0xaf, 0x5e, 0x90, 0xd4, 0xdc, 0x3c, 0x67, 0x41, 0x72, 0x69, 0xbf, 0x10, 0x78, 0x63,
+	0x2c, 0x6b, 0xb0, 0x91, 0xda, 0xfb, 0x73, 0xcc, 0x8f, 0xd0, 0x37, 0x60, 0x05, 0xc5, 0x02, 0xc1,
+	0x27, 0xe6, 0x05, 0x23, 0xb6, 0x0f, 0xde, 0x88, 0x71, 0x60, 0x52, 0x7b, 0x8c, 0x06, 0x51, 0x47,
+	0x22, 0xd5, 0x55, 0x49, 0xfe, 0xa9, 0x00, 0xd2, 0xb4, 0x44, 0xa5, 0x8f, 0xa0, 0x82, 0x12, 0xeb,
+	0xd0, 0x58, 0x5f, 0x7e, 0x22, 0xcf, 0x56, 0x44, 0xc4, 0xcc, 0x41, 0x62, 0x1d, 0x9a, 0xcb, 0xe4,
+	0x32, 0x0a, 0xd3, 0xd4, 0xd4, 0xb8, 0x20, 0x5f, 0xd0, 0xfa, 0xbd, 0x66, 0xfb, 0x99, 0x54, 0x83,
+	0x6a, 0x44, 0xe3, 0x25, 0x2d, 0x05, 0xa9, 0xd7, 0xef, 0xdf, 0x92, 0x7f, 0x28, 0xc0, 0x66, 0x6a,
+	0x72, 0x0c, 0x09, 0xff, 0xf2, 0x2c, 0xef, 0x4f, 0xb3, 0x9c, 0xbb, 0x26, 0xcb, 0xb2, 0x0a, 0x5b,
+	0xa4, 0xa7, 0xef, 0x28, 0x29, 0x86, 0xa3, 0x5c, 0x8f, 0x84, 0xc9, 0x04, 0x46, 0xba, 0x39, 0xb5,
+	0x33, 0xa6, 0x86, 0x3f, 0x15, 0x60, 0x23, 0xa6, 0x4e, 0x0d, 0xce, 0x0f, 0x81, 0xc8, 0x65, 0x3b,
+	0xb9, 0xf4, 0x0d, 0xf6, 0xf5, 0x4d, 0xa8, 0x90, 0xa9, 0x74, 0x9d, 0x63, 0xe4, 0x72, 0xdb, 0x7c,
+	0x7b, 0x6a, 0x66, 0x26, 0xf3, 0xf2, 0xaf, 0x33, 0x73, 0x4b, 0x74, 0xfa, 0xb1, 0xc1, 0x3a, 0xc3,
+	0xd0, 0x60, 0xbf, 0x01, 0xd5, 0x14, 0x7f, 0x3e, 0x5f, 0x66, 0xae, 0xd3, 0xfe, 0x53, 0x2e, 0x46,
+	0x95, 0x93, 0x69, 0x53, 0x2a, 0x7f, 0x14, 0xae, 0x83, 0x66, 0x45, 0x35, 0x80, 0x8d, 0xa2, 0xbc,
+	0x22, 0x1d, 0xf6, 0xf3, 0xd7, 0xa9, 0xae, 0xed, 0xf1, 0x28, 0x89, 0x0b, 0x14, 0x68, 0xdc, 0xbf,
+	0x4b, 0xf2, 0x13, 0x0b, 0x5d, 0xe8, 0x96, 0x63, 0xa0, 0xe8, 0x08, 0xe1, 0x2e, 0x49, 0x0e, 0xd7,
+	0x38, 0x58, 0xeb, 0x38, 0x4e, 0x4e, 0x19, 0x30, 0x72, 0x08, 0x9b, 0x69, 0x4c, 0x33, 0x84, 0x24,
+	0xf9, 0xd1, 0xfd, 0xf6, 0x6c, 0x84, 0x2a, 0x25, 0x91, 0xf9, 0xb0, 0xa6, 0xfc, 0x7b, 0x02, 0x6c,
+	0xcd, 0x26, 0x30, 0x0d, 0xae, 0x0a, 0x37, 0x07, 0x57, 0xdf, 0x82, 0x4d, 0x6c, 0x9f, 0x38, 0x44,
+	0xd0, 0x13, 0xc4, 0x72, 0x89, 0xf4, 0x5f, 0xfe, 0xfb, 0x1c, 0x6c, 0x6a, 0xc6, 0x19, 0x1e, 0x8e,
+	0x2d, 0xd3, 0x3e, 0x4d, 0xb1, 0x71, 0x1f, 0xd6, 0xe2, 0x7d, 0xf0, 0x1e, 0x1e, 0x9d, 0xf3, 0xfb,
+	0xc2, 0xe3, 0x94, 0xe6, 0x73, 0x73, 0x35, 0xff, 0xe9, 0x24, 0xec, 0x97, 0xbf, 0x91, 0x50, 0x89,
+	0x2b, 0x46, 0xcc, 0xd0, 0x62, 0xa9, 0x40, 0xcf, 0xda, 0x8f, 0x88, 0xc6, 0x99, 0x69, 0x68, 0xe6,
+	0x97, 0xa6, 0x7d, 0xca, 0x93, 0x86, 0x6c, 0xe0, 0x9f, 0x0d, 0x09, 0x43, 0xdf, 0x9a, 0x6b, 0x21,
+	0x03, 0x8f, 0xb0, 0x1d, 0xd4, 0x1d, 0xdb, 0x0f, 0x3c, 0x64, 0xda, 0x01, 0x87, 0xbe, 0xd3, 0x27,
+	0x6c, 0x77, 0x7a, 0x1c, 0xf3, 0x8a, 0x5f, 0x8b, 0x2f, 0x73, 0x92, 0xa4, 0x99, 0x79, 0x2a, 0x11,
+	0xbf, 0x21, 0xae, 0x35, 0x71, 0xe7, 0x32, 0xc7, 0xca, 0xe5, 0x3f, 0x10, 0xe0, 0x7e, 0x0f, 0xff,
+	0x06, 0x36, 0x02, 0x3c, 0x9c, 0xa1, 0xa3, 0x0f, 0x61, 0xc1, 0xc3, 0xc8, 0x77, 0x6c, 0x9e, 0xdf,
+	0x4f, 0xd6, 0x39, 0x64, 0x32, 0xd5, 0x1e, 0x19, 0x13, 0xe2, 0x59, 0x8b, 0xa1, 0x5d, 0xb3, 0x6b,
+	0x9f, 0x74, 0xe4, 0xcc, 0x5e, 0x48, 0xfe, 0x33, 0x01, 0x36, 0xbb, 0x0c, 0xc7, 0x31, 0x1d, 0xfb,
+	0x98, 0x5d, 0xff, 0x86, 0x82, 0xac, 0xfa, 0x81, 0x67, 0x1a, 0x44, 0x3a, 0x24, 0x67, 0x0d, 0x78,
+	0x1c, 0xd8, 0x9d, 0xc2, 0x74, 0x8c, 0x20, 0x26, 0x11, 0x0e, 0x0e, 0xf3, 0xe5, 0x25, 0x23, 0x9c,
+	0x9d, 0x55, 0x0d, 0xcd, 0x98, 0x27, 0xbf, 0x82, 0x7b, 0x57, 0x13, 0xfe, 0x08, 0x4a, 0x51, 0x94,
+	0xe0, 0x57, 0x52, 0x6f, 0x5d, 0x41, 0x39, 0xbe, 0xe2, 0xa1, 0x85, 0xd6, 0x2c, 0xaa, 0x9f, 0xa6,
+	0x00, 0x61, 0x42, 0xf4, 0xbd, 0x19, 0x44, 0x33, 0x63, 0x66, 0x8a, 0xa9, 0xdc, 0x4d, 0x98, 0x52,
+	0xa1, 0x36, 0xab, 0xef, 0x06, 0x77, 0x52, 0xf2, 0x00, 0xee, 0xcf, 0x61, 0xf1, 0xab, 0x53, 0x90,
+	0xf7, 0x35, 0x4a, 0xe8, 0x5f, 0x81, 0x7b, 0x61, 0xfb, 0x81, 0x85, 0x8c, 0x2f, 0x2c, 0xd3, 0x0f,
+	0x52, 0x54, 0xb7, 0x61, 0xed, 0x75, 0xd8, 0xa1, 0xa3, 0xe1, 0xd0, 0x0c, 0xbd, 0x83, 0xb8, 0xf2,
+	0x1d, 0x90, 0xe2, 0x4e, 0x0f, 0x8f, 0x9c, 0x73, 0x14, 0xa5, 0x77, 0xff, 0xb0, 0x08, 0x0f, 0x93,
+	0xd0, 0x12, 0xa9, 0xfc, 0x69, 0xec, 0x26, 0x5b, 0xc3, 0x17, 0xc1, 0xff, 0xf2, 0x52, 0xff, 0x1e,
+	0x88, 0xc9, 0x89, 0xf1, 0xc9, 0xc4, 0x8a, 0xc4, 0xcd, 0x14, 0x36, 0xb8, 0xbf, 0x38, 0xc4, 0x27,
+	0x68, 0x6c, 0x05, 0x37, 0xbc, 0xc9, 0xa9, 0xc3, 0x6a, 0xaa, 0x26, 0xf4, 0x5d, 0x6c, 0xf0, 0x68,
+	0xf5, 0x28, 0x5b, 0x5d, 0x2d, 0x0a, 0x7a, 0xa4, 0xb6, 0xf8, 0x2e, 0x6c, 0x1b, 0xc8, 0x36, 0xb0,
+	0xc5, 0x60, 0x26, 0x5f, 0xff, 0xcd, 0x33, 0x6c, 0xeb, 0x86, 0x33, 0x72, 0x2d, 0xcc, 0x8b, 0xd5,
+	0xf0, 0xb8, 0xdb, 0x86, 0x4a, 0x02, 0xff, 0x19, 0x31, 0x48, 0x3f, 0x84, 0x7d, 0xb6, 0xa0, 0x3a,
+	0x42, 0x17, 0x8a, 0xeb, 0xf2, 0xda, 0xd5, 0xa7, 0xa7, 0x53, 0x91, 0xc7, 0xf5, 0x48, 0xf5, 0xa5,
+	0xb9, 0x47, 0xf1, 0xbd, 0x69, 0x3c, 0x8c, 0x41, 0x8d, 0x85, 0x57, 0x4a, 0xaf, 0x2d, 0xed, 0xc3,
+	0x7b, 0x5f, 0x60, 0xec, 0x26, 0x8e, 0x6a, 0x1d, 0x19, 0x9e, 0xe3, 0xfb, 0x59, 0x15, 0x37, 0x03,
+	0xa2, 0x23, 0x1e, 0x33, 0x10, 0xb2, 0x0a, 0xb5, 0x94, 0x3d, 0x90, 0xc3, 0x1a, 0xfd, 0x04, 0x99,
+	0xd6, 0xd8, 0xc3, 0xbe, 0x7e, 0x8e, 0x2c, 0x73, 0x68, 0x06, 0x97, 0xba, 0x69, 0x07, 0xd8, 0x3b,
+	0x47, 0x16, 0xad, 0x71, 0xd8, 0x2d, 0xe2, 0x11, 0xdc, 0x9e, 0x44, 0xd4, 0x0c, 0x26, 0x54, 0x0e,
+	0x41, 0xbe, 0x73, 0x05, 0xa4, 0x36, 0x69, 0x61, 0xec, 0x12, 0x21, 0xb2, 0xb0, 0x95, 0x0c, 0x0b,
+	0xeb, 0xc5, 0x43, 0x12, 0x85, 0x7d, 0x76, 0xee, 0x21, 0xd2, 0xdc, 0xe3, 0x08, 0xee, 0xa5, 0x6c,
+	0x23, 0x4a, 0x92, 0xc2, 0x50, 0xbd, 0x7a, 0x4d, 0x18, 0x4b, 0x52, 0x61, 0x3d, 0x03, 0x03, 0xf2,
+	0x6b, 0x12, 0x25, 0xf0, 0xce, 0x1c, 0xfc, 0x27, 0x42, 0xbd, 0x5a, 0xf0, 0x30, 0x05, 0xfb, 0x46,
+	0xa7, 0x82, 0xee, 0x7a, 0x8e, 0x8b, 0xbd, 0xc0, 0xc4, 0x7e, 0x6d, 0x2d, 0x83, 0x29, 0x86, 0xdd,
+	0xb3, 0xff, 0x8f, 0xd0, 0xfb, 0x4b, 0xb8, 0x73, 0xc5, 0x5a, 0xff, 0x97, 0x08, 0xdb, 0x0a, 0x2c,
+	0x26, 0x51, 0xb5, 0xbc, 0xfc, 0x3b, 0x02, 0xec, 0x24, 0x26, 0xf0, 0x32, 0xf6, 0xff, 0x91, 0x83,
+	0x2c, 0xe0, 0x4c, 0xfe, 0x2f, 0x01, 0xee, 0x5c, 0x61, 0x56, 0xdb, 0xb0, 0x62, 0xda, 0x86, 0x35,
+	0x1e, 0x62, 0x3d, 0xbc, 0xac, 0x63, 0x35, 0x61, 0x6e, 0x6f, 0x57, 0xda, 0x82, 0x15, 0x7c, 0x91,
+	0xee, 0x64, 0xb1, 0xe9, 0x96, 0xf4, 0x16, 0x6c, 0x7b, 0x8e, 0x65, 0xe1, 0xa1, 0x6e, 0x39, 0xa7,
+	0xbe, 0x3e, 0x49, 0x83, 0xd7, 0x61, 0xd2, 0x3b, 0xe9, 0x61, 0x93, 0xd4, 0x0a, 0xd1, 0x52, 0xef,
+	0xc2, 0xc3, 0x49, 0x47, 0x71, 0x1d, 0xcb, 0x34, 0x2e, 0xf5, 0xc4, 0x83, 0x2e, 0x76, 0x09, 0x32,
+	0x7b, 0xa8, 0x8b, 0x3c, 0x34, 0xc2, 0x41, 0x88, 0xc6, 0x94, 0x64, 0x9c, 0xba, 0xba, 0x51, 0xea,
+	0xad, 0x48, 0xee, 0x9f, 0x00, 0x20, 0xc3, 0xc0, 0xbe, 0xdf, 0x8f, 0x25, 0x3d, 0xd3, 0x44, 0x95,
+	0x68, 0x64, 0x78, 0xf1, 0x9b, 0x47, 0x86, 0xc5, 0x65, 0x21, 0xec, 0xc8, 0x7f, 0x27, 0xc0, 0xed,
+	0x57, 0xc8, 0xb3, 0xeb, 0xec, 0xa2, 0xec, 0x18, 0x93, 0xc4, 0xc0, 0x8f, 0xef, 0xa3, 0xc7, 0x23,
+	0x9d, 0xba, 0x20, 0x0b, 0x89, 0xd1, 0x65, 0xe3, 0x7d, 0xd8, 0x24, 0x5d, 0x49, 0xa4, 0x04, 0x0f,
+	0x75, 0x7b, 0x14, 0xde, 0x35, 0xf2, 0x5a, 0x03, 0x19, 0x81, 0x79, 0x8e, 0x69, 0x7b, 0x84, 0x34,
+	0x92, 0x76, 0xcb, 0xf1, 0x03, 0xda, 0x5a, 0x08, 0xdf, 0xa3, 0xd1, 0x7b, 0x4d, 0x9b, 0x41, 0x46,
+	0x97, 0xb4, 0xab, 0x48, 0xbb, 0x6a, 0x20, 0xb2, 0x5b, 0xcd, 0xd7, 0x8e, 0x13, 0xf0, 0x25, 0x28,
+	0x5c, 0x25, 0xff, 0x6b, 0x1e, 0xd6, 0x5f, 0x90, 0x03, 0x46, 0x0b, 0x50, 0x60, 0x52, 0x8c, 0x92,
+	0xb1, 0xcd, 0xa6, 0x28, 0xae, 0xeb, 0xd3, 0x13, 0x2f, 0x08, 0x30, 0xcf, 0xbf, 0xc3, 0x14, 0xd3,
+	0x75, 0xfd, 0xde, 0xd8, 0xb6, 0x49, 0xde, 0x9b, 0x9b, 0x68, 0xef, 0x62, 0x7b, 0x48, 0xda, 0xd9,
+	0xc5, 0x73, 0x4c, 0xa9, 0xce, 0xcf, 0x0a, 0x06, 0xc7, 0xe5, 0x39, 0x84, 0x46, 0x7a, 0x9e, 0x9b,
+	0xc4, 0x46, 0xf8, 0x03, 0x83, 0xb8, 0xf9, 0x10, 0x99, 0xa4, 0x79, 0x21, 0x49, 0x9f, 0x0a, 0x63,
+	0xe0, 0x13, 0x29, 0xb2, 0x0b, 0xcc, 0x2d, 0x58, 0x45, 0xe7, 0xc8, 0xb4, 0xd0, 0x6b, 0x0b, 0x1f,
+	0xd3, 0xdb, 0xc7, 0xe3, 0x03, 0x56, 0xf0, 0xd0, 0x2e, 0x96, 0x0a, 0xe3, 0x61, 0xd4, 0xc5, 0xe0,
+	0xb3, 0xdb, 0xb0, 0xe2, 0x32, 0x36, 0xa3, 0x0e, 0x08, 0xd9, 0x0d, 0x2f, 0x6b, 0xa3, 0x9e, 0x72,
+	0x38, 0x25, 0x5a, 0xe8, 0x65, 0x9d, 0x3e, 0xf0, 0xaa, 0x44, 0x1d, 0xe1, 0x32, 0xbc, 0x63, 0x39,
+	0xdc, 0x09, 0x5f, 0x84, 0x37, 0x57, 0xc3, 0x9d, 0x84, 0x4b, 0xf0, 0xf6, 0x15, 0xda, 0xbe, 0x1d,
+	0x95, 0x3d, 0x78, 0x98, 0x00, 0x16, 0xc5, 0x70, 0x2f, 0x9c, 0x56, 0xa2, 0x6b, 0x95, 0x76, 0xdd,
+	0x89, 0xef, 0x97, 0x13, 0x7d, 0x12, 0x0d, 0x42, 0x7f, 0x58, 0x80, 0x2a, 0x55, 0x70, 0x0c, 0x80,
+	0xac, 0x42, 0x89, 0xe6, 0x14, 0xed, 0x18, 0x4d, 0x12, 0x61, 0x89, 0x54, 0xc1, 0x46, 0x58, 0x50,
+	0xd1, 0xcb, 0xa6, 0x11, 0xba, 0x30, 0x47, 0xe3, 0x51, 0x3d, 0xec, 0xc8, 0x87, 0x1d, 0xfc, 0x92,
+	0x2b, 0xea, 0x28, 0xd0, 0x8e, 0xf7, 0xa0, 0xc8, 0x40, 0x4f, 0xf6, 0x50, 0xe0, 0x6e, 0xca, 0x99,
+	0x22, 0x1b, 0xe3, 0x1e, 0xf4, 0x18, 0xca, 0xc6, 0x99, 0x69, 0x0d, 0x69, 0x3b, 0x31, 0x46, 0x12,
+	0xce, 0xb7, 0xa7, 0xa7, 0xc4, 0x5c, 0x7f, 0x0c, 0x95, 0x44, 0xa0, 0x24, 0xca, 0xcf, 0x4f, 0x55,
+	0x10, 0x33, 0xae, 0x69, 0xef, 0xc2, 0x3a, 0xf3, 0x75, 0xf3, 0xb5, 0x85, 0xdb, 0x31, 0x26, 0xb7,
+	0x44, 0x8f, 0x74, 0x19, 0xee, 0xf0, 0xac, 0x2a, 0xeb, 0xf6, 0x88, 0xdd, 0x68, 0xee, 0xc3, 0xca,
+	0xf7, 0xd3, 0x5e, 0x42, 0xad, 0x65, 0xf2, 0x04, 0xca, 0xf4, 0xa4, 0x3b, 0x20, 0xb9, 0x51, 0xc6,
+	0xdb, 0x30, 0x7d, 0x62, 0x3e, 0x43, 0x96, 0x6e, 0x48, 0x47, 0xfc, 0xf2, 0xbd, 0xee, 0xd8, 0x27,
+	0xe6, 0xe9, 0xd8, 0x63, 0x7b, 0x3b, 0x8e, 0xee, 0xbb, 0x1f, 0x4d, 0x93, 0x9f, 0x1a, 0x1a, 0x5e,
+	0xb9, 0xdd, 0x35, 0x49, 0x9d, 0x40, 0xc7, 0x74, 0xa7, 0xd7, 0x5b, 0xa6, 0xaf, 0x2a, 0xfe, 0x3b,
+	0x07, 0xb5, 0x0c, 0x2a, 0x11, 0x0a, 0x15, 0x19, 0x81, 0x40, 0x55, 0x5a, 0x03, 0x11, 0xbd, 0xf6,
+	0x1d, 0x6b, 0x1c, 0xe0, 0x7a, 0xda, 0x3c, 0xd6, 0xa0, 0x3c, 0x42, 0x17, 0x13, 0xa6, 0x41, 0xec,
+	0x97, 0x0f, 0x3f, 0x4e, 0x74, 0x16, 0x12, 0x06, 0xa5, 0x1c, 0x77, 0xe3, 0xe7, 0x03, 0x45, 0xda,
+	0xf1, 0x11, 0xac, 0xe3, 0x93, 0x13, 0x4c, 0xfd, 0xfa, 0xd8, 0xb4, 0xa3, 0x69, 0x0b, 0x73, 0x13,
+	0xc0, 0xd4, 0xcc, 0xc4, 0x82, 0x8b, 0x73, 0x67, 0x7e, 0x4c, 0x9f, 0x1f, 0x51, 0x09, 0xe0, 0x61,
+	0x72, 0xd1, 0xa5, 0x1b, 0x4e, 0x4d, 0xac, 0x3a, 0x37, 0x61, 0x95, 0x2f, 0x60, 0xfb, 0x2a, 0x15,
+	0x92, 0x68, 0x81, 0xbc, 0x80, 0x56, 0x26, 0xed, 0x18, 0x0a, 0x3c, 0x80, 0xb5, 0x0c, 0x1b, 0xe1,
+	0xb5, 0xea, 0x5b, 0xf3, 0x0c, 0x24, 0x2c, 0x8f, 0x36, 0x68, 0x1f, 0x89, 0x9b, 0x4a, 0xbd, 0x75,
+	0x65, 0x2c, 0xf8, 0x0a, 0x7b, 0x9b, 0xa4, 0x18, 0xbc, 0x04, 0xaa, 0x4e, 0xec, 0x89, 0x12, 0x52,
+	0xea, 0xec, 0xdd, 0x91, 0xfc, 0x37, 0x02, 0xd4, 0x66, 0x81, 0x14, 0x92, 0x0a, 0xa2, 0x6f, 0x92,
+	0x98, 0x9f, 0x40, 0x39, 0x58, 0x5d, 0x94, 0x2e, 0x5a, 0x35, 0x3a, 0x68, 0x26, 0x99, 0xe7, 0xb0,
+	0x46, 0xca, 0x0c, 0xc7, 0x37, 0x83, 0x24, 0x25, 0x26, 0x81, 0xbd, 0x89, 0x02, 0x86, 0x8f, 0x9b,
+	0x09, 0x9c, 0xfc, 0x5c, 0x80, 0xfb, 0x73, 0xd6, 0x5b, 0x86, 0xa2, 0x6f, 0x38, 0x6e, 0xa8, 0x80,
+	0x43, 0x58, 0x0d, 0x90, 0x77, 0x8a, 0x83, 0x38, 0x2c, 0x84, 0xe0, 0xe5, 0x7b, 0xf3, 0xc0, 0x9a,
+	0x3e, 0x9d, 0x18, 0x3f, 0xcc, 0x21, 0xa6, 0xe6, 0x0d, 0x4d, 0x1b, 0x45, 0x70, 0x23, 0x3d, 0xe6,
+	0xa9, 0x2f, 0xc5, 0xed, 0xec, 0x40, 0xff, 0x56, 0x02, 0xae, 0xef, 0xb8, 0x75, 0x67, 0x18, 0x86,
+	0xd6, 0xb7, 0x66, 0x43, 0xa6, 0x6c, 0x1c, 0xdb, 0xe9, 0xcf, 0x04, 0xb8, 0x3f, 0x87, 0xa5, 0xef,
+	0x00, 0xb0, 0xad, 0xf5, 0xe3, 0x8b, 0xda, 0xa7, 0x37, 0xd8, 0xd3, 0x5e, 0x3f, 0x9a, 0x4d, 0xdf,
+	0x9c, 0xd1, 0x5f, 0xcf, 0xf1, 0x25, 0x07, 0x57, 0xd7, 0xa1, 0xc2, 0x9a, 0x28, 0x5c, 0xec, 0xd3,
+	0x37, 0xcf, 0x25, 0xf9, 0x5b, 0x00, 0x89, 0x69, 0x12, 0x54, 0xdb, 0x9d, 0x86, 0xaa, 0x2b, 0xfd,
+	0x7e, 0xaf, 0x79, 0x30, 0xe8, 0xab, 0xa2, 0x40, 0xda, 0x94, 0x56, 0xab, 0x53, 0x57, 0xfa, 0xcd,
+	0x4e, 0x5b, 0xef, 0x2b, 0xcf, 0xc4, 0x9c, 0xb4, 0x04, 0x05, 0x4d, 0x6d, 0x1d, 0x8a, 0x79, 0xf9,
+	0x77, 0x73, 0x70, 0x8f, 0xe4, 0xbe, 0xc3, 0x99, 0x0a, 0x9c, 0x01, 0xb0, 0x31, 0x44, 0xfc, 0x7a,
+	0x00, 0x1b, 0x89, 0x57, 0x71, 0xe9, 0xd1, 0xc0, 0x16, 0xba, 0x64, 0xef, 0xcc, 0xa4, 0x01, 0x94,
+	0x86, 0xe4, 0xe7, 0xc0, 0x36, 0x03, 0xfe, 0x74, 0xfc, 0x6b, 0x29, 0x92, 0x57, 0xf2, 0xb6, 0xd7,
+	0x08, 0xe7, 0xee, 0x57, 0x8e, 0x9b, 0xad, 0x56, 0x53, 0x53, 0xeb, 0x9d, 0x76, 0x43, 0x93, 0x1f,
+	0x43, 0x29, 0xea, 0x92, 0x44, 0x48, 0x75, 0x8a, 0x82, 0xb4, 0x0a, 0xcb, 0x9d, 0x6e, 0xb7, 0xd3,
+	0xeb, 0x0f, 0xda, 0xcd, 0x7e, 0x53, 0xd5, 0xc4, 0x9c, 0xfc, 0xb7, 0x39, 0x78, 0x38, 0xd7, 0xde,
+	0x25, 0x0d, 0x96, 0x23, 0xe7, 0x49, 0x68, 0xf9, 0x9b, 0x37, 0x73, 0x9b, 0x78, 0x04, 0x55, 0xda,
+	0x67, 0x20, 0xd2, 0xe3, 0x3b, 0x1e, 0xe5, 0x67, 0xa3, 0x49, 0xb3, 0xb8, 0x6a, 0xc2, 0x06, 0xa9,
+	0x51, 0x86, 0xf5, 0x49, 0x2a, 0xec, 0x59, 0xfc, 0xee, 0xf5, 0x05, 0x2a, 0x3f, 0x86, 0xe5, 0x34,
+	0x73, 0x8b, 0x90, 0x57, 0xda, 0x0d, 0x51, 0x90, 0x16, 0x20, 0xd7, 0xe9, 0x89, 0x39, 0xa9, 0x0a,
+	0xd0, 0x50, 0x5b, 0xca, 0x2b, 0xb5, 0xa1, 0x77, 0x7a, 0x62, 0x5e, 0xfe, 0x6d, 0x01, 0x76, 0x32,
+	0xc8, 0x1d, 0x23, 0x97, 0x3e, 0x0b, 0x8f, 0x1f, 0xc9, 0x4c, 0xbc, 0xf5, 0x65, 0x60, 0x51, 0x1d,
+	0xd6, 0x23, 0xe3, 0x22, 0x75, 0x73, 0x3a, 0x1c, 0x5d, 0x13, 0xbe, 0xfd, 0x04, 0xa4, 0x8c, 0x52,
+	0x3d, 0xfe, 0xbc, 0x24, 0x7f, 0xd5, 0xe7, 0x25, 0x3f, 0x12, 0xe0, 0x76, 0x62, 0x76, 0xaa, 0x08,
+	0x4f, 0xdf, 0x67, 0xcc, 0x7f, 0xcf, 0xbf, 0x35, 0x75, 0x9f, 0x91, 0x63, 0x68, 0xcc, 0x87, 0xd2,
+	0x26, 0x94, 0x0d, 0xc7, 0x66, 0xc9, 0x9e, 0xc1, 0x83, 0x15, 0x69, 0x5f, 0x87, 0xa5, 0x21, 0x3f,
+	0x5e, 0x58, 0x22, 0x4f, 0x2f, 0x16, 0x7e, 0x2a, 0xd0, 0x6f, 0x14, 0x26, 0x98, 0xf2, 0x43, 0x00,
+	0x6a, 0x23, 0x09, 0x5e, 0xc4, 0x50, 0x34, 0x83, 0x30, 0xdf, 0x9c, 0x85, 0x61, 0xa4, 0xb6, 0xf6,
+	0x1c, 0xca, 0x14, 0x61, 0x71, 0x3d, 0x52, 0xe2, 0xf1, 0xfb, 0xc2, 0x0f, 0xe6, 0x4c, 0x6d, 0xc6,
+	0x33, 0xd8, 0x4d, 0x45, 0xb1, 0xa7, 0x2b, 0xad, 0x96, 0xfc, 0xef, 0x02, 0xdc, 0x49, 0x8c, 0x6e,
+	0xe0, 0x13, 0xd3, 0x36, 0xe3, 0x0b, 0xec, 0x3a, 0xac, 0xa7, 0x19, 0xe6, 0x6f, 0x7a, 0x84, 0xec,
+	0x5b, 0xf0, 0xec, 0x5d, 0xaf, 0xc0, 0x22, 0xf2, 0x3c, 0xf3, 0x1c, 0x59, 0xbc, 0x44, 0x12, 0x61,
+	0x69, 0x88, 0xd1, 0xd0, 0x32, 0x6d, 0x1c, 0x17, 0x47, 0xc9, 0x75, 0x12, 0x0f, 0xff, 0x76, 0x88,
+	0xc8, 0xb8, 0xf0, 0x71, 0x12, 0xb6, 0x61, 0x4f, 0x48, 0x26, 0x6e, 0x41, 0x16, 0xe6, 0x61, 0x80,
+	0x72, 0x00, 0xf7, 0x43, 0xcd, 0x2b, 0x93, 0x77, 0x2b, 0xd1, 0x85, 0x35, 0x7d, 0xe2, 0xc1, 0xd0,
+	0x03, 0x21, 0xe4, 0x18, 0xdb, 0xc3, 0x18, 0x4f, 0xc8, 0xa7, 0x30, 0xba, 0xb9, 0xd7, 0x65, 0xf2,
+	0x3f, 0xe7, 0xe0, 0x41, 0x42, 0x3e, 0xf1, 0xca, 0x89, 0x5a, 0xe0, 0x19, 0x6c, 0x26, 0x65, 0x30,
+	0x8c, 0x54, 0xc1, 0xa5, 0xfd, 0xce, 0x2c, 0x69, 0x4f, 0x2a, 0xed, 0x28, 0x79, 0x6d, 0x14, 0xeb,
+	0x2c, 0xeb, 0xa8, 0xbe, 0x91, 0x28, 0xf2, 0x53, 0xa2, 0x60, 0xf5, 0x6b, 0xf8, 0x8c, 0xb3, 0x18,
+	0xbe, 0x50, 0xe2, 0x5e, 0xe4, 0xeb, 0xa7, 0xc8, 0x3e, 0x65, 0x25, 0xf6, 0x12, 0x0d, 0x24, 0x86,
+	0x81, 0xdd, 0x00, 0x11, 0x45, 0xd2, 0xe9, 0xac, 0x70, 0x9d, 0x46, 0xf4, 0x96, 0xae, 0x85, 0xe8,
+	0xc9, 0x3f, 0xcc, 0xc3, 0xf6, 0x55, 0x48, 0xed, 0xb7, 0xa1, 0x6a, 0x25, 0x1f, 0x66, 0x87, 0x6e,
+	0xf6, 0x28, 0xf3, 0xa9, 0x6b, 0x62, 0x60, 0x94, 0x8a, 0x56, 0x61, 0x81, 0x81, 0xbc, 0x54, 0xe9,
+	0x15, 0xe9, 0x29, 0x54, 0x08, 0x17, 0xa6, 0x81, 0xf5, 0x21, 0x0a, 0x10, 0x8f, 0xd2, 0x3b, 0x19,
+	0xf4, 0x0e, 0x2e, 0x03, 0x1c, 0xa7, 0xb4, 0x4f, 0xa1, 0x8c, 0xed, 0x73, 0xd3, 0x73, 0x6c, 0x12,
+	0x04, 0xe9, 0xc5, 0xd9, 0x75, 0x50, 0x3b, 0xe2, 0x39, 0x86, 0x33, 0x1a, 0x21, 0x7b, 0x58, 0x2b,
+	0xd2, 0xa0, 0xfb, 0x69, 0x1a, 0x26, 0x57, 0xea, 0xad, 0xb0, 0x68, 0x9c, 0x59, 0x01, 0x26, 0xd1,
+	0x9e, 0x23, 0xb8, 0x9d, 0x44, 0x38, 0x03, 0xef, 0x32, 0x82, 0x61, 0x17, 0x33, 0x6c, 0x2c, 0xf1,
+	0x29, 0x47, 0xe0, 0x5d, 0xa6, 0x64, 0xbb, 0x06, 0x65, 0x0e, 0x7f, 0x93, 0x2a, 0x80, 0x6a, 0xac,
+	0x22, 0xff, 0x75, 0xf2, 0xf3, 0x8f, 0xe4, 0x43, 0xc8, 0x5f, 0xea, 0xf3, 0x8f, 0x0f, 0xc2, 0x42,
+	0x3a, 0x77, 0xcd, 0x4f, 0x1e, 0x26, 0xde, 0x98, 0xe5, 0xe3, 0xeb, 0x83, 0x3b, 0x50, 0x4e, 0x7e,
+	0x5c, 0x41, 0xf3, 0xca, 0xfd, 0xe2, 0xfb, 0x1f, 0x3e, 0x7e, 0xfc, 0xf8, 0xc6, 0x0f, 0x9e, 0xa6,
+	0xbe, 0x9e, 0x58, 0xb8, 0xf9, 0xd5, 0xf0, 0x67, 0xb0, 0x1e, 0xcb, 0x23, 0xf1, 0x7e, 0x67, 0xf1,
+	0xba, 0x86, 0xf1, 0x6d, 0x52, 0x0a, 0x44, 0xd7, 0x18, 0xe3, 0xd7, 0xa9, 0x47, 0xcb, 0x6f, 0xcc,
+	0x90, 0xd4, 0xf8, 0x75, 0x2c, 0x2c, 0xf9, 0x5f, 0x04, 0xb8, 0x73, 0x85, 0x7e, 0x9b, 0x50, 0x61,
+	0xf6, 0xc1, 0x20, 0x45, 0x8e, 0x0c, 0xbe, 0x7d, 0x85, 0x79, 0x74, 0xe9, 0x40, 0xb6, 0xd7, 0x72,
+	0x5b, 0x7d, 0xa9, 0xf6, 0xf4, 0x9e, 0xda, 0xef, 0xbd, 0xa2, 0x70, 0xac, 0xe7, 0x39, 0x9e, 0x6e,
+	0x38, 0x43, 0xfe, 0xdc, 0x81, 0x24, 0xfb, 0xa4, 0x70, 0xa6, 0x36, 0x68, 0xf2, 0x8f, 0x07, 0xe8,
+	0xd5, 0xc7, 0x16, 0x09, 0x06, 0x64, 0xdd, 0xe8, 0x12, 0xa1, 0x10, 0x76, 0xbd, 0x0d, 0x77, 0xae,
+	0xb8, 0x6b, 0x28, 0x46, 0x27, 0xf0, 0xaf, 0xc2, 0xf6, 0x55, 0x3e, 0x1d, 0x7d, 0x3b, 0xc1, 0x9e,
+	0x3d, 0x24, 0xbe, 0xbe, 0x9c, 0x0c, 0x39, 0xd3, 0xdf, 0xa1, 0xc8, 0x4f, 0x60, 0x3d, 0x53, 0x1f,
+	0x29, 0xa2, 0xa9, 0x4f, 0x3a, 0x4b, 0xf2, 0x87, 0xb0, 0x96, 0x15, 0x13, 0x66, 0x4f, 0xa9, 0xc8,
+	0xdf, 0x03, 0xa9, 0xee, 0x58, 0x16, 0x36, 0x02, 0xc7, 0x8b, 0x8b, 0x54, 0x1a, 0x59, 0x79, 0x2b,
+	0xfd, 0xa4, 0x87, 0x4f, 0xa6, 0x9f, 0x8f, 0x85, 0xed, 0xec, 0xed, 0x73, 0x6e, 0xce, 0xdb, 0xe7,
+	0xdd, 0x37, 0x68, 0xe2, 0x35, 0xf1, 0x69, 0xa7, 0xb4, 0x0c, 0xa5, 0x7a, 0x67, 0xd0, 0xee, 0x2b,
+	0x07, 0x2d, 0x55, 0xbc, 0xb5, 0xfb, 0x19, 0xac, 0x65, 0xf9, 0x59, 0x09, 0x8a, 0x75, 0xbd, 0xad,
+	0x7e, 0x2e, 0x0a, 0x74, 0x82, 0xde, 0x1b, 0xb4, 0xdb, 0xcd, 0xf6, 0x33, 0x96, 0x61, 0xd6, 0xf5,
+	0x7a, 0xe7, 0xb8, 0xdb, 0x52, 0xfb, 0xaa, 0x98, 0xdf, 0xb5, 0x61, 0x33, 0xdb, 0xfc, 0x48, 0x1e,
+	0x5f, 0xd7, 0x34, 0x5d, 0xab, 0x1f, 0xa9, 0x8d, 0x41, 0x4b, 0x25, 0x69, 0xea, 0x0a, 0x94, 0x49,
+	0x53, 0x9a, 0x9a, 0xa6, 0xe9, 0x5d, 0x65, 0xa0, 0xa9, 0x0d, 0x31, 0x4f, 0xca, 0x21, 0xf2, 0x9b,
+	0xd3, 0x27, 0x63, 0x0a, 0x52, 0x05, 0x96, 0x48, 0x5b, 0xa3, 0xd3, 0x56, 0xc5, 0xe2, 0xee, 0x0f,
+	0x04, 0xd8, 0x9a, 0xfd, 0x48, 0x7f, 0x11, 0xf2, 0x8c, 0xeb, 0x2a, 0x40, 0x5b, 0xfd, 0x5c, 0xd7,
+	0x94, 0x97, 0x6c, 0xa1, 0x65, 0x28, 0x69, 0x83, 0x83, 0xe3, 0x66, 0xbf, 0x4f, 0xd7, 0xa9, 0xc0,
+	0x92, 0x52, 0xaf, 0xab, 0x5d, 0xf2, 0xab, 0x20, 0x95, 0x61, 0x31, 0x64, 0xa9, 0x48, 0xba, 0x0e,
+	0x9b, 0xed, 0xa6, 0x76, 0xa4, 0x36, 0xc4, 0x05, 0x09, 0x60, 0xe1, 0x50, 0x69, 0x12, 0xee, 0x17,
+	0xc9, 0xdf, 0xcf, 0x9b, 0x2d, 0xf2, 0xf7, 0xd2, 0xee, 0x3f, 0xe6, 0x60, 0x67, 0xee, 0x03, 0xd5,
+	0x35, 0x58, 0x51, 0xba, 0x5d, 0x52, 0xef, 0xa9, 0xc7, 0xdd, 0x3e, 0x97, 0xe7, 0x16, 0x6c, 0x24,
+	0x1b, 0x63, 0xae, 0x72, 0x53, 0x5d, 0x91, 0xe4, 0xf2, 0xd2, 0x0e, 0xdc, 0x4d, 0x76, 0xf1, 0x9a,
+	0x51, 0x6d, 0x84, 0x3b, 0x2c, 0x4c, 0x4e, 0x8e, 0x46, 0x88, 0x45, 0xa9, 0x06, 0xeb, 0xc9, 0xae,
+	0x96, 0x32, 0x68, 0xd7, 0xd9, 0xf6, 0x36, 0x41, 0x4a, 0xf6, 0x44, 0x5b, 0xbd, 0x0d, 0x6b, 0xc9,
+	0xf6, 0x50, 0x3a, 0x4b, 0x93, 0xab, 0x30, 0x49, 0x91, 0xae, 0xd2, 0xe4, 0x2a, 0x91, 0x10, 0x61,
+	0x72, 0x15, 0x2e, 0xc4, 0xf2, 0xae, 0x07, 0xdb, 0x57, 0x7d, 0xcf, 0xb0, 0x0a, 0xcb, 0x64, 0xda,
+	0xa0, 0xdd, 0x50, 0x0f, 0x9b, 0x6d, 0xb5, 0x21, 0xde, 0x0a, 0x9b, 0xb4, 0x41, 0xbd, 0xae, 0xaa,
+	0x0d, 0x6a, 0x53, 0x55, 0x00, 0xd2, 0xc4, 0x59, 0xcf, 0x85, 0xbf, 0xf9, 0x22, 0x79, 0xa2, 0x79,
+	0xf2, 0x5b, 0x6d, 0x93, 0xe1, 0x85, 0xdd, 0x23, 0xb8, 0x7b, 0xe5, 0xa7, 0x5c, 0x00, 0x0b, 0xdd,
+	0xc1, 0x41, 0xab, 0x59, 0x17, 0x05, 0x62, 0x17, 0xdd, 0x5e, 0xf3, 0xa5, 0xd2, 0x57, 0xc5, 0x1c,
+	0xb1, 0x5d, 0xa5, 0xdb, 0x6d, 0x35, 0x59, 0xa9, 0x2e, 0xe6, 0x77, 0xbf, 0x09, 0x9b, 0x33, 0xbe,
+	0x26, 0x2b, 0xc3, 0xa2, 0xd2, 0xab, 0x1f, 0x35, 0x5f, 0x92, 0x0a, 0x7f, 0x09, 0x0a, 0x87, 0xcd,
+	0x16, 0xa1, 0x40, 0xc8, 0x11, 0x19, 0xf4, 0xc8, 0xec, 0x9f, 0x08, 0xb0, 0x35, 0xfb, 0xb3, 0x02,
+	0x11, 0x2a, 0xad, 0xce, 0x33, 0xbd, 0xd1, 0xd4, 0x88, 0x9f, 0x36, 0x58, 0x55, 0x4c, 0x5a, 0xda,
+	0x9d, 0xbe, 0xae, 0xf5, 0x95, 0x5e, 0x9f, 0x71, 0x44, 0x9a, 0x42, 0xe5, 0xe4, 0xc3, 0x31, 0xb1,
+	0x74, 0x0a, 0x44, 0x1a, 0xa4, 0x89, 0x4b, 0xa7, 0x18, 0x12, 0xee, 0x37, 0x8f, 0x55, 0xbd, 0x33,
+	0xe8, 0x8b, 0x0b, 0xd2, 0x5d, 0xa8, 0x25, 0xa8, 0xe8, 0x9f, 0x37, 0xfb, 0x47, 0x74, 0xf8, 0xa0,
+	0xa7, 0x8a, 0x8b, 0xbb, 0x3f, 0x16, 0xd8, 0xeb, 0xcc, 0x84, 0x55, 0x03, 0x2c, 0xb4, 0x35, 0x3d,
+	0x76, 0xb3, 0xa4, 0x3f, 0x8b, 0x50, 0x69, 0x6b, 0xfa, 0xa0, 0x7d, 0xa4, 0x2a, 0xad, 0xfe, 0xd1,
+	0x2b, 0x31, 0x2f, 0x6d, 0xc0, 0x6a, 0x5b, 0xd3, 0x1b, 0x6a, 0xbd, 0x73, 0x7c, 0xdc, 0xd4, 0xb4,
+	0x66, 0xa7, 0x1d, 0xba, 0x5c, 0x5b, 0xd3, 0x5b, 0x1d, 0xad, 0x2f, 0x16, 0xc9, 0x46, 0x08, 0x15,
+	0xf5, 0xa0, 0xd3, 0xe9, 0x87, 0x66, 0x39, 0x31, 0x89, 0x90, 0x5f, 0xe4, 0x03, 0xb5, 0xa3, 0x41,
+	0xbf, 0xd1, 0xf9, 0xbc, 0x2d, 0x2e, 0xed, 0xf2, 0x67, 0xae, 0x93, 0xef, 0x66, 0xc9, 0xb8, 0x4e,
+	0x43, 0xd5, 0x07, 0x1a, 0x0b, 0x73, 0x44, 0x32, 0xac, 0xa1, 0xcd, 0x9b, 0x04, 0x62, 0xae, 0xb4,
+	0x69, 0x72, 0x95, 0xdc, 0xee, 0x9b, 0x13, 0x0f, 0x2a, 0x63, 0xba, 0x00, 0xfc, 0x3d, 0xa6, 0x28,
+	0xec, 0x3e, 0x25, 0x01, 0x9c, 0x07, 0xbe, 0x78, 0x04, 0x33, 0xf5, 0xd0, 0x4a, 0xf4, 0x63, 0x45,
+	0xeb, 0xab, 0x3d, 0x66, 0x05, 0x7d, 0x45, 0x7b, 0x2e, 0xe6, 0x76, 0xbf, 0x01, 0xd2, 0x74, 0xea,
+	0x40, 0x04, 0x19, 0x27, 0x0f, 0x13, 0x20, 0x88, 0xd6, 0x6f, 0xd6, 0xc5, 0xdc, 0xee, 0x63, 0xa8,
+	0x2a, 0xc7, 0x75, 0x96, 0x2b, 0x46, 0xb1, 0x5c, 0x39, 0xd6, 0x7b, 0xaa, 0xf6, 0xaa, 0x5d, 0x67,
+	0xd1, 0x55, 0x39, 0x8e, 0xa5, 0x93, 0xdb, 0xfd, 0x2e, 0xac, 0x67, 0xbe, 0x4e, 0x7a, 0x00, 0xdb,
+	0xbd, 0x5e, 0x57, 0xaf, 0x77, 0x06, 0xad, 0x06, 0xb5, 0xa8, 0x6e, 0x4b, 0xa9, 0xab, 0x7a, 0xa7,
+	0xad, 0x13, 0x89, 0x88, 0x82, 0x24, 0xc3, 0xfd, 0xf4, 0x80, 0x30, 0x14, 0x45, 0x63, 0xc8, 0x3e,
+	0xb6, 0xaf, 0xba, 0xa1, 0xe5, 0xd1, 0x80, 0x18, 0x5a, 0x67, 0xd0, 0xd7, 0x5b, 0xcd, 0x43, 0x95,
+	0xfc, 0x2d, 0x0a, 0xbb, 0xed, 0xd4, 0x3d, 0xf5, 0xe4, 0x85, 0x23, 0x13, 0x20, 0x09, 0xce, 0x9a,
+	0xa6, 0xbf, 0x6c, 0xaa, 0x9f, 0xeb, 0x4a, 0xb7, 0xcb, 0xd4, 0x15, 0xb7, 0x1f, 0x77, 0x1a, 0xcd,
+	0xc3, 0x57, 0xb4, 0x27, 0xb7, 0xfb, 0x19, 0xac, 0x4c, 0xde, 0xb9, 0x2c, 0x43, 0xe9, 0x85, 0xae,
+	0xf5, 0x3b, 0xdd, 0x2e, 0x15, 0x26, 0xfd, 0x99, 0x3a, 0x74, 0x5e, 0xe8, 0x8d, 0x9e, 0xd2, 0x64,
+	0x6e, 0xb3, 0x7b, 0x04, 0xcb, 0x29, 0xa4, 0x97, 0xb8, 0xc4, 0x0b, 0xa5, 0xde, 0xe2, 0xb1, 0x59,
+	0x4f, 0x28, 0x54, 0x63, 0x01, 0x9c, 0xf6, 0x2a, 0x8d, 0x63, 0x12, 0xe2, 0xfa, 0x6a, 0x4f, 0x7f,
+	0x31, 0x50, 0x07, 0x44, 0x26, 0x06, 0x6c, 0x6b, 0xe6, 0xa9, 0x8d, 0xac, 0xc8, 0x32, 0x52, 0xfa,
+	0xda, 0x04, 0xa9, 0x33, 0xe8, 0x77, 0x07, 0x7d, 0xbd, 0x7f, 0xd4, 0x53, 0x95, 0x86, 0xde, 0x18,
+	0x1c, 0x93, 0xbd, 0x6d, 0xc0, 0xea, 0xb3, 0x9e, 0x52, 0x57, 0x0f, 0x07, 0xad, 0x84, 0xfa, 0x48,
+	0xf3, 0x61, 0xa7, 0x37, 0xd1, 0x9c, 0xdf, 0xfd, 0x3a, 0xd4, 0x66, 0x01, 0xa1, 0xe4, 0xdc, 0x6e,
+	0x77, 0xf4, 0x4e, 0x97, 0x41, 0x42, 0xea, 0x0b, 0x31, 0x47, 0xfe, 0x6d, 0x93, 0x83, 0xfa, 0xbb,
+	0x20, 0xcf, 0xc7, 0x0c, 0x08, 0x81, 0x9e, 0xae, 0xb4, 0x5f, 0x89, 0xb7, 0xf8, 0x9f, 0xad, 0x16,
+	0x0b, 0x84, 0x3d, 0xbd, 0xd3, 0x6b, 0xa8, 0x3d, 0x31, 0x47, 0xce, 0x68, 0xfe, 0x43, 0x6f, 0x77,
+	0xf4, 0x67, 0x4a, 0x97, 0x66, 0x01, 0xb5, 0x68, 0xcb, 0xea, 0x85, 0x19, 0x24, 0x63, 0x59, 0x19,
+	0x16, 0x69, 0x44, 0xd2, 0x34, 0xf1, 0x96, 0xb4, 0x0e, 0x8b, 0xcd, 0xf6, 0x4b, 0xa5, 0xd5, 0x6c,
+	0x88, 0x7f, 0xfe, 0x9f, 0xbf, 0x60, 0xff, 0x13, 0x48, 0xab, 0x72, 0xd0, 0xe9, 0x11, 0xe7, 0xff,
+	0xf1, 0x2f, 0xa2, 0xd6, 0x2d, 0xa8, 0x34, 0x9a, 0xda, 0x73, 0x2d, 0x8c, 0x5e, 0x7f, 0x11, 0x75,
+	0xed, 0x9e, 0xc1, 0xd6, 0xcc, 0xd4, 0x94, 0x7a, 0x7f, 0x9c, 0x9c, 0x8a, 0xb7, 0xc8, 0x69, 0x46,
+	0xff, 0x24, 0xd6, 0xab, 0xb4, 0x5a, 0xba, 0xda, 0xeb, 0x75, 0x7a, 0x44, 0x95, 0x0f, 0xe1, 0x5e,
+	0xd4, 0xa1, 0x75, 0xd5, 0x7a, 0xf3, 0xb0, 0x59, 0x67, 0xbd, 0x7a, 0xbd, 0xd3, 0x50, 0x35, 0x31,
+	0x77, 0xf0, 0x18, 0xee, 0x3a, 0xde, 0xe9, 0x1e, 0x72, 0x91, 0x71, 0x86, 0x53, 0xb9, 0x23, 0xfd,
+	0x8f, 0xb8, 0x1c, 0x00, 0xc9, 0x02, 0xe8, 0xba, 0xfe, 0xef, 0x0b, 0xc2, 0x5f, 0x0a, 0xc2, 0xff,
+	0x04, 0x00, 0x00, 0xff, 0xff, 0x15, 0x9e, 0x1b, 0x22, 0x07, 0x46, 0x00, 0x00,
 }
