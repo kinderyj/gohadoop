@@ -36,7 +36,7 @@ func main() {
 
     // Get GetApplicationReport
     applicationIdProto := hadoop_yarn.ApplicationIdProto{}
-    id := int32(85)
+    id := int32(97)
     applicationIdProto.Id = &id
     clusterTimestamp := int64(1587465966658)
     applicationIdProto.ClusterTimestamp = &clusterTimestamp
@@ -45,6 +45,9 @@ func main() {
         log.Println("the err is ", err)
     } else {
         log.Println("the aplication is", aplication)
+        log.Println("====the id is ", *aplication.ApplicationId.Id)
+        log.Println("====the User is ", *aplication.User)
+        log.Println("====the ContainerResourceRequest is ", aplication.ResourceRequests)
     }
 
 }
